@@ -4,6 +4,7 @@
 	String path = request.getContextPath();
 	String basePath = path + "/";
 	String ipPath=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
+	String MISPath=request.getScheme()+"://"+request.getServerName()+":"+"8080";
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -2692,7 +2693,7 @@
 								console.log("下架mis");
 								//下架mis的商品
 								$.ajax({
-									url: '<%=ipPath%>/JLMIS/backgroundConfiguration/goods/goodsManager/offShelvesOperation',
+									url: '<%=MISPath%>/JLMIS/backgroundConfiguration/goods/goodsManager/offShelvesOperation',
 									type: "POST",
 									dataType: "json",
 									data:{

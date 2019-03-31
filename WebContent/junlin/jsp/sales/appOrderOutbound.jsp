@@ -4,6 +4,7 @@
 	String path = request.getContextPath();
 	String basePath = path + "/";
 	String ipPath=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort();
+	String MISPath=request.getScheme()+"://"+request.getServerName()+":"+"8080";
     //String userIdentifier=(String) request.getSession().getAttribute("userName");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -194,7 +195,7 @@
 	     $('#carID').typeahead({
 	      source:function(query, process) {
 	    return $.ajax({
-	     url: '<%= ipPath%>/JLMIS/orderManagement/order/order/selectTenCarId',
+	     url: '<%= MISPath%>/JLMIS/orderManagement/order/order/selectTenCarId',
 	     type: 'post',
 	     data: {
 	      carId: query
@@ -602,7 +603,7 @@
 						success: function(data) {
 							if(data.success){
 								$.ajax({
-									url :'<%= ipPath%>/JLMIS/orderManagement/order/order/shippingGoods' ,
+									url :'<%= MISPath%>/JLMIS/orderManagement/order/order/shippingGoods' ,
 									type : "POST",
 									dataType : "json",
 									data: {
