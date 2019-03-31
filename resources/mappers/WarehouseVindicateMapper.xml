@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.WarehouseVindicateMapper">
+	<resultMap id="BaseResultMap" type="com.jl.psi.model.CommoditySpecification">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="specification_identifier" jdbcType="VARCHAR"
+			property="specificationIdentifier" />
+		<result column="specification_name" jdbcType="VARCHAR"
+			property="specificationName" />
+		<result column="commodity_id" jdbcType="INTEGER" property="commodityId" />
+		<result column="quality_period" jdbcType="INTEGER" property="qualityPeriod" />
+		<result column="quality_period_unit" jdbcType="VARCHAR"
+			property="qualityPeriodUnit" />
+		<result column="mini_order_quantity" jdbcType="INTEGER"
+			property="miniOrderQuantity" />
+		<result column="add_order_quantity" jdbcType="INTEGER"
+			property="addOrderQuantity" />
+		<result column="packaging_size" jdbcType="VARCHAR" property="packagingSize" />
+		<result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+		<result column="warning_number" jdbcType="INTEGER" property="warningNumber" />
+		<result column="weight" jdbcType="DOUBLE" property="weight" />
+		<result column="operator_identifier" jdbcType="VARCHAR"
+			property="operatorIdentifier" />
+		<result column="operator_time" jdbcType="TIMESTAMP" property="operatorTime" />
+		<result column="state" jdbcType="INTEGER" property="state" />
+		<result column="baseUnitName" jdbcType="VARCHAR" property="baseUnitName" />
+		<result column="baseCommonlyPrice" jdbcType="DOUBLE" property="baseCommonlyPrice" />
+		<result column="specWarehouseId" jdbcType="INTEGER" property="specWarehouseId" />
+		<association property="commodity" javaType="com.jl.psi.model.Commodity"
+			resultMap="CommodityResultMap" />
+		<association property="person" javaType="com.jl.psi.model.Person"
+			resultMap="PersonResultMap" />
+		<collection property="units" ofType="com.jl.psi.model.Unit" resultMap="UnitResultMap"/>
+		<collection property="inventories" ofType="com.jl.psi.model.Inventory" resultMap="InventoryResultMap"/>
+		<collection property="allotOrderCommodities" ofType="com.jl.psi.model.AllotOrderCommodity" resultMap="allotOrderCommodities"/>
+	</resultMap>
+	<!-- 调拨单商品信息 -->
+	<resultMap id="allotOrderCommodities" type="com.jl.psi.model.AllotOrderCommodity">
+    <id column="aocId" jdbcType="INTEGER" property="id" />
+    <result column="allot_order_id" jdbcType="INTEGER" property="allotOrderId" />
+    <result column="commodity_specification_id" jdbcType="INTEGER" property="commoditySpecificationId" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="export_unit_price" jdbcType="DOUBLE" property="exportUnitPrice" />
+    <result column="import_unit_price" jdbcType="DOUBLE" property="importUnitPrice" />
+    <result column="import_money" jdbcType="DOUBLE" property="importMoney" />
+    <association property="allotOrder" javaType="com.jl.psi.model.AllotOrder"
+			resultMap="allotOrder" />
+  </resultMap>
+	<!-- 调拨单 -->
+	<resultMap id="allotOrder" type="com.jl.psi.model.AllotOrder">
+    <id column="aoId" jdbcType="INTEGER" property="id" />
+    <result column="allot_date" jdbcType="TIMESTAMP" property="allotDate" />
+    <result column="ao_identifier" jdbcType="VARCHAR" property="identifier" />
+    <result column="export_warehouse_id" jdbcType="INTEGER" property="exportWarehouseId" />
+    <result column="import_warehouse_id" jdbcType="INTEGER" property="importWarehouseId" />
+    <result column="shipping_mode_id" jdbcType="INTEGER" property="shippingModeId" />
+    <result column="import_branch" jdbcType="VARCHAR" property="importBranch" />
+    <result column="adjust_subject" jdbcType="VARCHAR" property="adjustSubject" />
+    <result column="send_goods_place" jdbcType="VARCHAR" property="sendGoodsPlace" />
+    <result column="person_id" jdbcType="INTEGER" property="personId" />
+    <result column="originator" jdbcType="VARCHAR" property="originator" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="print_num" jdbcType="INTEGER" property="printNum" />
+    <result column="exportName" jdbcType="VARCHAR" property="exportName" />
+    <result column="importName" jdbcType="VARCHAR" property="importName" />
+    <result column="make_order_persion" jdbcType="VARCHAR" property="makePerson" />
+    <association property="shippingMode"  javaType="com.jl.psi.model.ShippingMode" resultMap="shippingModel" />
+    
+  </resultMap>
+	<!-- 用户信息 -->
+	<resultMap id="PersonResultMap" type="com.jl.psi.model.Person">
+		<result column="uname" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+	
+	<!-- 单位信息 -->
+	<resultMap id="UnitResultMap" type="com.jl.psi.model.Unit">
+		<id column="uId" jdbcType="INTEGER" property="id" />
+		<result column="unName" jdbcType="VARCHAR" property="name" />
+		<result column="uSpecificationId" jdbcType="INTEGER" property="specificationId" />
+		<result column="ratio_denominator" jdbcType="INTEGER" property="ratioDenominator" />
+		<result column="ratio_molecular" jdbcType="INTEGER" property="ratioMolecular" />
+		<result column="purchase_price" jdbcType="DOUBLE" property="purchasePrice" />
+		<result column="commonly_price" jdbcType="DOUBLE" property="commonlyPrice" />
+		<result column="mini_price" jdbcType="DOUBLE" property="miniPrice" />
+		<result column="bar_code" jdbcType="VARCHAR" property="barCode" />
+		<result column="sales_unit" jdbcType="VARCHAR" property="salesUnit" />
+		<result column="basic_unit" jdbcType="INTEGER" property="basicUnit" />
+		<result column="warehouse_unit" jdbcType="VARCHAR" property="warehouseUnit" />
+		<result column="purchasing_unit" jdbcType="VARCHAR" property="purchasingUnit" />
+		<result column="mini_purchasing" jdbcType="INTEGER" property="miniPurchasing" />
+	</resultMap>
+	
+	<!-- 库存信息 -->
+	<resultMap id="InventoryResultMap" type="com.jl.psi.model.Inventory">
+		<id column="inId" jdbcType="INTEGER" property="id" />
+		<result column="inSpecificationId" jdbcType="INTEGER" property="specificationId" />
+		<result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		<result column="inventory" jdbcType="INTEGER" property="inventory" />
+		<result column="presell_inventory" jdbcType="INTEGER" property="presellInventory" />
+		<result column="occupied_inventory" jdbcType="INTEGER"
+			property="occupiedInventory" />
+		<result column="max_inventory" jdbcType="INTEGER" property="maxInventory" />
+		<result column="mini_inventory" jdbcType="INTEGER" property="miniInventory" />
+		<result column="cost_price" jdbcType="DOUBLE" property="costPrice" />
+		<result column="commodity_num" jdbcType="INTEGER" property="commodityNum" />
+		<association property="warehouse" javaType="com.jl.psi.model.Warehouse"
+			resultMap="WarehouseResultMap" />
+	</resultMap>
+	
+	<!-- 仓库信息 -->
+	<resultMap id="WarehouseResultMap" type="com.jl.psi.model.Warehouse">
+		<result column="wName" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+	
+	<!-- 商品信息 -->
+	<resultMap id="CommodityResultMap" type="com.jl.psi.model.Commodity">
+		<id column="cId" jdbcType="INTEGER" property="id" />
+		<result column="classification_id" jdbcType="INTEGER" property="classificationId" />
+		<result column="cName" jdbcType="VARCHAR" property="name" />
+		<result column="brand" jdbcType="VARCHAR" property="brand" />
+		<result column="zero_stock" jdbcType="INTEGER" property="zeroStock" />
+		<result column="shout_name" jdbcType="VARCHAR" property="shoutName" />
+		<result column="mnemonic_code" jdbcType="VARCHAR" property="mnemonicCode" />
+		<result column="basics_information" jdbcType="VARCHAR"
+			property="basicsInformation" />
+		<result column="attribute" jdbcType="VARCHAR" property="attribute" />
+		<result column="identifier" jdbcType="VARCHAR" property="identifier" />
+		<result column="supcto_id" jdbcType="INTEGER" property="supctoId" />
+		<result column="taxes" jdbcType="DOUBLE" property="taxes" />
+		<association property="classification" javaType="com.jl.psi.model.Classification"
+			resultMap="ClassificationResultMap" />
+		<association property="supcto" javaType="com.jl.psi.model.Supcto"
+			resultMap="SupctoResultMap" />
+	</resultMap>
+	
+	<!-- 供货商信息 -->
+	<resultMap id="SupctoResultMap" type="com.jl.psi.model.Supcto">
+	    <result column="sName" jdbcType="VARCHAR" property="name" />
+    </resultMap>
+    <!-- 运输方式 -->
+    <resultMap type="com.jl.psi.model.ShippingMode" id="shippingModel">
+  		<id column="sId" jdbcType="INTEGER" property="id" />
+	    <result column="sName" jdbcType="VARCHAR" property="name" />
+ 
+  </resultMap>
+    <!-- 分类信息 -->
+	<resultMap id="ClassificationResultMap" type="com.jl.psi.model.Classification">
+		<id column="cfId" jdbcType="INTEGER" property="id" />
+		<result column="cfName" jdbcType="VARCHAR" property="name" />
+		<result column="parent_id" jdbcType="INTEGER" property="parentId" />
+	</resultMap>
+	<sql id="query_where">
+		<if test="brand!=null and brand!=''">
+		 AND c.brand like '%${brand}%'
+		</if>
+		<if test="commodityName!=null and commodityName!=''">
+		 AND c.name like '%${commodityName}%'
+		</if>
+		<if test="warehouseId!=null and warehouseId!=''">
+		AND w.id=#{warehouseId}
+		</if>
+		<if test="classficationId!=null and classficationId!=''">
+		AND cf.id=#{classficationId}
+		</if>
+	</sql>
+	<!-- dataTable数据查询 -->
+	<select id="selectForSearch"  resultMap="BaseResultMap">
+		SELECT
+			cs.specification_identifier,
+			c.`name` cName,
+			c.brand,
+			c.identifier,
+			cf.`name` cfName,
+			cs.specification_name,
+			u.`name` unName,
+			i.inventory,
+			w.`name` wName,
+			cs.quality_period,
+			cs.quality_period_unit
+			
+			
+			FROM
+			commodity_specification cs
+			LEFT JOIN
+			commodity c
+			ON
+			c.id=cs.commodity_id
+			LEFT JOIN
+			inventory i
+			ON
+			i.specification_id=cs.id
+			LEFT JOIN
+			warehouse w
+			ON
+			w.id=i.warehouse_id
+			LEFT JOIN
+			unit u
+			ON
+			u.specification_id=cs.id
+			LEFT JOIN
+			classification cf
+			ON
+			c.classification_id=cf.id
+			where cs.state!=10
+			and
+			cs.id=i.specification_id
+			<include refid="query_where"></include>
+			order by cs.id
+			<!-- 很无敌的分组。。。。order by & group by 傻傻分不清楚？？？
+			GROUP BY
+			cs.id-->
+			<!-- <if test="desc!=null and desc!='' ">
+			order by ${desc} desc
+			</if>
+			<if test="asc!=null and asc!='' ">
+				order by ${asc} asc
+			</if> -->
+			limit ${iDisplayStart},${pageDisplayLength}
+	</select>
+	<!-- dataTable过滤数据数 -->
+	<select id="iTotalDisplayRecords"  resultType="java.lang.Integer">
+			SELECT
+
+			COUNT(*)
+			FROM
+			(SELECT
+			count(cs.id)
+			
+			FROM
+			commodity_specification cs
+			LEFT JOIN
+			commodity c
+			ON
+			c.id=cs.commodity_id
+			LEFT JOIN
+			inventory i
+			ON
+			i.specification_id=cs.id
+			LEFT JOIN
+			warehouse w
+			ON
+			w.id=i.warehouse_id
+			LEFT JOIN
+			unit u
+			ON
+			u.specification_id=cs.id
+			LEFT JOIN
+			classification cf
+			ON
+			c.classification_id=cf.id
+			where cs.state!=10
+			and
+			cs.id=i.specification_id
+			<include refid="query_where"></include>
+			GROUP BY
+			cs.id) a
+	</select>
+	<!-- dataTable数据总数 -->
+	<select id="iTotalRecords"  resultType="java.lang.Integer">
+			SELECT
+
+			COUNT(*)
+			FROM
+			(SELECT
+			count(cs.id)
+			
+			FROM
+			commodity_specification cs
+			LEFT JOIN
+			commodity c
+			ON
+			c.id=cs.commodity_id
+			LEFT JOIN
+			inventory i
+			ON
+			i.specification_id=cs.id
+			LEFT JOIN
+			warehouse w
+			ON
+			w.id=i.warehouse_id
+			LEFT JOIN
+			unit u
+			ON
+			u.specification_id=cs.id
+			LEFT JOIN
+			classification cf
+			ON
+			c.classification_id=cf.id
+			where cs.state!=10
+			and
+			cs.id=i.specification_id
+			<include refid="query_where"></include>
+			GROUP BY
+			cs.id) a
+	</select>
+	<!-- 打印时的查询 -->
+	<select id="getWarehouseMsg"  resultMap="BaseResultMap">
+		SELECT
+			cs.specification_identifier,
+			c.`name` cName,
+			c.brand,
+			c.identifier,
+			cf.`name` cfName,
+			cs.specification_name,
+			u.`name` unName,
+			i.inventory,
+			w.`name` wName,
+			cs.quality_period,
+			cs.quality_period_unit
+			
+			
+			FROM
+			commodity_specification cs
+			LEFT JOIN
+			commodity c
+			ON
+			c.id=cs.commodity_id
+			LEFT JOIN
+			inventory i
+			ON
+			i.specification_id=cs.id
+			LEFT JOIN
+			warehouse w
+			ON
+			w.id=i.warehouse_id
+			LEFT JOIN
+			unit u
+			ON
+			u.specification_id=cs.id
+			LEFT JOIN
+			classification cf
+			ON
+			c.classification_id=cf.id
+			where cs.state!=10
+			and
+			cs.id=i.specification_id
+			<include refid="query_where"></include>
+			GROUP BY
+			cs.id
+	</select>
+	<!--根据仓库id查询数据  -->
+	<select id="getWarehouseCommodity"  resultMap="BaseResultMap">
+		SELECT
+			cs.specification_identifier,
+			c.`name` cName,
+			c.identifier,
+			cf.`name` cfName,
+			cs.specification_name,
+			u.`name` unName,
+			i.inventory,
+			w.`name` wName,
+			cs.quality_period,
+			cs.quality_period_unit,
+			cs.id,
+			u.mini_price
+			
+			FROM
+			commodity_specification cs
+			LEFT JOIN
+			commodity c
+			ON
+			c.id=cs.commodity_id
+			LEFT JOIN
+			inventory i
+			ON
+			i.specification_id=cs.id
+			LEFT JOIN
+			warehouse w
+			ON
+			w.id=i.warehouse_id
+			LEFT JOIN
+			unit u
+			ON
+			u.specification_id=cs.id
+			LEFT JOIN
+			classification cf
+			ON
+			c.classification_id=cf.id
+			where cs.state!=10
+			and
+			cs.id=i.specification_id
+			and
+			i.warehouse_id=#{warehouseId}		
+	</select>
+	<!--根据仓库通过审核的商品id查询数据  -->
+	<select id="PassWarehouseCommodityById"  resultMap="BaseResultMap">
+		SELECT
+			cs.specification_identifier,
+			c.`name` cName,
+			c.identifier,
+			cf.`name` cfName,
+			cs.specification_name,
+			u.`name` unName,
+			i.inventory,
+			w.`name` wName,
+			cs.quality_period,
+			cs.quality_period_unit,
+			cs.id,
+			u.mini_price
+			
+			FROM
+			commodity_specification cs
+			LEFT JOIN
+			commodity c
+			ON
+			c.id=cs.commodity_id
+			LEFT JOIN
+			inventory i
+			ON
+			i.specification_id=cs.id
+			LEFT JOIN
+			warehouse w
+			ON
+			w.id=i.warehouse_id
+			LEFT JOIN
+			unit u
+			ON
+			u.specification_id=cs.id
+			LEFT JOIN
+			classification cf
+			ON
+			c.classification_id=cf.id
+			where 1=1
+			and
+			cs.id=i.specification_id
+			and
+			
+			cs.state=3
+			and
+			i.warehouse_id=#{warehouseId}		
+	</select>
+	<select id="getAlloteById"  resultMap="BaseResultMap">
+			SELECT
+ 
+			ao.identifier ao_identifier,
+			ao.allot_date,
+			ao.export_warehouse_id,
+			ao.import_warehouse_id,
+			ao.shipping_mode_id,
+			ao.import_branch,
+			ao.adjust_subject,
+			ao.send_goods_place,
+			cs.specification_identifier,
+			c.`name` cName,
+			cs.packaging_size,
+			u.`name` unName,
+			aoc.number,
+			aoc.import_unit_price,
+			aoc.export_unit_price,
+			aoc.import_money,
+			ao.person_id,
+			
+			ao.summary
+			
+			FROM
+			commodity_specification cs
+			INNER JOIN
+			commodity c
+			ON
+			c.id=cs.commodity_id
+			INNER JOIN
+			inventory i
+			ON
+			i.specification_id=cs.id
+			INNER JOIN
+			warehouse w
+			ON
+			w.id=i.warehouse_id
+			INNER JOIN
+			unit u
+			ON
+			u.specification_id=cs.id
+			INNER JOIN
+			classification cf
+			ON
+			c.classification_id=cf.id
+			INNER JOIN
+			allot_order_commodity aoc
+			ON
+			aoc.commodity_specification_id=cs.id
+			INNER JOIN
+			allot_order ao
+			ON
+			aoc.allot_order_id=ao.id
+			INNER JOIN
+			person p
+			ON
+			p.id=ao.person_id
+		WHERE ao.id=#{allocationId}
+	</select>
+</mapper>

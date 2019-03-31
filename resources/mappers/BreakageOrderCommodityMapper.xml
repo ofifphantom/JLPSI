@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.BreakageOrderCommodityMapper">
+  <resultMap id="BaseResultMap" type="com.jl.psi.model.BreakageOrderCommodity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="breakage_order_id" jdbcType="INTEGER" property="breakageOrderId" />
+    <result column="commodity_specification_id" jdbcType="INTEGER" property="commoditySpecificationId" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="unit_price" jdbcType="DOUBLE" property="unitPrice" />
+    <result column="money" jdbcType="DOUBLE" property="money" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, breakage_order_id, commodity_specification_id, number, unit_price, money
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from breakage_order_commodity
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from breakage_order_commodity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jl.psi.model.BreakageOrderCommodity">
+    insert into breakage_order_commodity (id, breakage_order_id, commodity_specification_id, 
+      number, unit_price, money
+      )
+    values (#{id,jdbcType=INTEGER}, #{breakageOrderId,jdbcType=INTEGER}, #{commoditySpecificationId,jdbcType=INTEGER}, 
+      #{number,jdbcType=INTEGER}, #{unitPrice,jdbcType=DOUBLE}, #{money,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jl.psi.model.BreakageOrderCommodity">
+    insert into breakage_order_commodity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="breakageOrderId != null">
+        breakage_order_id,
+      </if>
+      <if test="commoditySpecificationId != null">
+        commodity_specification_id,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="unitPrice != null">
+        unit_price,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="breakageOrderId != null">
+        #{breakageOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="commoditySpecificationId != null">
+        #{commoditySpecificationId,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="unitPrice != null">
+        #{unitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.BreakageOrderCommodity">
+    update breakage_order_commodity
+    <set>
+      <if test="breakageOrderId != null">
+        breakage_order_id = #{breakageOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="commoditySpecificationId != null">
+        commodity_specification_id = #{commoditySpecificationId,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="unitPrice != null">
+        unit_price = #{unitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jl.psi.model.BreakageOrderCommodity">
+    update breakage_order_commodity
+    set breakage_order_id = #{breakageOrderId,jdbcType=INTEGER},
+      commodity_specification_id = #{commoditySpecificationId,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      unit_price = #{unitPrice,jdbcType=DOUBLE},
+      money = #{money,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+    <!-- 批量添加 -->
+  <insert id="insertBeatch" parameterType="com.jl.psi.model.TakeStockOrderCommodity" useGeneratedKeys="true" keyProperty="id">
+    insert into breakage_order_commodity (
+    	breakage_order_id,
+    	commodity_specification_id, 
+      	number, 
+      	unit_price, 
+      	money
+      )
+    values <foreach collection="list" index="index" item="boc" separator=",">
+	 ( #{boc.breakageOrderId,jdbcType=INTEGER},
+	   #{boc.commoditySpecificationId,jdbcType=INTEGER}, 
+       #{boc.number,jdbcType=INTEGER}, 
+       #{boc.unitPrice,jdbcType=DOUBLE}, 
+       #{boc.money,jdbcType=DOUBLE}
+      )
+      </foreach>
+  </insert>
+  
+   <!-- 根据报损单id删除报损商品信息 -->
+  <delete id="deleteMsgByBreakageOrderId" parameterType="java.lang.Integer">
+  	delete 
+    from breakage_order_commodity
+    where breakage_order_id = #{breakageOrderId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 根据报损单id获取报损商品列表 -->
+  <select id="selectByBreakageOrderId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select 
+	<include refid="Base_Column_List" /> 
+    from breakage_order_commodity
+    where breakage_order_id = #{breakageOrderId,jdbcType=INTEGER}
+  </select>
+</mapper>

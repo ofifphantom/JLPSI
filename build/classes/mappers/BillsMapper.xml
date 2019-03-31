@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.BillsMapper">
+  <resultMap id="BaseResultMap" type="com.jl.psi.model.Bills">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bills_code" jdbcType="VARCHAR" property="billsCode" />
+    <result column="customer_supplier_id" jdbcType="INTEGER" property="customerSupplierId" />
+    <result column="bills_type" jdbcType="INTEGER" property="billsType" />
+    <result column="bills_date" jdbcType="TIMESTAMP" property="billsDate" />
+    <result column="bank" jdbcType="VARCHAR" property="bank" />
+    <result column="bank_account" jdbcType="VARCHAR" property="bankAccount" />
+    <result column="payment" jdbcType="INTEGER" property="payment" />
+    <result column="person_id" jdbcType="INTEGER" property="personId" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="money" jdbcType="DOUBLE" property="money" />
+     <result column="ticket_no" jdbcType="VARCHAR" property="ticketNo" />
+     <result column="branch" jdbcType="VARCHAR" property="branch" />
+     <result column="account" jdbcType="VARCHAR" property="account" />
+     <result column="originator" jdbcType="VARCHAR" property="originator" />
+      <result column="customer_supplier_name" jdbcType="VARCHAR" property="customerSupplierName" />
+      <result column="originator_name" jdbcType="VARCHAR" property="originatorName" />
+      <result column="payment_name" jdbcType="VARCHAR" property="paymentName" />
+     <result column="personName" jdbcType="VARCHAR" property="personName" />
+     <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+     <result column="balance" jdbcType="DOUBLE" property="balance" />
+     <result column="receiveMoney" jdbcType="DOUBLE" property="receiveMoney" />
+     <result column="returnMoney" jdbcType="DOUBLE" property="returnMoney" />
+     <result column="order_type" jdbcType="INTEGER" property="orderType" />
+      <association property="supcto" javaType="com.jl.psi.model.Supcto"
+			resultMap="SupctoResultMap" />
+     <collection property="billsSubs" ofType="com.jl.psi.model.BillsSub"
+			resultMap="BillSubResultMap" />
+  </resultMap>
+ <resultMap id="BillSubResultMap" type="com.jl.psi.model.BillsSub">
+    <id column="bsid" jdbcType="INTEGER" property="id" />
+    <result column="bills_id" jdbcType="INTEGER" property="billsId" />
+    <result column="procure_sales_id" jdbcType="INTEGER" property="procureSalesId" />
+    <result column="clearing_money" jdbcType="DOUBLE" property="clearingMoney" />
+    <result column="stay_money" jdbcType="DOUBLE" property="stayMoney" />
+    <result column="the_moeny" jdbcType="DOUBLE" property="theMoeny" />
+    <result column="actual_money" jdbcType="DOUBLE" property="actualMoney" />
+    <result column="rebate_money" jdbcType="DOUBLE" property="rebateMoney" />
+    <result column="is_payment" jdbcType="INTEGER" property="isPayment" />
+    <result column="rebate" jdbcType="INTEGER" property="rebate" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+   	<result column="identifier" jdbcType="VARCHAR" property="identifier" />
+    <result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
+     <result column="order_money" jdbcType="DOUBLE" property="orderMoney" />
+ 	<result column="payMoney" jdbcType="DOUBLE" property="payMoney" />
+ 
+  </resultMap>
+ <!-- 供货商信息 -->
+	<resultMap id="SupctoResultMap" type="com.jl.psi.model.Supcto">
+		<id column="sId" jdbcType="INTEGER" property="id" />
+		<result column="sName" jdbcType="VARCHAR" property="name" />
+		<result column="sIdentifier" jdbcType="VARCHAR" property="identifier" />
+		<result column="bank_account" jdbcType="VARCHAR" property="bankAccount" />
+		<result column="settlement_type_id" jdbcType="INTEGER" property="settlementTypeId" />
+		<result column="settlementTypeName" jdbcType="VARCHAR" property="settlementTypeName" />
+	</resultMap>
+ 
+  	<!-- 获取最大的编号 -->
+	<select id="selectMaxCode" resultType="java.lang.String">
+		select MAX(bills_code) from bills  where bills_type=#{billsType} 
+	</select>
+
+<insert id="insertSelective" parameterType="com.jl.psi.model.Bills"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into bills
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			<if test="billsCode != null">
+				bills_code,
+			</if>
+			<if test="customerSupplierId != null">
+				customer_supplier_id,
+			</if>
+			<if test="billsType != null">
+				bills_type,
+			</if>
+			<if test="billsDate != null">
+				bills_date,
+			</if>
+			<if test="bank != null">
+				bank,
+			</if>
+			<if test="bankAccount != null">
+				bank_account,
+			</if>
+			<if test="payment != null">
+				payment,
+			</if>
+			<if test="personId != null">
+				person_id,
+			</if>
+			<if test="summary != null">
+				summary,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="money != null">
+				money,
+			</if>
+			<if test="ticketNo != null">
+				ticket_no,
+			</if>
+			<if test="branch != null">
+				branch,
+			</if>
+			<if test="originator != null">
+				originator,
+			</if>
+			<if test="account != null">
+				account,
+			</if>
+				<if test="balance != null">
+				balance,
+			</if>
+				<if test="orderType != null">
+				order_type,
+			</if>
+			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+ 
+			 <if test="billsCode != null">
+				#{billsCode,jdbcType=VARCHAR},
+			</if>
+			<if test="customerSupplierId != null">
+ 				#{customerSupplierId,jdbcType=INTEGER},
+			</if>
+			<if test="billsType != null">
+				#{billsType,jdbcType=INTEGER},
+			</if>
+			<if test="billsDate != null">
+ 				#{billsDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="bank != null">
+ 				#{bank,jdbcType=VARCHAR},
+			</if>
+			<if test="bankAccount != null">
+ 				#{bankAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="payment != null">
+			 	 #{payment,jdbcType=INTEGER},
+			</if>
+			<if test="personId != null">
+ 				#{personId,jdbcType=INTEGER},
+				
+			</if>
+			<if test="summary != null">
+ 			 #{summary,jdbcType=VARCHAR},
+				
+			</if>
+			<if test="remark != null">
+ 				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="money != null">
+ 			 	#{money,jdbcType=DOUBLE},
+				
+			</if>
+			<if test="ticketNo != null">
+			#{ticketNo,jdbcType=VARCHAR},
+ 			</if>
+ 			<if test="branch != null">
+			#{branch,jdbcType=VARCHAR},
+			</if>
+			<if test="originator != null">
+				#{originator,jdbcType=VARCHAR},
+			</if>
+			<if test="account != null">
+				#{account,jdbcType=VARCHAR},
+			</if>
+			 <if test="balance != null">
+				 #{balance,jdbcType=DOUBLE},
+			</if>
+				<if test="orderType != null">
+				#{orderType,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+  	<sql id="query_where">
+  			<if test="billsCode != null and billsCode!=''">
+ 				and b.bills_code like '%${billsCode}%'
+			</if>
+	      	<if test="customerSupplierId != null and customerSupplierId!=''">
+ 				and b.customer_supplier_id=#{customerSupplierId,jdbcType=INTEGER}
+			</if>
+			<!--时间  -->
+			<if test="beginTime!=null and beginTime!=''">
+				AND
+				b.bills_date
+				BETWEEN
+				'${beginTime}'
+				AND
+				DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+			</if>
+  	</sql>
+  	<!-- datatable 分页 start -->
+    <!-- 查询记录总条数 -->
+	<select id="iTotalRecords" resultType="java.lang.Integer">
+	select  count(*) from bills b
+		INNER JOIN supcto s ON s.id = b.customer_supplier_id 
+	INNER JOIN person p on p.identifier=b.originator
+	INNER JOIN settlement_type st on st.id=b.payment
+	 where b.bills_type=#{billsType,jdbcType=INTEGER} 
+	<!-- 		<if test="billsCode != null and billsCode!=''">
+ 				and b.bills_code like '%${billsCode}%'
+			</if>
+	       <if test="customerSupplierId != null and customerSupplierId!=''">
+ 				and b.customer_supplier_id=#{customerSupplierId,jdbcType=INTEGER}
+			</if> -->
+	</select>
+	<!-- 查询所有信息 结果集 -->
+	<select id="selectForSearch" resultMap="BaseResultMap">
+		SELECT
+		b.*,
+	  	s.name AS customer_supplier_name,
+		p.name  as originator_name,
+		st.name as payment_name 
+		 
+	FROM
+		bills b
+	INNER JOIN supcto s ON s.id = b.customer_supplier_id 
+	INNER JOIN person p on p.identifier=b.originator
+	INNER JOIN settlement_type st on st.id=b.payment
+	
+
+	WHERE
+		b.bills_type=#{billsType,jdbcType=INTEGER}
+			
+ 	 <include refid="query_where"></include>
+		<if test="desc!=null and desc!='' ">
+			order by ${desc} desc
+		</if>
+		<if test="asc!=null and asc!=''">
+			order by ${asc} asc
+		</if>
+		limit ${iDisplayStart},${pageDisplayLength}
+	</select>
+	<!-- 通过搜索条件过滤后的总记录 -->
+	<select id="iTotalDisplayRecords" resultType="java.lang.Integer">
+	select  count(*) from bills b
+	
+		INNER JOIN supcto s ON s.id = b.customer_supplier_id 
+	INNER JOIN person p on p.identifier=b.originator
+	INNER JOIN settlement_type st on st.id=b.payment
+	where b.bills_type=#{billsType,jdbcType=INTEGER}
+	
+		<include refid="query_where"></include>
+	</select>
+	
+	
+		<select id="selectByPrimaryKey"  resultMap="BaseResultMap" parameterType="java.lang.Integer">
+			SELECT
+		b.*,
+	  	s.name AS customer_supplier_name,
+		p.name  as originator_name,
+		st.name as payment_name ,
+		(SELECT pe.name from person pe WHERE pe.id= b.person_id ) as personName,
+(SELECT de.`name` from person pp INNER JOIN department de on de.id=pp.department_id   WHERE pp.id=b.person_id ) as departmentName
+	FROM
+		bills b
+	INNER JOIN supcto s ON s.id = b.customer_supplier_id 
+	INNER JOIN person p on p.identifier=b.originator
+	INNER JOIN settlement_type st on st.id=b.payment
+	
+
+	WHERE
+		b.id=#{id}
+		</select>
+	
+	<select id="reportPayOrderSales" resultMap="BaseResultMap">
+  	  SELECT
+  	  s.identifier sIdentifier,
+s.`name` sName,
+sum(bs.rebate_money) rebate_money,
+(SELECT
+ROUND(sum(soc.receiving_goods_money),2)
+FROM
+sales_order so LEFT JOIN sales_order_commodity soc ON so.id=soc.sales_order_id
+WHERE
+so.order_type IN (2,6)
+AND so.state IN ( 4,15, 16, 17, 18, 22, 23 ,30,31)  AND so.supcto_id=b.customer_supplier_id
+GROUP BY
+so.supcto_id
+) receiveMoney,
+(SELECT
+sum(soc.return_goods_num*soc.unit_price)
+FROM
+sales_order so LEFT JOIN sales_order_commodity soc ON so.id=soc.sales_order_id
+WHERE
+so.order_type IN (2,6)
+AND so.state IN ( 4,15, 16, 17, 18, 22, 23 ,30,31) AND so.supcto_id=b.customer_supplier_id
+GROUP BY
+so.supcto_id) returnMoney,
+(SELECT sum(bbs.the_moeny)  FROM  bills bb LEFT JOIN bills_sub bbs ON bb.id=bbs.bills_id WHERE bb.bills_type=3 AND bb.customer_supplier_id=b.customer_supplier_id GROUP BY bb.customer_supplier_id) the_moeny
+FROM
+bills b LEFT JOIN bills_sub bs ON b.id=bs.bills_id
+LEFT JOIN supcto s ON b.customer_supplier_id=s.id AND s.customer_or_supplier=1
+LEFT JOIN classification cla ON cla.id=s.classification_id
+WHERE b.bills_type=1
+<if test="supctoTypeClassId!=null and supctoTypeClassId!='' and supctoTypeClassId!=-1">		
+			AND cla.parent_id='${supctoTypeClassId}'
+		</if>
+		<!--客户名称二级分类  -->
+		<if test="supctoTypeClassTwoId!=null and supctoTypeClassTwoId!='' and supctoTypeClassTwoId!=-1">
+			AND s.classification_id='${supctoTypeClassTwoId}'
+		</if>
+		<!--客户名称  -->
+		<if test="supctoName!=null and supctoName!=''">
+			AND s.name  like '%${supctoName}%'
+		</if>
+	 
+ 
+		<!--时间  -->
+		<if test="beginTime!=null and beginTime!=''">
+			AND
+			b.bills_date
+			BETWEEN
+			'${beginTime}'
+			AND
+			DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+		</if>
+GROUP BY
+b.customer_supplier_id
+		
+
+ 
+		
+	
+		
+	
+	</select>
+		<select id="reportPayOrderProcure" resultMap="BaseResultMap">
+   	 SELECT
+s.identifier sIdentifier,
+s.`name` sName,
+sum(bs.rebate_money) rebate_money,
+(SELECT
+ROUND(SUM(pc.business_unit_price * pc.arrival_quantity *(1+ pc.tax_rate)),2) total_tax_price
+FROM
+procure_table pt 
+LEFT JOIN procure_commodity pc ON pt.id=pc.procure_table_id
+LEFT JOIN supcto s ON s.id=pt.supcto_id AND s.customer_or_supplier=2
+LEFT JOIN classification cla ON cla.id=s.classification_id
+WHERE pt.plan_or_order=4 AND pt.state IN(13) and pt.is_delete=0 AND pt.supcto_id=b.customer_supplier_id
+GROUP BY
+pt.supcto_id
+) receiveMoney,
+
+(SELECT
+
+sum(pc.total_price)
+FROM
+procure_table pt 
+LEFT JOIN procure_commodity pc ON pt.id=pc.procure_table_id
+LEFT JOIN supcto s ON s.id=pt.supcto_id AND s.customer_or_supplier=2
+WHERE pt.plan_or_order=5  and pt.is_delete=0 AND pt.supcto_id=b.customer_supplier_id
+
+GROUP BY pt.supcto_id) returnMoney,
+(SELECT sum(bbs.the_moeny)  FROM  bills bb LEFT JOIN bills_sub bbs ON bb.id=bbs.bills_id WHERE bb.bills_type=4 AND bb.customer_supplier_id=b.customer_supplier_id GROUP BY bb.customer_supplier_id) the_moeny
+FROM
+bills b LEFT JOIN bills_sub bs ON b.id=bs.bills_id
+LEFT JOIN supcto s ON b.customer_supplier_id=s.id AND s.customer_or_supplier=2
+WHERE b.bills_type=2
+<!--客户名称分类  -->
+		<if test="supctoTypeClassId!=null and supctoTypeClassId!='' and supctoTypeClassId!=-1">		
+			AND cla.parent_id='${supctoTypeClassId}'
+		</if>
+		<!--客户名称二级分类  -->
+		<if test="supctoTypeClassTwoId!=null and supctoTypeClassTwoId!='' and supctoTypeClassTwoId!=-1">
+			AND s.classification_id='${supctoTypeClassTwoId}'
+		</if>
+		<!--客户名称  -->
+		<if test="supctoName!=null and supctoName!=''">
+			AND s.name  like '%${supctoName}%'
+		</if>
+	 
+ 
+		<!--时间  -->
+		<if test="beginTime!=null and beginTime!=''">
+			AND
+			b.bills_date
+			BETWEEN
+			'${beginTime}'
+			AND
+			DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+		</if>
+
+GROUP BY
+b.customer_supplier_id
+ 
+		
+	
+		
+	
+	</select>
+</mapper>

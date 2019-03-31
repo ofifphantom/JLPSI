@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.InventoryMapper">
+	<resultMap id="BaseResultMap" type="com.jl.psi.model.Inventory">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="specification_id" jdbcType="INTEGER" property="specificationId" />
+		<result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		<result column="inventory" jdbcType="INTEGER" property="inventory" />
+		<result column="presell_inventory" jdbcType="INTEGER" property="presellInventory" />
+		<result column="occupied_inventory" jdbcType="INTEGER"
+			property="occupiedInventory" />
+		<result column="max_inventory" jdbcType="INTEGER" property="maxInventory" />
+		<result column="mini_inventory" jdbcType="INTEGER" property="miniInventory" />
+		<result column="cost_price" jdbcType="DOUBLE" property="costPrice" />
+		<result column="commodity_num" jdbcType="INTEGER" property="commodityNum" />
+		<result column="is_create_procure_plan" jdbcType="INTEGER" property="isCreateProcurePlan" />
+	</resultMap>
+	
+	<!-- 仓库信息 -->
+	<resultMap id="WarehouseResultMap" type="com.jl.psi.model.Warehouse">
+		<id column="wId" jdbcType="INTEGER" property="id" />
+		<result column="wName" jdbcType="VARCHAR" property="name" />
+		<result column="position" jdbcType="VARCHAR" property="position" />
+		<result column="operator_identifier" jdbcType="VARCHAR"
+			property="operatorIdentifier" />
+		<result column="operator_time" jdbcType="TIMESTAMP" property="operatorTime" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, specification_id, warehouse_id, inventory,
+		presell_inventory,
+		occupied_inventory,
+		max_inventory, mini_inventory,
+		cost_price,commodity_num,is_create_procure_plan
+	</sql>
+
+	<!-- 根据主键查询信息 -->
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from inventory
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 根据主键删除 信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		inventory
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 根据商品规格Id列表删除 信息 -->
+	<delete id="deleteByCommoditySpecificationIds" parameterType="java.lang.Integer">
+		delete from
+		inventory
+		where specification_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</delete>
+
+	<!-- 保存全部信息 -->
+	<insert id="insert" parameterType="com.jl.psi.model.Inventory">
+		insert into inventory (id,
+		specification_id, warehouse_id,
+		inventory, presell_inventory,
+		occupied_inventory,
+		max_inventory, mini_inventory, cost_price,commodity_num,is_create_procure_plan
+		)
+		values
+		(#{id,jdbcType=INTEGER}, #{specificationId,jdbcType=INTEGER},
+		#{warehouseId,jdbcType=INTEGER},
+		#{inventory,jdbcType=INTEGER},
+		#{presellInventory,jdbcType=INTEGER},
+		#{occupiedInventory,jdbcType=INTEGER},
+		#{maxInventory,jdbcType=INTEGER}, #{miniInventory,jdbcType=INTEGER},
+		#{costPrice,jdbcType=DOUBLE}, #{commodityNum,jdbcType=INTEGER}, #{isCreateProcurePlan,jdbcType=INTEGER}
+		)
+	</insert>
+
+	<!-- 批量保存全部信息 -->
+	<insert id="insertBatch" parameterType="com.jl.psi.model.Inventory">
+		insert into inventory
+		(specification_id, warehouse_id,
+		max_inventory, mini_inventory,commodity_num,inventory
+		)
+		values
+		<foreach collection="list" index="index" item="inventory"
+			separator=",">
+		(#{inventory.specificationId,jdbcType=INTEGER},
+		#{inventory.warehouseId,jdbcType=INTEGER},
+		#{inventory.maxInventory,jdbcType=INTEGER},
+		#{inventory.miniInventory,jdbcType=INTEGER},
+		#{inventory.commodityNum,jdbcType=INTEGER},
+		#{inventory.inventory,jdbcType=INTEGER}
+		)
+		</foreach>
+	</insert>
+
+	<!-- 保存所选内容的信息 -->
+	<insert id="insertSelective" parameterType="com.jl.psi.model.Inventory">
+		insert into inventory
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="specificationId != null">
+				specification_id,
+			</if>
+			<if test="warehouseId != null">
+				warehouse_id,
+			</if>
+			<if test="inventory != null">
+				inventory,
+			</if>
+			<if test="presellInventory != null">
+				presell_inventory,
+			</if>
+			<if test="occupiedInventory != null">
+				occupied_inventory,
+			</if>
+			<if test="maxInventory != null">
+				max_inventory,
+			</if>
+			<if test="miniInventory != null">
+				mini_inventory,
+			</if>
+			<if test="costPrice != null">
+				cost_price,
+			</if>
+			<if test="commodityNum != null">
+				commodity_num,
+			</if>
+			<if test="isCreateProcurePlan != null">
+				is_create_procure_plan,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="specificationId != null">
+				#{specificationId,jdbcType=INTEGER},
+			</if>
+			<if test="warehouseId != null">
+				#{warehouseId,jdbcType=INTEGER},
+			</if>
+			<if test="inventory != null">
+				#{inventory,jdbcType=INTEGER},
+			</if>
+			<if test="presellInventory != null">
+				#{presellInventory,jdbcType=INTEGER},
+			</if>
+			<if test="occupiedInventory != null">
+				#{occupiedInventory,jdbcType=INTEGER},
+			</if>
+			<if test="maxInventory != null">
+				#{maxInventory,jdbcType=INTEGER},
+			</if>
+			<if test="miniInventory != null">
+				#{miniInventory,jdbcType=INTEGER},
+			</if>
+			<if test="costPrice != null">
+				#{costPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="commodityNum != null">
+				#{commodityNum,jdbcType=INTEGER},
+			</if>
+			<if test="isCreateProcurePlan != null">
+				#{isCreateProcurePlan,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新所选内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.Inventory">
+		update inventory
+		<set>
+			<if test="specificationId != null">
+				specification_id = #{specificationId,jdbcType=INTEGER},
+			</if>
+			<if test="warehouseId != null and warehouseId != -1">
+				warehouse_id = #{warehouseId,jdbcType=INTEGER},
+			</if>
+			<if test="inventory != null">
+				inventory = #{inventory,jdbcType=INTEGER},
+			</if>
+			<if test="presellInventory != null">
+				presell_inventory = #{presellInventory,jdbcType=INTEGER},
+			</if>
+			<if test="occupiedInventory != null">
+				occupied_inventory =
+				#{occupiedInventory,jdbcType=INTEGER},
+			</if>
+			<if test="maxInventory != null">
+				max_inventory = #{maxInventory,jdbcType=INTEGER},
+			</if>
+			<if test="miniInventory != null">
+				mini_inventory = #{miniInventory,jdbcType=INTEGER},
+			</if>
+			<if test="costPrice != null">
+				cost_price = #{costPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="commodityNum != null">
+				commodity_num = #{commodityNum,jdbcType=INTEGER},
+			</if>
+			<if test="isCreateProcurePlan != null">
+				is_create_procure_plan = #{isCreateProcurePlan,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据主键更新全部内容 -->
+	<update id="updateByPrimaryKey" parameterType="com.jl.psi.model.Inventory">
+		update inventory
+		set specification_id = #{specificationId,jdbcType=INTEGER},
+		warehouse_id =
+		#{warehouseId,jdbcType=INTEGER},
+		inventory =
+		#{inventory,jdbcType=INTEGER},
+		presell_inventory =
+		#{presellInventory,jdbcType=INTEGER},
+		occupied_inventory =
+		#{occupiedInventory,jdbcType=INTEGER},
+		max_inventory =
+		#{maxInventory,jdbcType=INTEGER},
+		mini_inventory =
+		#{miniInventory,jdbcType=INTEGER},
+		cost_price =
+		#{costPrice,jdbcType=DOUBLE},
+		commodity_num =
+		#{commodityNum,jdbcType=INTEGER},
+		is_create_procure_plan =
+		#{isCreateProcurePlan,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="getCommodityWarehouse" resultMap="BaseResultMap">
+	SELECT
+	i.warehouse_id warehouse_id
+	FROM
+	inventory i
+	LEFT JOIN
+	commodity_specification c
+	ON 
+	i.specification_id=c.id
+	WHERE c.specification_identifier=#{identifier}
+	</select>
+
+	
+	<!-- 根据仓库id以及商品id修改该商品的占用数量 -->
+	<update id="updateOccupiedInventory" parameterType="com.jl.psi.model.Inventory">
+		UPDATE inventory inv
+		INNER JOIN (
+			SELECT
+				occupied_inventory
+			FROM
+				inventory
+			WHERE
+				warehouse_id = #{warehouseId,jdbcType=INTEGER}
+			AND specification_id = #{specificationId,jdbcType=INTEGER}
+		) oi
+		SET
+		<if test="occupiedInventory!=null and occupiedInventory!=''">
+		inv.occupied_inventory = #{occupiedInventory,jdbcType=INTEGER}+oi.occupied_inventory
+		</if> 
+		<if test="inventory!=null and inventory!=''">
+		inv.inventory=#{inventory,jdbcType=INTEGER}+inv.inventory
+		</if>
+		WHERE
+			warehouse_id = #{warehouseId,jdbcType=INTEGER}
+		AND specification_id = #{specificationId,jdbcType=INTEGER}
+	
+	</update>
+	<!-- 根据仓库id以及商品id修改该商品的库存数量及占用数量 减库存 -->
+	<update id="updateInventoryDown" parameterType="com.jl.psi.model.Inventory">
+		UPDATE inventory inv
+		INNER JOIN (
+			SELECT
+				occupied_inventory
+			FROM
+				inventory
+			WHERE
+				warehouse_id = #{warehouseId,jdbcType=INTEGER}
+			AND specification_id = #{specificationId,jdbcType=INTEGER}
+		) oi
+		SET inv.occupied_inventory =oi.occupied_inventory-#{occupiedInventory,jdbcType=INTEGER},
+		inv.inventory=inv.inventory-#{inventory}
+		WHERE
+			warehouse_id = #{warehouseId,jdbcType=INTEGER}
+		AND specification_id =#{specificationId,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 根据仓库id以及商品id修改该商品的库存   加库存  -->
+	<update id="updateAddGoodsInventory" parameterType="com.jl.psi.model.Inventory">
+		
+		UPDATE inventory inv
+		
+		SET inv.inventory = inv.inventory+#{inventory}
+		WHERE
+			warehouse_id = #{warehouseId,jdbcType=INTEGER}
+		AND specification_id =#{specificationId,jdbcType=INTEGER}
+
+	</update>
+	
+	<!-- 根据商品规格id获取商品仓库id -->
+	<select id="getWarehouseIdByCommoditySpecificationId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT i.warehouse_id from  inventory i  WHERE i.specification_id =#{specificationId} 
+	</select>
+	
+	<!-- 根据商品id修改该商品的占用数量 -->
+	<update id="updateOccupiedInventoryByCommoditySpecificationId" parameterType="com.jl.psi.model.Inventory">
+		UPDATE inventory inv
+		INNER JOIN (
+			SELECT
+				occupied_inventory
+			FROM
+				inventory
+			WHERE
+				specification_id = #{specificationId,jdbcType=INTEGER}
+		) oi
+		SET inv.occupied_inventory =oi.occupied_inventory+#{occupiedInventory,jdbcType=INTEGER}
+		WHERE
+			specification_id =#{specificationId,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 根据商品id修改该商品的占用数量 -->
+	<update id="updateOccupiedInventoryToReduceByCommoditySpecificationId" parameterType="com.jl.psi.model.Inventory">
+		UPDATE inventory inv
+		INNER JOIN (
+			SELECT
+				occupied_inventory
+			FROM
+				inventory
+			WHERE
+				specification_id = #{specificationId,jdbcType=INTEGER}
+		) oi
+		SET inv.occupied_inventory =oi.occupied_inventory-#{occupiedInventory,jdbcType=INTEGER}
+		WHERE
+			specification_id =#{specificationId,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 根据商品id修改该商品的库存数量  -->
+	<update id="updateInventoryByCommoditySpecificationId" parameterType="com.jl.psi.model.Inventory">
+		UPDATE inventory SET inventory = #{inventory} WHERE specification_id = #{specificationId}
+	</update>
+	
+	<!-- 根据规格id更新字段是否生成采购计划单 -->
+	<update id="updateBySpecificationId" parameterType="com.jl.psi.model.Inventory">
+		update inventory
+		set is_create_procure_plan = #{isCreateProcurePlan,jdbcType=INTEGER}
+		where specification_id = #{specificationId,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 如果库存数大于预警数量 则修改是否生成采购计划单字段为0 -->
+	<update id="updateIsCreateProcurePlanTo0">
+	update inventory inv set is_create_procure_plan=0 where inventory >=(select warning_number from commodity_specification where id=inv.specification_id) 
+	</update>
+	
+	<!-- 根据商品规格id修改该商品的库存   减库存  -->
+	<update id="updateReduceGoodsInventory" parameterType="com.jl.psi.model.Inventory">
+		
+		UPDATE inventory inv
+		
+		SET inv.inventory = inv.inventory-#{inventory}
+		WHERE
+			specification_id =#{specificationId,jdbcType=INTEGER}
+
+	</update>
+	
+	<!-- 根据商品规格id批量查询商品库存信息 -->
+	<select id="selectBatchInventoryMsgBySpecificationId" resultMap="BaseResultMap">
+	select id,specification_id,warehouse_id,inventory,occupied_inventory from inventory where specification_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		) 
+	</select>
+	
+	<!-- 根据商品id修改该商品的库存   加库存  -->
+	<update id="updateAddGoodsInventoryBySpecificationId" parameterType="com.jl.psi.model.Inventory">
+		
+		UPDATE inventory inv
+		
+		SET inv.inventory = inv.inventory+#{inventory}
+		WHERE
+			specification_id =#{specificationId,jdbcType=INTEGER}
+
+	</update>
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.SupctoCommodityMapper">
+  <resultMap id="BaseResultMap" type="com.jl.psi.model.SupctoCommodity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="commodity_id" jdbcType="INTEGER" property="commodityId" />
+    <result column="supcto_id" jdbcType="INTEGER" property="supctoId" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <association property="commodity" javaType="com.jl.psi.model.Commodity"
+			resultMap="CommodityResultMap" />
+	<association property="commoditySpecification" javaType="com.jl.psi.model.CommoditySpecification"
+			resultMap="CommoditySpecificationResultMap" />
+	<association property="unit" javaType="com.jl.psi.model.Commodity"
+			resultMap="UnitResultMap" />
+  </resultMap>
+  <resultMap id="CommodityResultMap" type="com.jl.psi.model.Commodity">
+	<result column="cname" jdbcType="VARCHAR" property="name" />
+	<result column="taxes" jdbcType="DOUBLE" property="taxes" />
+  </resultMap>
+  <resultMap id="CommoditySpecificationResultMap" type="com.jl.psi.model.CommoditySpecification">
+	<result column="csname" jdbcType="VARCHAR" property="specificationName" />
+	<result column="csidentifier" jdbcType="VARCHAR" property="specificationIdentifier" />
+	<result column="baseMiniPrice" jdbcType="DOUBLE" property="baseMiniPrice" />
+  </resultMap>
+ <resultMap id="UnitResultMap" type="com.jl.psi.model.Unit">
+		<result column="unitname" jdbcType="VARCHAR" property="name" />
+		
+ </resultMap>
+	
+  <sql id="Base_Column_List">
+    id, commodity_id, supcto_id, price
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from supcto_commodity
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from supcto_commodity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jl.psi.model.SupctoCommodity">
+	insert into supcto_commodity
+	(id, commodity_id, supcto_id,
+	price)
+	values (#{id,jdbcType=INTEGER},
+	#{commodityId,jdbcType=INTEGER},
+	#{supctoId,jdbcType=INTEGER},
+	#{price,jdbcType=DOUBLE})
+</insert>
+  <insert id="insertSelective" parameterType="com.jl.psi.model.SupctoCommodity">
+    insert into supcto_commodity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="commodityId != null">
+        commodity_id,
+      </if>
+      <if test="supctoId != null">
+        supcto_id,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="commodityId != null">
+        #{commodityId,jdbcType=INTEGER},
+      </if>
+      <if test="supctoId != null">
+        #{supctoId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.SupctoCommodity">
+    update supcto_commodity
+    <set>
+      <if test="commodityId != null">
+        commodity_id = #{commodityId,jdbcType=INTEGER},
+      </if>
+      <if test="supctoId != null">
+        supcto_id = #{supctoId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jl.psi.model.SupctoCommodity">
+    update supcto_commodity
+    set commodity_id = #{commodityId,jdbcType=INTEGER},
+      supcto_id = #{supctoId,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  
+  
+  
+ <!--根据SupctoId删除信息--> 
+  <delete id="deleteSupctoCommodityBySupctoId" parameterType="java.lang.Integer">
+    delete from supcto_commodity
+    where supcto_id= #{SupctoId,jdbcType=INTEGER}
+  </delete>
+  
+  <!--根据SupctoIds删除信息-->
+  <delete id="deleteSupctoCommodityBySupctoIds" parameterType="java.util.List">
+    delete from supcto_commodity
+    where supcto_id in (
+      	<foreach collection="list" item="item" separator=",">
+          #{item}
+      	</foreach>
+      	)
+  </delete>
+  
+  <!--根据SupctoId查询信息--> 
+  <select id="selectSupctoCommodityBySupctoId" parameterType="java.util.Map" resultMap="BaseResultMap">
+ 
+	    SELECT
+		s.*, c. NAME cname,c.taxes,
+		cs.specification_identifier csidentifier,
+		cs.specification_name csname,
+		u.name unitname,u.mini_price baseMiniPrice
+	FROM
+		supcto_commodity s
+  LEFT JOIN commodity_specification cs ON s.commodity_id = cs.id
+  	
+	LEFT JOIN commodity c ON cs.commodity_id = c.id
+	LEFT JOIN unit u ON s.commodity_id = u.specification_id and u.basic_unit=1
+	WHERE
+		s.supcto_id = #{supctoId,jdbcType=INTEGER}
+		
+		<if test="flag == 2">
+			and cs.state !=10
+		</if>
+  </select>
+  
+  <!-- 根据商品id查询信息 -->
+  <select id="selectByCommodityIds" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+   SELECT
+		sc.*,cs.id, cs.specification_identifier csidentifier
+	FROM
+		supcto_commodity sc
+	LEFT JOIN commodity_specification cs ON sc.commodity_id = cs.id
+    where sc.commodity_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+  </select>
+  
+  <!-- 根据商品规格ID以及客户Id查询价格 -->
+  <select id="selectPriceByCommoditySpIdAndSupId" resultType="Double">
+	  SELECT
+		price
+	FROM
+		supcto_commodity
+	WHERE
+		supcto_id = #{supctoId,jdbcType=INTEGER}
+	AND commodity_id = #{commodityId,jdbcType=INTEGER}
+  </select>
+  
+   <!--根据SupctoId更新SupctoId--> 
+  <delete id="updateSupctoIdBySupctoId" parameterType="java.util.Map">
+    update supcto_commodity
+    set supcto_id = #{newId,jdbcType=INTEGER}
+    where supcto_id= #{oldId,jdbcType=INTEGER}
+  </delete>
+</mapper>

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.ProcureCommodityMapper">
+	<resultMap id="BaseResultMap" type="com.jl.psi.model.ProcureCommodity">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="commodity_id" jdbcType="INTEGER" property="commodityId" />
+		<result column="procure_table_id" jdbcType="INTEGER" property="procureTableId" />
+		<result column="tax_rate" jdbcType="DOUBLE" property="taxRate" />
+		<result column="amount_of_tax" jdbcType="DOUBLE" property="amountOfTax" />
+		<result column="total_tax_price" jdbcType="DOUBLE" property="totalTaxPrice" />
+		<result column="order_num" jdbcType="INTEGER" property="orderNum" />
+		<result column="lot_number" jdbcType="VARCHAR" property="lotNumber" />
+		<result column="arrival_quantity" jdbcType="INTEGER" property="arrivalQuantity" />
+		<result column="suspend_quantity" jdbcType="INTEGER" property="suspendQuantity" />
+		<result column="suspend_price" jdbcType="DOUBLE" property="suspendPrice" />
+		<result column="discount" jdbcType="INTEGER" property="discount" />
+		<result column="is_largess" jdbcType="INTEGER" property="isLargess" />
+		<result column="original_unit_price" jdbcType="DOUBLE"
+			property="originalUnitPrice" />
+		<result column="business_unit_price" jdbcType="DOUBLE"
+			property="businessUnitPrice" />
+		<result column="remarks" jdbcType="VARCHAR" property="remarks" />
+		<result column="contains_tax_price" jdbcType="DOUBLE" property="containsTaxPrice" />
+		<result column="payment_for_goods" jdbcType="DOUBLE" property="paymentForGoods" />
+		<result column="total_price" jdbcType="DOUBLE" property="totalPrice" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, commodity_id, procure_table_id, tax_rate,
+		amount_of_tax,
+		total_tax_price, order_num,
+		lot_number, arrival_quantity,
+		suspend_quantity, suspend_price, discount,
+		is_largess,original_unit_price,
+		business_unit_price, remarks, contains_tax_price,
+		payment_for_goods,
+		total_price
+	</sql>
+
+	<!-- 根据主键查询信息 -->
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from procure_commodity
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 根据主键删除 信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		procure_commodity
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<!-- 保存全部信息 -->
+	<insert id="insert" parameterType="com.jl.psi.model.ProcureCommodity">
+		insert into procure_commodity
+		(id, commodity_id, procure_table_id,
+		tax_rate, amount_of_tax,
+		total_tax_price,
+		order_num, lot_number, arrival_quantity,
+		suspend_quantity, suspend_price, discount,
+		is_largess,original_unit_price,
+		business_unit_price, remarks,
+		contains_tax_price,
+		payment_for_goods,
+		total_price)
+		values (#{id,jdbcType=INTEGER},
+		#{commodityId,jdbcType=INTEGER},
+		#{procureTableId,jdbcType=INTEGER},
+		#{taxRate,jdbcType=DOUBLE}, #{amountOfTax,jdbcType=DOUBLE},
+		#{totalTaxPrice,jdbcType=DOUBLE},
+		#{orderNum,jdbcType=INTEGER},
+		#{lotNumber,jdbcType=VARCHAR},
+		#{arrivalQuantity,jdbcType=INTEGER},
+		#{suspendQuantity,jdbcType=INTEGER}, #{suspendPrice,jdbcType=DOUBLE},
+		#{discount,jdbcType=INTEGER},
+		#{isLargess,jdbcType=INTEGER},#{originalUnitPrice,jdbcType=DOUBLE},
+		#{businessUnitPrice,jdbcType=DOUBLE}, #{remarks,jdbcType=VARCHAR},
+	    #{containsTaxPrice,jdbcType=DOUBLE},
+		#{paymentForGoods,jdbcType=DOUBLE},
+		#{totalPrice,jdbcType=DOUBLE})
+	</insert>
+
+	<!-- 保存所选内容的信息 -->
+	<insert id="insertSelective" parameterType="com.jl.psi.model.ProcureCommodity">
+		insert into procure_commodity
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="commodityId != null">
+				commodity_id,
+			</if>
+			<if test="procureTableId != null">
+				procure_table_id,
+			</if>
+			<if test="taxRate != null">
+				tax_rate,
+			</if>
+			<if test="amountOfTax != null">
+				amount_of_tax,
+			</if>
+			<if test="totalTaxPrice != null">
+				total_tax_price,
+			</if>
+			<if test="orderNum != null">
+				order_num,
+			</if>
+			<if test="lotNumber != null">
+				lot_number,
+			</if>
+			<if test="arrivalQuantity != null">
+				arrival_quantity,
+			</if>
+			<if test="suspendQuantity != null">
+				suspend_quantity,
+			</if>
+			<if test="suspendPrice != null">
+				suspend_price,
+			</if>
+			<if test="discount != null">
+				discount,
+			</if>
+			<if test="isLargess != null">
+				is_largess,
+			</if>
+			<if test="originalUnitPrice != null">
+				original_unit_price,
+			</if>
+			<if test="businessUnitPrice != null">
+				business_unit_price,
+			</if>
+			<if test="remarks != null">
+				remarks,
+			</if>
+			<if test="containsTaxPrice != null">
+				contains_tax_price,
+			</if>
+			<if test="paymentForGoods != null">
+				payment_for_goods,
+			</if>
+			<if test="totalPrice != null">
+				total_price,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="commodityId != null">
+				#{commodityId,jdbcType=INTEGER},
+			</if>
+			<if test="procureTableId != null">
+				#{procureTableId,jdbcType=INTEGER},
+			</if>
+			<if test="taxRate != null">
+				#{taxRate,jdbcType=DOUBLE},
+			</if>
+			<if test="amountOfTax != null">
+				#{amountOfTax,jdbcType=DOUBLE},
+			</if>
+			<if test="totalTaxPrice != null">
+				#{totalTaxPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="orderNum != null">
+				#{orderNum,jdbcType=INTEGER},
+			</if>
+			<if test="lotNumber != null">
+				#{lotNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="arrivalQuantity != null">
+				#{arrivalQuantity,jdbcType=INTEGER},
+			</if>
+			<if test="suspendQuantity != null">
+				#{suspendQuantity,jdbcType=INTEGER},
+			</if>
+			<if test="suspendPrice != null">
+				#{suspendPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="discount != null">
+				#{discount,jdbcType=INTEGER},
+			</if>
+			<if test="isLargess != null">
+				#{isLargess,jdbcType=INTEGER},
+			</if>
+			<if test="originalUnitPrice != null">
+				#{originalUnitPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="businessUnitPrice != null">
+				#{businessUnitPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="remarks != null">
+				#{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="containsTaxPrice != null">
+				#{containsTaxPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="paymentForGoods != null">
+				#{paymentForGoods,jdbcType=DOUBLE},
+			</if>
+			<if test="totalPrice != null">
+				#{totalPrice,jdbcType=DOUBLE},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 批量保存全部信息 -->
+	<insert id="insertBatch" parameterType="com.jl.psi.model.ProcureCommodity">
+		insert into procure_commodity
+		(commodity_id, procure_table_id,
+		tax_rate, amount_of_tax,
+		total_tax_price,
+		order_num, lot_number, discount,original_unit_price,
+		business_unit_price, remarks,
+		contains_tax_price,
+		payment_for_goods,
+		total_price,arrival_quantity,suspend_quantity,suspend_price)
+		values <foreach collection="list" index="index" item="pc"
+			separator=",">
+		(#{pc.commodityId,jdbcType=INTEGER},
+		#{pc.procureTableId,jdbcType=INTEGER},
+		#{pc.taxRate,jdbcType=DOUBLE}, #{pc.amountOfTax,jdbcType=DOUBLE},
+		#{pc.totalTaxPrice,jdbcType=DOUBLE},
+		#{pc.orderNum,jdbcType=INTEGER},#{pc.lotNumber,jdbcType=VARCHAR},
+		#{pc.discount,jdbcType=INTEGER},#{pc.originalUnitPrice,jdbcType=DOUBLE},
+		#{pc.businessUnitPrice,jdbcType=DOUBLE}, #{pc.remarks,jdbcType=VARCHAR},
+	    #{pc.containsTaxPrice,jdbcType=DOUBLE},
+		#{pc.paymentForGoods,jdbcType=DOUBLE},
+		#{pc.totalPrice,jdbcType=DOUBLE},
+		#{pc.arrivalQuantity,jdbcType=INTEGER},
+		#{pc.suspendQuantity,jdbcType=INTEGER},
+		#{pc.suspendPrice,jdbcType=DOUBLE})
+		</foreach>
+	</insert>
+
+	<!-- 根据主键更新所选内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.ProcureCommodity">
+		update procure_commodity
+		<set>
+			<if test="commodityId != null">
+				commodity_id = #{commodityId,jdbcType=INTEGER},
+			</if>
+			<if test="procureTableId != null">
+				procure_table_id = #{procureTableId,jdbcType=INTEGER},
+			</if>
+			<if test="taxRate != null">
+				tax_rate = #{taxRate,jdbcType=DOUBLE},
+			</if>
+			<if test="amountOfTax != null">
+				amount_of_tax = #{amountOfTax,jdbcType=DOUBLE},
+			</if>
+			<if test="totalTaxPrice != null">
+				total_tax_price = #{totalTaxPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="orderNum != null">
+				order_num = #{orderNum,jdbcType=INTEGER},
+			</if>
+			<if test="lotNumber != null">
+				lot_number = #{lotNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="arrivalQuantity != null">
+				arrival_quantity = #{arrivalQuantity,jdbcType=INTEGER},
+			</if>
+			<if test="suspendQuantity != null">
+				suspend_quantity = #{suspendQuantity,jdbcType=INTEGER},
+			</if>
+			<if test="suspendPrice != null">
+				suspend_price = #{suspendPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="discount != null">
+				discount = #{discount,jdbcType=INTEGER},
+			</if>
+			<if test="isLargess != null">
+				is_largess = #{isLargess,jdbcType=INTEGER},
+			</if>
+			<if test="originalUnitPrice != null">
+				original_unit_price =
+				#{originalUnitPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="businessUnitPrice != null">
+				business_unit_price =
+				#{businessUnitPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="remarks != null">
+				remarks = #{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="containsTaxPrice != null">
+				contains_tax_price = #{containsTaxPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="paymentForGoods != null">
+				payment_for_goods = #{paymentForGoods,jdbcType=DOUBLE},
+			</if>
+			<if test="totalPrice != null">
+				total_price = #{totalPrice,jdbcType=DOUBLE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据主键更新全部内容 -->
+	<update id="updateByPrimaryKey" parameterType="com.jl.psi.model.ProcureCommodity">
+		update
+		procure_commodity
+		set commodity_id = #{commodityId,jdbcType=INTEGER},
+		procure_table_id = #{procureTableId,jdbcType=INTEGER},
+		tax_rate =
+		#{taxRate,jdbcType=DOUBLE},
+		amount_of_tax =
+		#{amountOfTax,jdbcType=DOUBLE},
+		total_tax_price =
+		#{totalTaxPrice,jdbcType=DOUBLE},
+		order_num =
+		#{orderNum,jdbcType=INTEGER},
+		lot_number =
+		#{lotNumber,jdbcType=VARCHAR},
+		arrival_quantity =
+		#{arrivalQuantity,jdbcType=INTEGER},
+		suspend_quantity =
+		#{suspendQuantity,jdbcType=INTEGER},
+		suspend_price =
+		#{suspendPrice,jdbcType=DOUBLE},
+		discount =
+		#{discount,jdbcType=INTEGER},
+		is_largess =
+		#{isLargess,jdbcType=INTEGER},
+		original_unit_price =
+		#{originalUnitPrice,jdbcType=DOUBLE},
+		business_unit_price =
+		#{businessUnitPrice,jdbcType=DOUBLE},
+		remarks =
+		#{remarks,jdbcType=VARCHAR},
+		contains_tax_price =
+		#{containsTaxPrice,jdbcType=DOUBLE},
+		payment_for_goods =
+		#{paymentForGoods,jdbcType=DOUBLE},
+		total_price =
+		#{totalPrice,jdbcType=DOUBLE}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	
+	<!-- 根据procureTableId 批量删除 信息 -->
+	<delete id="deleteBatchByProcureTableId">
+		delete from
+		procure_commodity
+		where procure_table_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</delete>
+	
+	<!-- 根据procureTableId删除 信息 -->
+	<delete id="deleteByProcureTableId">
+		delete from procure_commodity where procure_table_id = #{procureTableId,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 根据商品规格id获取采购商品信息 -->
+	<select id="getProcureCommodityByCommoditySpecificationId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+			pc.business_unit_price,
+			pc.arrival_quantity
+		from procure_commodity pc, 
+			 procure_table pt 
+		WHERE pc.procure_table_id = pt.id 
+		and pt.state=13
+		and pc.commodity_id = #{CommoditySpecificationId} 
+		and pt.plan_or_order=4
+	</select>
+</mapper>

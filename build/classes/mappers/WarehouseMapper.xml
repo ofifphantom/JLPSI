@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.WarehouseMapper">
+	<resultMap id="BaseResultMap" type="com.jl.psi.model.Warehouse">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="identifier" jdbcType="VARCHAR" property="identifier" />
+		<result column="position" jdbcType="VARCHAR" property="position" />
+		<result column="operator_identifier" jdbcType="VARCHAR"
+			property="operatorIdentifier" />
+		<result column="operator_time" jdbcType="TIMESTAMP" property="operatorTime" />
+		<result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+		<association property="person" javaType="com.jl.psi.model.Person"
+			resultMap="PersonResultMap" />
+	</resultMap>
+	 <resultMap id="PersonResultMap" type="com.jl.psi.model.Person">
+	<result column="userName" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+	<sql id="Base_Column_List">
+		id, name, identifier, position, operator_identifier, operator_time,is_delete
+	</sql>
+	
+	<!-- 根据主键查询信息 -->
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from warehouse
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<!-- 根据主键查询信息 -->
+	<select id="selectById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		name
+		from warehouse
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<!-- 查询所有信息 -->
+	<select id="selectAllMsg" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from warehouse
+		where is_delete = 0
+	</select>
+	
+	<!-- 根据主键删除 信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		warehouse
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 保存全部信息 -->
+	<insert id="insert" parameterType="com.jl.psi.model.Warehouse">
+		insert into warehouse (id,
+		name, identifier, position,
+		operator_identifier, operator_time,is_delete)
+		values
+		(#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{identifier,jdbcType=VARCHAR},
+		#{position,jdbcType=VARCHAR},
+		#{operatorIdentifier,jdbcType=VARCHAR},
+		#{operatorTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=INTEGER})
+	</insert>
+	
+	<!-- 保存所选内容的信息 -->
+	<insert id="insertSelective" parameterType="com.jl.psi.model.Warehouse">
+		insert into warehouse
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="identifier != null">
+		        identifier,
+		     </if>
+			<if test="position != null">
+				position,
+			</if>
+			<if test="operatorIdentifier != null">
+				operator_identifier,
+			</if>
+			<if test="operatorTime != null">
+				operator_time,
+			</if>
+			<if test="isDelete != null">
+			    is_delete,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="identifier != null">
+        		#{identifier,jdbcType=VARCHAR},
+      		</if>
+			<if test="position != null">
+				#{position,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorIdentifier != null">
+				#{operatorIdentifier,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorTime != null">
+				#{operatorTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 根据主键更新所选内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.Warehouse">
+		update warehouse
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="identifier != null">
+        		identifier = #{identifier,jdbcType=VARCHAR},
+      		</if>
+			<if test="position != null">
+				position = #{position,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorIdentifier != null">
+				operator_identifier =
+				#{operatorIdentifier,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorTime != null">
+				operator_time = #{operatorTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 根据主键更新全部内容 -->
+	<update id="updateByPrimaryKey" parameterType="com.jl.psi.model.Warehouse">
+		update warehouse
+		set name = #{name,jdbcType=VARCHAR}, identifier = #{identifier,jdbcType=VARCHAR},
+		position =
+		#{position,jdbcType=VARCHAR},
+		operator_identifier =
+		#{operatorIdentifier,jdbcType=VARCHAR},
+		operator_time =
+		#{operatorTime,jdbcType=TIMESTAMP},
+		is_delete = #{isDelete,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	 <!--判断关联   根据仓库id列表获取编号 -->
+	<select id="selectWarehouseIdentifierByWarehouseId" parameterType="java.util.List" resultMap="BaseResultMap">
+		select DISTINCT(c.identifier) from inventory a,commodity_specification cs, warehouse c where cs.id= a.specification_id and a.warehouse_id= c.id and c.id in(
+			<foreach collection="list" item="item" separator=",">
+	          #{item}
+	      	</foreach>
+		)
+		and cs.state != 10
+	</select>
+	
+	<!--判断关联   根据仓库id列表从调拨单获取编号 -->
+	<select id="selectWarehouseIdentifierFromAllotOrderByWarehouseId" parameterType="java.util.List" resultMap="BaseResultMap">
+		select DISTINCT(c.identifier) from allot_order a, warehouse c where (a.export_warehouse_id= c.id OR a.import_warehouse_id= c.id) and c.id in(
+			<foreach collection="list" item="item" separator=",">
+	          #{item}
+	      	</foreach>
+		)
+	</select>
+	
+	<!--判断关联   根据仓库id列表从报损单获取编号 -->
+	<select id="selectWarehouseIdentifierFromBreakageOrderByWarehouseId" parameterType="java.util.List" resultMap="BaseResultMap">
+		select DISTINCT(c.identifier) from breakage_order a, warehouse c where a.is_delete=0 and a.warehouse_id= c.id and c.id in(
+			<foreach collection="list" item="item" separator=",">
+	          #{item}
+	      	</foreach>
+		)
+	</select>
+	
+	<!--判断关联   根据仓库id列表从拆卸/组装单获取编号 -->
+	<select id="selectWarehouseIdentifierFromPackageOrTeardownOrderByWarehouseId" parameterType="java.util.List" resultMap="BaseResultMap">
+		select DISTINCT(c.identifier) from package_or_teardown_order a, warehouse c where a.is_delete=0 and  a.warehouse_id= c.id and c.id in(
+			<foreach collection="list" item="item" separator=",">
+	          #{item}
+	      	</foreach>
+		)
+	</select>
+	
+	<!--判断关联   根据仓库id列表从盘点单获取编号 -->
+	<select id="selectWarehouseIdentifierFromTakeStockOrderByWarehouseId" parameterType="java.util.List" resultMap="BaseResultMap">
+		select DISTINCT(c.identifier) from take_stock_order a, warehouse c where a.is_delete=0 and a.warehouse_id= c.id and c.id in(
+			<foreach collection="list" item="item" separator=",">
+	          #{item}
+	      	</foreach>
+		)
+	</select>
+	
+	<!--判断关联   根据仓库id列表从员工表获取编号 -->
+	<select id="selectWarehouseIdentifierFromPersonByWarehouseId" parameterType="java.util.List" resultMap="BaseResultMap">
+		select DISTINCT(c.identifier) from person a, warehouse c where a.warehouse_id= c.id and c.id in(
+			<foreach collection="list" item="item" separator=",">
+	          #{item}
+	      	</foreach>
+		)
+		
+		and a.is_delete = 0
+	</select>
+  
+  
+  <!-- 根据id列表获取信息 -->
+	<select id="getWarehouseByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+		 select * from warehouse where id  in (
+		<foreach collection="list" item="item" separator=",">
+          #{item}
+      	</foreach>
+      	) 
+
+	</select>
+	
+	<!-- 根据id列表删除信息 -->
+	<delete id="deleteWarehouseByIds" parameterType="java.util.List">
+ 		<!-- delete from warehouse where id in (
+      	<foreach collection="list" item="item" separator=",">
+          #{item}
+      	</foreach>
+      ) -->
+		update warehouse set is_delete = 1 where id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</delete>
+  
+    <!-- 增加或编辑前判断是否重复    根据名称&位置或名称&位置&id查询所有信息 -->
+	<select id="checkIsRepeat" resultMap="BaseResultMap">
+		select * from warehouse where name = #{name,jdbcType=VARCHAR} 
+		and position = #{position,jdbcType=VARCHAR}
+		<if test="id != null">
+	        and id != #{id,jdbcType=INTEGER}
+	    </if>
+	    and is_delete = 0
+	</select>
+  
+  <!--定义一个sql片段-->
+	<sql id="query_where">
+		<if test="identifier!=null and identifier!=''">
+			AND c.identifier like '%${identifier}%'
+		</if>
+		<if test="name!=null and name!=''">
+			AND c.name like '%${name}%'
+		</if>
+		<if test="operatorIdentifier!=null and operatorIdentifier!=''">
+			AND u.name like '%${operatorIdentifier}%'
+		</if>
+			<if test="position!=null and position!=''">
+			AND c.position like '%${position}%'
+		</if>
+		<if test="beginTime!=null and beginTime!=''">
+			AND date_format(c.operator_time,'%Y-%m-%d') &gt;= #{beginTime}
+			AND date_format(c.operator_time,'%Y-%m-%d') &lt;= #{endTime}
+		</if>
+	</sql>
+	
+	
+	<select id="selectMsgOrderBySearchMsg" resultMap="BaseResultMap">
+		 select c.*,u.name userName 
+		from warehouse c LEFT JOIN person u on u.identifier=c.operator_identifier
+		where 1=1
+		<include refid="query_where"></include>
+	</select>
+	
+	
+	
+	
+	<!-- datatable 分页 start -->
+    <!-- 查询记录总条数 -->
+	<select id="iTotalRecords" resultType="java.lang.Integer">
+		select count(1)
+		from warehouse c LEFT JOIN person u on u.identifier=c.operator_identifier
+	</select>
+	<!-- 查询所有信息 结果集 -->
+	<select id="selectForSearch" resultMap="BaseResultMap">
+		
+	    select c.*,u.name userName 
+		from warehouse c LEFT JOIN person u on u.identifier=c.operator_identifier
+		where 1=1
+		<include refid="query_where"></include>
+		
+		<if test="desc!=null and desc!='' ">
+			order by ${desc} desc
+		</if>
+		<if test="asc!=null and asc!=''">
+			order by ${asc} asc
+		</if>
+		limit ${iDisplayStart},${pageDisplayLength}
+	</select>
+	<!-- 通过搜索条件过滤后的总记录 -->
+	<select id="iTotalDisplayRecords" resultType="java.lang.Integer">
+		select count(1)
+		from warehouse c LEFT JOIN person u on u.identifier=c.operator_identifier
+		where 1=1
+		<include refid="query_where"></include>
+			
+	</select>
+	<select id="selectWarehouseById"   resultMap="BaseResultMap">
+	select id,name from warehouse where id=#{id}
+	</select>
+	
+	
+	
+</mapper>

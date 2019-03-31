@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script src="../js/typeahead-bs2.min.js"></script>
+		<script src="../js/laydate/laydate.js"></script>
+		<style>
+			
+		</style>
+	</head>
+	<body>
+		<input type="text" id="test6" readonly="readonly" />
+		
+		
+		<!--<input type="text" class="form-control" id="goodsname" name="goodsname" data-provide="typeahead" placeholder="输入编号、名称、关键字可自动进行检索" />
+		<input id="good" />
+		<div id="Div">
+			
+		</div>-->
+	</body>
+	<script type="text/javascript">
+		
+laydate.render({
+  elem: '#test6'
+  ,range: '~'
+  ,value:'2018-06-27 ~ 2018-06-29'
+});		
+
+		
+
+		/*var subjects = ['PHP 宝宝开心 就折磨干', 'MySQL', 'SQL', 'PostgreSQL', 'HTML', 'CSS', 'HTML5', 'CSS3', 'JSON','14578952 绝味鸭脖 鸭架 好好吃'];
+    	$('#goodsname').typeahead({
+    		source: subjects,
+    		updater: function (obj) {
+            var str=obj.split(" ");
+            return str[1];
+        }
+    	})
+    	
+    	
+    	console.log(8%4)
+    	
+		$("#Div").append(toInput("123"));
+		
+		
+		function toInput(val){
+		let $input=$('<input type="text" name="" id="" value="" class="form-control"/>');
+		if(val!=""){
+			return $input.val(val);
+		}else{
+			return $input;
+		}
+	}*/
+	</script>
+</html>

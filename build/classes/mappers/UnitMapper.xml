@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.UnitMapper">
+	<resultMap id="BaseResultMap" type="com.jl.psi.model.Unit">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="specification_id" jdbcType="INTEGER" property="specificationId" />
+		<result column="ratio_denominator" jdbcType="INTEGER" property="ratioDenominator" />
+		<result column="ratio_molecular" jdbcType="INTEGER" property="ratioMolecular" />
+		<result column="purchase_price" jdbcType="DOUBLE" property="purchasePrice" />
+		<result column="commonly_price" jdbcType="DOUBLE" property="commonlyPrice" />
+		<result column="temp_commonly_price" jdbcType="DOUBLE" property="tempCommonlyPrice" />
+		<result column="mini_price" jdbcType="DOUBLE" property="miniPrice" />
+		<result column="bar_code" jdbcType="VARCHAR" property="barCode" />
+		<result column="sales_unit" jdbcType="VARCHAR" property="salesUnit" />
+		<result column="basic_unit" jdbcType="INTEGER" property="basicUnit" />
+		<result column="warehouse_unit" jdbcType="VARCHAR" property="warehouseUnit" />
+		<result column="purchasing_unit" jdbcType="VARCHAR" property="purchasingUnit" />
+		<result column="mini_purchasing" jdbcType="INTEGER" property="miniPurchasing" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, name, specification_id, ratio_denominator, ratio_molecular,
+		purchase_price, commonly_price,temp_commonly_price,
+		mini_price, bar_code, sales_unit,
+		basic_unit, warehouse_unit, purchasing_unit,
+		mini_purchasing
+	</sql>
+
+	<!-- 根据主键查询信息 -->
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from unit
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 根据主键删除 信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from unit
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 根据商品规格Id列表删除 信息 -->
+	<delete id="deleteByCommoditySpecificationIds" parameterType="java.lang.Integer">
+		delete from unit
+		where specification_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</delete>
+
+	<!-- 保存全部信息 -->
+	<insert id="insert" parameterType="com.jl.psi.model.Unit">
+		insert into unit (id, name,
+		specification_id,
+		ratio_denominator, ratio_molecular, purchase_price,
+		commonly_price,temp_commonly_price, mini_price, bar_code,
+		sales_unit, basic_unit,
+		warehouse_unit,
+		purchasing_unit, mini_purchasing)
+		values
+		(#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+		#{specificationId,jdbcType=INTEGER},
+		#{ratioDenominator,jdbcType=INTEGER},
+		#{ratioMolecular,jdbcType=INTEGER}, #{purchasePrice,jdbcType=DOUBLE},
+		#{commonlyPrice,jdbcType=DOUBLE},#{tempCommonlyPrice,jdbcType=DOUBLE}, #{miniPrice,jdbcType=DOUBLE},
+		#{barCode,jdbcType=VARCHAR},
+		#{salesUnit,jdbcType=VARCHAR},
+		#{basicUnit,jdbcType=INTEGER}, #{warehouseUnit,jdbcType=VARCHAR},
+		#{purchasingUnit,jdbcType=VARCHAR},
+		#{miniPurchasing,jdbcType=INTEGER})
+	</insert>
+
+	<!-- 批量保存全部信息 -->
+	<insert id="insertBatch" parameterType="com.jl.psi.model.Unit">
+		insert into unit (name,
+		specification_id,
+		ratio_denominator, ratio_molecular,
+		commonly_price,temp_commonly_price,
+		mini_price, bar_code,
+		sales_unit, basic_unit,
+		warehouse_unit,
+		purchasing_unit, mini_purchasing)
+		values
+		<foreach collection="list" index="index" item="unit"
+			separator=",">
+			(#{unit.name,jdbcType=VARCHAR},
+			#{unit.specificationId,jdbcType=INTEGER},
+			#{unit.ratioDenominator,jdbcType=INTEGER},
+			#{unit.ratioMolecular,jdbcType=INTEGER},
+			#{unit.commonlyPrice,jdbcType=DOUBLE},
+			#{unit.tempCommonlyPrice,jdbcType=DOUBLE},
+			#{unit.miniPrice,jdbcType=DOUBLE},
+			#{unit.barCode,jdbcType=VARCHAR},
+			#{unit.salesUnit,jdbcType=VARCHAR},
+			#{unit.basicUnit,jdbcType=INTEGER},
+			#{unit.warehouseUnit,jdbcType=VARCHAR},
+			#{unit.purchasingUnit,jdbcType=VARCHAR},
+			#{unit.miniPurchasing,jdbcType=INTEGER})
+		</foreach>
+	</insert>
+
+	<!-- 保存所选内容的信息 -->
+	<insert id="insertSelective" parameterType="com.jl.psi.model.Unit">
+		insert into unit
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="specificationId != null">
+				specification_id,
+			</if>
+			<if test="ratioDenominator != null">
+				ratio_denominator,
+			</if>
+			<if test="ratioMolecular != null">
+				ratio_molecular,
+			</if>
+			<if test="purchasePrice != null">
+				purchase_price,
+			</if>
+			<if test="commonlyPrice != null">
+				commonly_price,
+			</if>
+			<if test="tempCommonlyPrice != null">
+				temp_commonly_price,
+			</if>
+			<if test="miniPrice != null">
+				mini_price,
+			</if>
+			<if test="barCode != null">
+				bar_code,
+			</if>
+			<if test="salesUnit != null">
+				sales_unit,
+			</if>
+			<if test="basicUnit != null">
+				basic_unit,
+			</if>
+			<if test="warehouseUnit != null">
+				warehouse_unit,
+			</if>
+			<if test="purchasingUnit != null">
+				purchasing_unit,
+			</if>
+			<if test="miniPurchasing != null">
+				mini_purchasing,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="specificationId != null">
+				#{specificationId,jdbcType=INTEGER},
+			</if>
+			<if test="ratioDenominator != null">
+				#{ratioDenominator,jdbcType=INTEGER},
+			</if>
+			<if test="ratioMolecular != null">
+				#{ratioMolecular,jdbcType=INTEGER},
+			</if>
+			<if test="purchasePrice != null">
+				#{purchasePrice,jdbcType=DOUBLE},
+			</if>
+			<if test="commonlyPrice != null">
+				#{commonlyPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="tempCommonlyPrice != null">
+				#{tempCommonlyPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="miniPrice != null">
+				#{miniPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="barCode != null">
+				#{barCode,jdbcType=VARCHAR},
+			</if>
+			<if test="salesUnit != null">
+				#{salesUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="basicUnit != null">
+				#{basicUnit,jdbcType=INTEGER},
+			</if>
+			<if test="warehouseUnit != null">
+				#{warehouseUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="purchasingUnit != null">
+				#{purchasingUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="miniPurchasing != null">
+				#{miniPurchasing,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新所选内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.Unit">
+		update unit
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="specificationId != null">
+				specification_id = #{specificationId,jdbcType=INTEGER},
+			</if>
+			<if test="ratioDenominator != null">
+				ratio_denominator = #{ratioDenominator,jdbcType=INTEGER},
+			</if>
+			<if test="ratioMolecular != null">
+				ratio_molecular = #{ratioMolecular,jdbcType=INTEGER},
+			</if>
+			<if test="purchasePrice != null">
+				purchase_price = #{purchasePrice,jdbcType=DOUBLE},
+			</if>
+			<if test="commonlyPrice != null">
+				commonly_price = #{commonlyPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="tempCommonlyPrice != null">
+				temp_commonly_price = #{tempCommonlyPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="miniPrice != null">
+				mini_price = #{miniPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="barCode != null">
+				bar_code = #{barCode,jdbcType=VARCHAR},
+			</if>
+			<if test="salesUnit != null">
+				sales_unit = #{salesUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="basicUnit != null">
+				basic_unit = #{basicUnit,jdbcType=INTEGER},
+			</if>
+			<if test="warehouseUnit != null">
+				warehouse_unit = #{warehouseUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="purchasingUnit != null">
+				purchasing_unit = #{purchasingUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="miniPurchasing != null">
+				mini_purchasing = #{miniPurchasing,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据主键更新全部内容 -->
+	<update id="updateByPrimaryKey" parameterType="com.jl.psi.model.Unit">
+		update unit
+		set
+		name = #{name,jdbcType=VARCHAR},
+		specification_id =
+		#{specificationId,jdbcType=INTEGER},
+		ratio_denominator =
+		#{ratioDenominator,jdbcType=INTEGER},
+		ratio_molecular =
+		#{ratioMolecular,jdbcType=INTEGER},
+		purchase_price =
+		#{purchasePrice,jdbcType=DOUBLE},
+		commonly_price =
+		#{commonlyPrice,jdbcType=DOUBLE},
+		temp_commonly_price =
+		#{tempCommonlyPrice,jdbcType=DOUBLE},
+		mini_price =
+		#{miniPrice,jdbcType=DOUBLE},
+		bar_code = #{barCode,jdbcType=VARCHAR},
+		sales_unit = #{salesUnit,jdbcType=VARCHAR},
+		basic_unit =
+		#{basicUnit,jdbcType=INTEGER},
+		warehouse_unit =
+		#{warehouseUnit,jdbcType=VARCHAR},
+		purchasing_unit =
+		#{purchasingUnit,jdbcType=VARCHAR},
+		mini_purchasing =
+		#{miniPurchasing,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="selectMsgByunitId"   resultType="java.lang.Integer">
+		SELECT
+		id
+		FROM
+		unit
+		WHERE
+		specification_id=${csId}  and  name=#{name}
+	</select>
+</mapper>

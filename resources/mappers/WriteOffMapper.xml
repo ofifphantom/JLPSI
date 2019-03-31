@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.WriteOffMapper">
+
+
+ 
+
+  <resultMap id="BaseResultMap" type="com.jl.psi.model.WriteOff">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="writeoff_code" jdbcType="INTEGER" property="writeoffCode" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="company_one" jdbcType="INTEGER" property="companyOne" />
+    <result column="company_two" jdbcType="INTEGER" property="companyTwo" />
+    <result column="money" jdbcType="DOUBLE" property="money" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="originator" jdbcType="VARCHAR" property="originator" />
+    <result column="person_id" jdbcType="INTEGER" property="personId" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+   	<result column="voucher_no" jdbcType="VARCHAR" property="voucherNo" />
+   	<result column="branch" jdbcType="VARCHAR" property="branch" />
+   	
+    <result column="companyOneName" jdbcType="VARCHAR" property="companyOneName" />
+    <result column="companyTwoName" jdbcType="VARCHAR" property="companyTwoName" />
+    <result column="originator_name" jdbcType="VARCHAR" property="originatorName" />
+     <result column="personName" jdbcType="VARCHAR" property="personName" />
+    <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+    <result column="advanceMoney" jdbcType="DOUBLE" property="advanceMoney" />
+    
+  </resultMap>
+
+ 
+   	<!-- 获取最大的编号 -->
+	<select id="selectMaxCode" resultType="java.lang.String">
+		select MAX(writeoff_code) from writeoff 
+	</select>
+  <insert id="insertSelective" parameterType="com.jl.psi.model.WriteOff"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into writeoff
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			<if test="writeoffCode != null">
+				writeoff_code,
+			</if>
+			 <if test="type != null">
+				type,
+			</if>
+			 <if test="companyOne != null">
+				company_one,
+			</if>
+			 <if test="companyTwo != null">
+				company_two,
+			</if>
+			 <if test="money != null">
+				money,
+			</if>	
+			 <if test="createDate != null">
+				create_date,
+			</if>
+			 <if test="originator != null">
+				originator,
+			</if>
+			 <if test="personId != null">
+				person_id,
+			</if>
+			 <if test="summary != null">
+				summary,
+			</if>	
+			 <if test="remark != null">
+				remark,
+			</if>	
+				 <if test="voucherNo != null">
+				voucher_no,
+			</if>	
+				 <if test="branch != null">
+				branch,
+			</if>	
+														
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+ 
+ 			<if test="writeoffCode != null">
+ 				#{writeoffCode,jdbcType=INTEGER},
+			</if>
+			 <if test="type != null">
+  				#{type,jdbcType=INTEGER},
+				
+			</if>
+			 <if test="companyOne != null">
+				#{companyOne,jdbcType=INTEGER},
+			</if>
+			 <if test="companyTwo != null">
+				 #{companyTwo,jdbcType=INTEGER},
+			</if>
+			 <if test="money != null">
+				
+				#{money,jdbcType=DOUBLE},
+			</if>	
+			 <if test="createDate != null">
+				#{createDate,jdbcType=TIMESTAMP},
+			</if>
+			 <if test="originator != null">
+				 #{originator,jdbcType=VARCHAR},
+			</if>
+			 <if test="personId != null">
+				 #{personId,jdbcType=INTEGER},
+			</if>
+			 <if test="summary != null">
+				  #{summary,jdbcType=VARCHAR},
+			</if>	
+			 <if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>	
+				 <if test="voucherNo != null">
+				#{voucherNo,jdbcType=VARCHAR},
+			</if>	
+			  <if test="branch != null">
+				#{branch,jdbcType=VARCHAR},
+			</if>	
+			
+		</trim>
+	</insert>
+  
+  	<!-- datatable 分页 start -->
+    <!-- 查询记录总条数 -->
+	<select id="iTotalRecords" resultType="java.lang.Integer">
+	select  count(*) from writeoff where  type=#{type}
+	</select>
+	<!-- 查询所有信息 结果集 -->
+	<select id="selectForSearch" resultMap="BaseResultMap">
+		SELECT
+		w.*,
+	  	(SELECT  sp1.`name` from supcto sp1 where sp1.id=w.company_one) as companyOneName,
+      (SELECT  sp2.`name` from supcto sp2 where sp2.id=w.company_two) as companyTwoName,
+		p.name  as originator_name 
+	FROM
+		writeoff w 
+ 	INNER JOIN person p on p.identifier=w.originator
+	where w.type=#{type}
+ 			<if test="writeoffCode != null and writeoffCode!=''">
+ 				and w.writeoff_code like '%${writeoffCode}%'
+			</if>
+	       <if test="companyOne != null and companyOne!=''">
+ 				and w.company_one=#{companyOne,jdbcType=INTEGER}
+			</if>
+			  <if test="companyTwo != null and companyTwo!=''">
+ 				and w.company_two=#{companyTwo,jdbcType=INTEGER}
+			</if>
+			<if test="beginTime!=null and beginTime!=''">
+				AND
+				w.create_date
+				BETWEEN
+				'${beginTime}'
+				AND
+				DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+			</if>
+		<if test="desc!=null and desc!='' ">
+			order by ${desc} desc
+		</if>
+		<if test="asc!=null and asc!=''">
+			order by ${asc} asc
+		</if>
+		limit ${iDisplayStart},${pageDisplayLength}
+	</select>
+	<!-- 通过搜索条件过滤后的总记录 -->
+	<select id="iTotalDisplayRecords" resultType="java.lang.Integer">
+	select  count(*) from writeoff w where  w.type=#{type}
+		<if test="beginTime!=null and beginTime!=''">
+				AND
+				w.create_date
+				BETWEEN
+				'${beginTime}'
+				AND
+				DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+			</if>
+		<if test="writeoffCode != null and writeoffCode!=''">
+ 				and w.writeoff_code like '%${writeoffCode}%'
+			</if>
+	       <if test="companyOne != null and companyOne!=''">
+ 				and w.company_one=#{companyOne,jdbcType=INTEGER}
+			</if>
+			  <if test="companyTwo != null and companyTwo!=''">
+ 				and w.company_two=#{companyTwo,jdbcType=INTEGER}
+			</if>
+	</select>
+	
+	
+		<select id="selectByPrimaryKey"  resultMap="BaseResultMap" parameterType="java.lang.Integer">
+			SELECT
+				w.*,
+				(SELECT  sp1.`name` from supcto sp1 where sp1.id=w.company_one) as companyOneName,
+		    (SELECT  sp2.`name` from supcto sp2 where sp2.id=w.company_two) as companyTwoName,
+		     (SELECT  sp1.`advance_money` from supcto sp1 where sp1.id=w.company_one) as advanceMoney,
+		 		p.name  as originator_name,
+				(SELECT pe.name from person pe WHERE pe.id= w.person_id ) as personName,
+			(SELECT de.`name` from person pp INNER JOIN department de on de.id=pp.department_id   WHERE pp.id=w.person_id ) as departmentName
+			FROM
+				writeoff w
+			INNER JOIN person p on p.identifier=w.originator
+			WHERE
+				w.id=#{id}
+		</select>
+	
+ </mapper>

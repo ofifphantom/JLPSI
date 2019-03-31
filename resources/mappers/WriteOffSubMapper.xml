@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.WriteOffSubMapper">
+
+ 
+
+  <resultMap id="BaseResultMap" type="com.jl.psi.model.WriteOffSub">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="writeoff_id" jdbcType="INTEGER" property="writeoffId" />
+    <result column="procure_sales_id" jdbcType="INTEGER" property="procureSalesId" />
+    <result column="clear_money" jdbcType="DOUBLE" property="clearMoney" />
+    <result column="stay_money" jdbcType="DOUBLE" property="stayMoney" />
+    <result column="the_money" jdbcType="DOUBLE" property="theMoney" />
+   <result column="is_writeoff" jdbcType="DOUBLE" property="isWriteoff" />
+    <result column="is_procure_sales" jdbcType="DOUBLE" property="isProcureSales" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+   	<result column="identifier" jdbcType="VARCHAR" property="identifier" />
+    <result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
+     <result column="order_money" jdbcType="DOUBLE" property="orderMoney" />
+ 
+ 
+  </resultMap>
+
+
+ 	<!-- 批量添加 -->
+	<insert id="insertBatch" parameterType="java.util.List"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into writeoff_sub (
+  writeoff_id,procure_sales_id,clear_money,stay_money,the_money,is_writeoff,is_procure_sales,remark
+		)
+		values
+		<foreach collection="list" item="sb" separator=",">
+			(
+			#{sb.writeoffId,jdbcType=INTEGER},
+			#{sb.procureSalesId,jdbcType=INTEGER},
+			#{sb.clearMoney,jdbcType=DOUBLE}, 
+			#{sb.stayMoney,jdbcType=DOUBLE}, 
+			#{sb.theMoney,jdbcType=DOUBLE}, 
+			#{sb.isWriteoff,jdbcType=INTEGER}, 
+		 	#{sb.isProcureSales,jdbcType=INTEGER},
+ 			#{sb.remark,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+	
+	 	<!-- 查询 预收冲应收 核销单子项 -->
+ 		<select id="selectAdvanceReceivable"  
+		resultMap="BaseResultMap">
+ 	 SELECT DISTINCT
+	so.id AS procure_sales_id,
+	so.create_time as order_time,
+ 	so.identifier
+  ,
+  
+   	(
+ 		SELECT
+ 			SUM(sc.receiving_goods_money)
+  		FROM
+  			sales_order_commodity sc
+  		WHERE
+   			sc.sales_order_id = so.id
+  	) AS order_money ,
+  	IFNULL((
+ 		SELECT
+ 			SUM(sub.the_money)
+ 		FROM
+  		 writeoff_sub sub
+  		INNER JOIN writeoff wo ON wo.id=sub.writeoff_id
+   		WHERE
+ 		  wo.type=1
+  		AND sub.procure_sales_id = so.id
+ 	),0)
+ 	+
+	IFNULL((
+ 		SELECT
+ 			SUM(bsub.the_moeny)
+ 		FROM
+  		 bills_sub bsub
+  		INNER JOIN bills bs ON bs.id=bsub.bills_id
+   		WHERE
+ 		  bs.bills_type=1
+  		AND bsub.procure_sales_id = so.id
+ 	),0)
+ 	 AS clear_money
+FROM
+	sales_order so  
+WHERE
+	so.order_type=2
+AND (so.is_verification is null or so.is_verification = 0)
+ AND so.supcto_id = #{supctoId}
+ORDER BY  so.create_time asc 
+	</select>
+		 	<!-- 查询 预付冲应付 核销单子项 -->
+ 		<select id="selectAdvancePayable"  
+		resultMap="BaseResultMap">
+ SELECT
+	pt.id AS procure_sales_id,
+	pt.generate_date AS order_time,
+	pt.identifier,
+	(
+		SELECT
+			SUM(pc.arrival_quantity*pc.business_unit_price*(1+pc.tax_rate))
+		FROM
+			procure_commodity pc
+		WHERE
+			pc.procure_table_id = pt.id
+	) AS order_money,
+	IFNULL((
+		SELECT
+			SUM(sub.the_money)
+		FROM
+			writeoff_sub sub
+		INNER JOIN writeoff wo ON wo.id = sub.writeoff_id
+		WHERE
+			wo.type=2
+		AND sub.procure_sales_id = pt.id
+	),0)
+	+
+	IFNULL((
+ 		SELECT
+ 			SUM(bsub.the_moeny)
+ 		FROM
+  		 bills_sub bsub
+  		INNER JOIN bills bs ON bs.id=bsub.bills_id
+   		WHERE
+ 		  bs.bills_type=2
+  		AND bsub.procure_sales_id = pt.id
+ 	),0)
+	 AS clear_money
+FROM
+	procure_table pt
+WHERE
+	 pt.state = 13 and pt.plan_or_order=4
+AND (pt.is_verification is null or pt.is_verification = 0)
+AND pt.supcto_id=#{supctoId}
+ORDER BY  pt.generate_date asc 
+	</select>
+	
+ 	<!-- 查询待添加客户核销单子项 -->
+ 		<select id="selectBySaleId"  
+		resultMap="BaseResultMap">
+ 	 SELECT DISTINCT
+	so.id AS procure_sales_id,
+	so.create_time as order_time,
+ 	so.identifier
+  ,
+  
+   	(
+ 		SELECT
+ 			SUM(sc.receiving_goods_money)
+  		FROM
+  			sales_order_commodity sc
+  		WHERE
+   			sc.sales_order_id = so.id
+  	) AS order_money ,
+  	(
+ 		SELECT
+ 			SUM(sub.the_money)
+ 		FROM
+  		 writeoff_sub sub
+  		INNER JOIN writeoff wo ON wo.id=sub.writeoff_id
+   		WHERE
+ 		  wo.type=#{type}
+  		AND sub.procure_sales_id = so.id
+ 	) AS clear_money
+FROM
+	sales_order so  
+WHERE
+	so.order_type = 2   
+AND (so.is_verification is null or so.is_verification = 0)
+AND so.supcto_id = #{supctoId}
+ORDER BY  so.create_time asc 
+	</select>
+	<!-- 查询待添加供应商核销单子项 -->
+	 		<select id="selectByProcureId"  
+		resultMap="BaseResultMap">
+SELECT
+	pt.id AS procure_sales_id,
+	pt.generate_date AS order_time,
+	pt.identifier,
+	(
+		SELECT
+			SUM(pc.arrival_quantity*pc.business_unit_price*(1+pc.tax_rate))
+		FROM
+			procure_commodity pc
+		WHERE
+			pc.procure_table_id = pt.id
+	) AS order_money,
+	(
+		SELECT
+			SUM(sub.the_money)
+		FROM
+			writeoff_sub sub
+		INNER JOIN writeoff wo ON wo.id = sub.writeoff_id
+		WHERE
+			wo.type=#{type}
+		AND sub.procure_sales_id = pt.id
+	) AS clear_money
+FROM
+	procure_table pt
+WHERE
+   pt.state = 13 and pt.plan_or_order=4
+AND (pt.is_verification is null or pt.is_verification = 0)
+AND pt.supcto_id=#{supctoId}
+ORDER BY  pt.generate_date asc 
+	</select>
+	<!-- 根据核销主项id查询销售订单列表 -->
+	 		<select id="selectSalesById"  
+		resultMap="BaseResultMap">
+ 		  SELECT
+		  b.*,
+		 	so.create_time as order_time,
+		 	so.identifier
+		  ,
+		  
+		   	(
+		 		SELECT
+		 			SUM(sc.receiving_goods_money)
+		  		FROM
+		  			sales_order_commodity sc
+		  		WHERE
+		   			sc.sales_order_id = b.procure_sales_id
+		  	) AS order_money 
+		FROM
+		  writeoff_sub b
+			INNER JOIN sales_order so on b.procure_sales_id=so.id
+		WHERE
+		  b.writeoff_id=#{writeoffId}
+		AND b.is_procure_sales=1	
+	</select>
+	  	<!-- 根据核销主项id查询供应商订单列表 -->
+	 		<select id="selectProcureById"  
+		resultMap="BaseResultMap">
+ 	 SELECT
+		  b.*,
+		 	pt.generate_date as order_time,
+		 	pt.identifier
+		  ,
+		   	(
+		 		SELECT
+			SUM(pc.arrival_quantity*pc.business_unit_price*(1+pc.tax_rate))
+		FROM
+			procure_commodity pc
+ 		  		WHERE
+		   			pc.procure_table_id = b.procure_sales_id
+		  	) AS order_money 
+		FROM
+		  writeoff_sub b
+			INNER JOIN procure_table pt on b.procure_sales_id=pt.id
+		WHERE
+		  b.writeoff_id=#{writeoffId}
+		AND b.is_procure_sales=2
+	</select>
+	<!--销售开单收款情况 部分sql  -->
+	<select id="reportSalesOpenReceiveMoney"  resultMap="BaseResultMap">
+	SELECT
+	ws.procure_sales_id,
+	SUM(ws.the_money) the_money
+	FROM
+	writeoff_sub ws
+	LEFT JOIN writeoff w ON w.id=ws.writeoff_id
+	WHERE w.type IN(1, 4, 5, 6)
+
+	GROUP BY ws.procure_sales_id
+
+	</select>
+</mapper>

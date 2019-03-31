@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.AllotOrderCommodityMapper">
+  <resultMap id="BaseResultMap" type="com.jl.psi.model.AllotOrderCommodity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="allot_order_id" jdbcType="INTEGER" property="allotOrderId" />
+    <result column="commodity_specification_id" jdbcType="INTEGER" property="commoditySpecificationId" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="export_unit_price" jdbcType="DOUBLE" property="exportUnitPrice" />
+    <result column="import_unit_price" jdbcType="DOUBLE" property="importUnitPrice" />
+    <result column="import_money" jdbcType="DOUBLE" property="importMoney" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, allot_order_id, commodity_specification_id, number, export_unit_price, import_unit_price, 
+    import_money
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from allot_order_commodity
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from allot_order_commodity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jl.psi.model.AllotOrderCommodity">
+    insert into allot_order_commodity (id, allot_order_id, commodity_specification_id, 
+      number, export_unit_price, import_unit_price, 
+      import_money)
+    values (#{id,jdbcType=INTEGER}, #{allotOrderId,jdbcType=INTEGER}, #{commoditySpecificationId,jdbcType=INTEGER}, 
+      #{number,jdbcType=INTEGER}, #{exportUnitPrice,jdbcType=DOUBLE}, #{importUnitPrice,jdbcType=DOUBLE}, 
+      #{importMoney,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jl.psi.model.AllotOrderCommodity">
+    insert into allot_order_commodity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="allotOrderId != null">
+        allot_order_id,
+      </if>
+      <if test="commoditySpecificationId != null">
+        commodity_specification_id,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="exportUnitPrice != null">
+        export_unit_price,
+      </if>
+      <if test="importUnitPrice != null">
+        import_unit_price,
+      </if>
+      <if test="importMoney != null">
+        import_money,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="allotOrderId != null">
+        #{allotOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="commoditySpecificationId != null">
+        #{commoditySpecificationId,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="exportUnitPrice != null">
+        #{exportUnitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="importUnitPrice != null">
+        #{importUnitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="importMoney != null">
+        #{importMoney,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.AllotOrderCommodity">
+    update allot_order_commodity
+    <set>
+      <if test="allotOrderId != null">
+        allot_order_id = #{allotOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="commoditySpecificationId != null">
+        commodity_specification_id = #{commoditySpecificationId,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="exportUnitPrice != null">
+        export_unit_price = #{exportUnitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="importUnitPrice != null">
+        import_unit_price = #{importUnitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="importMoney != null">
+        import_money = #{importMoney,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jl.psi.model.AllotOrderCommodity">
+    update allot_order_commodity
+    set allot_order_id = #{allotOrderId,jdbcType=INTEGER},
+      commodity_specification_id = #{commoditySpecificationId,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      export_unit_price = #{exportUnitPrice,jdbcType=DOUBLE},
+      import_unit_price = #{importUnitPrice,jdbcType=DOUBLE},
+      import_money = #{importMoney,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

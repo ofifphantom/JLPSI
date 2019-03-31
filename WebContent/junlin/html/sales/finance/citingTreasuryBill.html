@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8" />
+		<title>引用出库单</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="../../../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../../../css/ace.min.css" />
+		<link rel="stylesheet" href="../../../css/style.css" />
+		<link rel="stylesheet" href="../../../css/style_i.css" />
+		<link rel="stylesheet" href="../../../font/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="../../../js/layer/skin/layer.css" />
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="../../../font/css/font-awesome-ie7.min.css" />
+		  <link rel="stylesheet" href="../../../css/ace-ie.min.css" />
+		<![endif]-->
+
+		<link rel="stylesheet" href="../../../css/mine/all.css" />
+		<link rel="stylesheet" href="../../../css/mine/public.css" />
+
+		<script src="../../../js/jquery-1.10.2.min.js"></script>
+		<script src="../../../js/bootstrap.min.js"></script>
+		<script src="../../../js/typeahead-bs2.min.js"></script>
+		<script src="../../../js/jquery.dataTables.min.js"></script>
+		<script src="../../../js/jquery.dataTables.bootstrap.js"></script>
+		<script src="../../../js/layer/layer.js" type="text/javascript"></script>
+		<script src="../../../js/laydate/laydate.js" type="text/javascript"></script>
+		<script src="../../../script/public.js" type="text/javascript"></script>
+		
+		
+		<style>
+			#editDiv {
+				padding-top: 20px;
+			}
+			#foldlossDiv>.container,#SalesOpening>.container{
+				width: 700px;
+				margin: 50px auto;
+			}
+			#foldlossDiv table th,#SalesOpening table th{
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body class="content">
+		<div class="page-content clearfix">
+			<div id="Member_Ratings">
+				<div class="d_Confirm_Order_style" style="margin-top:10px;">
+					<h4 class="text-title">出库单引用</h4>
+					<div class="search-div clearfix">
+						<div class="clearfix">
+							<span class="l_f"> 
+							单号： <input type="text" value="" />
+						</span>
+							<span class="l_f"> 
+							供应商名称： <input type="text" value="" />
+						</span>
+							<span class="l_f"> 
+							货品名称： <input type="text"  value="" />
+						</span>
+
+							</span>
+							<span class="r_f"> 
+							<input type="button"  class="btncss btn_search" value="搜索" />
+						</span>
+						</div>
+
+					</div>
+					<div class="opration-div clearfix">
+
+					</div>
+					<div class="table_menu_list">
+						<table class="table table-striped table-hover col-xs-12" id="datatable">
+							<thead class="table-header">
+								<tr>
+									<th>单号</th>
+									<th>客户</th>
+									<th>运输方式</th>
+									<th>货品编码</th>
+									<th>货品名称</th>
+									<th>部门</th>
+									<th>制单人</th>
+									<th>审核人</th>
+									<th>日期</th>
+									<th>状态</th>
+									<th style="width: 21%;">操作</th>
+								</tr>
+
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<span class="look-span" onclick="WarehouseReceiptDetail()">PO.2017.09.00054</span>
+									</td>
+									<td>通泰十八里店</td>
+									<td>配送</td>
+									<td>212454878</td>
+									<td>酱肉包</td>
+									<td>A部门</td>
+									<td>小辉</td>
+									<td>小辉</td>
+									<td>2017.10.02</td>
+									<td>已完成</td>
+									<td>
+										<input type="button" class="btncss edit" onclick="salesOpening()" value="销售开单" />
+										<input type="button" class="btncss edit" onclick="foldloss()" value="生成折损单" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--详情 -->
+		<div id="lookDiv" style="display: none;">
+			<form class="container">
+				<div class="row jl-title">
+					<span>基本信息</span>
+				</div>
+				<div class="row jl-panel">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">日期：</label>
+							<div class="col-xs-8">
+								2017-9-5
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">客户编码：</label>
+							<div class="col-xs-8">
+								AAAAA
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">结算方式：</label>
+							<div class="col-xs-8">
+							月结
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">发货时间：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">运输方式：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">联系电话：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">订货人：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">单号：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">客户：</label>
+							<div class="col-xs-8">
+								通泰十八里店
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">有效期至：</label>
+							<div class="col-xs-8">
+								铁路
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">发货地点：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">收货人：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">传真：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">预收金额：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row jl-title">
+					<span>商品</span>
+				</div>
+				<div class="row jl-panel">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">货品编码：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">规格：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">发货数量：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">签收数量：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">单价：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">税额：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">折损金额：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">批号：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">备注：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						
+						
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">货品名称：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">规格编码：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">单位：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">返货数量：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">折扣%：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">税率：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">金额：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">签收金额：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">赠品：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				
+				
+				<div class="row jl-title">
+					<span>合计</span>
+				</div>
+				<div class="row jl-panel">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">发货数量：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">税额：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">折损金额：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">返货数量：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">金额：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">签收金额：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row jl-title">
+					<span>其他</span>
+				</div>
+				<div class="row jl-panel">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">地区：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">业务员：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">审核人：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">分支机构：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">部门：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">制单人：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">摘要：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</form>
+
+
+		</div>
+		
+		
+		<!--折损单-->
+		<div id="foldlossDiv" style="display: none;">
+			<form action="" class="container">
+				
+				<div class="row">
+					<table class="table table-bordered table-striped table-hover col-xs-12" border="" cellspacing="0" cellpadding="0">
+						<tr>
+							<th>折损商品</th><th>单价</th><th>折损数量</th><th>折损金额</th>
+						</tr>
+						
+						<tr>
+							<td>虾条</td>
+							<td>10</td>
+							<td><input type="text" class="form-control"  value=""/></td>
+							<td><input type="text" class="form-control"  value=""/></td>
+						</tr>
+						<tr>
+							<td>酱肉包</td>
+							<td>100</td>
+							<td><input type="text" class="form-control"  value=""/></td>
+							<td><input type="text" class="form-control"  value=""/></td>
+						</tr>
+					</table>
+					
+				</div>
+			</form>
+			
+		</div>
+		<!--销售开单-->
+		<div id="SalesOpening" style="display: none;">
+			<form action="" class="container">
+				
+				<div class="row">
+					<table class="table table-bordered table-striped table-hover col-xs-12" border="" cellspacing="0" cellpadding="0">
+						<tr>
+							<th>折损商品</th><th>单价</th><th>签收数量</th><th>签收金额</th>
+						</tr>
+						
+						<tr>
+							<td>虾条</td>
+							<td>10</td>
+							<td><input type="text" class="form-control"  value=""/></td>
+							<td><input type="text" class="form-control"  value="" disabled="disabled"/></td>
+						</tr>
+						<tr>
+							<td>酱肉包</td>
+							<td>100</td>
+							<td><input type="text" class="form-control"  value=""/></td>
+							<td><input type="text" class="form-control"  value="" disabled="disabled"/></td>
+						</tr>
+					</table>
+					
+				</div>
+			</form>
+			
+		</div>
+	</body>
+
+	<script>
+		
+		/*详情*/
+		function WarehouseReceiptDetail() {
+			layer.open({
+				type: 1,
+				title: "出库单详情",
+				closeBtn: 1,
+				area: ['100%', '100%'],
+				content: $("#lookDiv"),
+				btn: ['关闭']
+			});
+		}
+		
+		/*销售开单*/
+		function salesOpening(){
+			layer.open({
+				type: 1,
+				title: "销售开单",
+				closeBtn: 1,
+				area: ['800px', ''],
+				content: $("#SalesOpening"),
+				btn: ['销售开单','取消'],
+				yes:function(index){
+					layer.close(index);
+					
+					laysuccess("已生成销售开单，请至销售开单页面查看详情。");
+					clearForm("SalesOpening","");
+				},
+				end: function(index, layero){
+					layer.close(index);
+					clearForm("SalesOpening","");
+  				}
+			});
+		}
+		
+		/*生成折损单*/
+		function foldloss(){
+			layer.open({
+				type: 1,
+				title: "折损",
+				closeBtn: 1,
+				area: ['800px', ''],
+				content: $("#foldlossDiv"),
+				btn: ['生成折损单','取消'],
+				yes:function(index){
+					layer.close(index);
+					
+					laysuccess("已生成折损单");
+					clearForm("foldlossDiv","");
+				},
+				end: function(index, layero){
+					layer.close(index);
+					clearForm("foldlossDiv","");
+  				}
+			});
+		}
+		
+		
+		
+		
+		
+	</script>
+
+</html>

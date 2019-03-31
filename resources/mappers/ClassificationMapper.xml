@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.ClassificationMapper">
+	<resultMap id="BaseResultMap" type="com.jl.psi.model.Classification">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="identifier" jdbcType="VARCHAR" property="identifier" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="parent_id" jdbcType="INTEGER" property="parentId" />
+		<result column="key_word" jdbcType="VARCHAR" property="keyWord" />
+		<result column="operator_identifier" jdbcType="VARCHAR"
+			property="operatorIdentifier" />
+		<result column="operator_time" jdbcType="TIMESTAMP" property="operatorTime" />
+		<result column="type" jdbcType="INTEGER" property="type" />
+		<result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+		<association property="person" javaType="com.jl.psi.model.Person"
+			resultMap="PersonResultMap" />
+		<association property="pClassification" javaType="com.jl.psi.model.Classification"
+			resultMap="PClassification" />
+	</resultMap>
+
+	<!-- 用户信息 -->
+	<resultMap id="PersonResultMap" type="com.jl.psi.model.Person">
+		<result column="uname" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+
+	<!-- 父级分类信息 -->
+	<resultMap id="PClassification" type="com.jl.psi.model.Classification">
+		<id column="cpId" jdbcType="INTEGER" property="id" />
+		<result column="cpIdentifier" jdbcType="VARCHAR" property="identifier" />
+		<result column="cpName" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, identifier, name, parent_id, key_word,
+		operator_identifier,
+		operator_time, type,is_delete
+	</sql>
+
+	<!--定义一个sql片段 -->
+	<sql id="query_where">
+		<if test="identifier!=null and identifier!=''">
+			AND c.identifier like '%${identifier}%'
+		</if>
+		<if test="cname!=null and cname!=''">
+			AND c.name like '%${cname}%'
+		</if>
+		<if test="operatorName!=null and operatorName!=''">
+			AND u.name like '%${operatorName}%'
+		</if>
+		<if test="oneClassification!=null and oneClassification!='-1'">
+			AND c.parent_id = #{oneClassification}
+		</if>
+		<if test="beginTime!=null and beginTime!=''and endTime!=''and endTime!=''">
+			AND (DATE_FORMAT(c.operator_time,'%Y-%m-%d') >= '${beginTime}'
+			AND DATE_FORMAT(c.operator_time,'%Y-%m-%d') &lt;= '${endTime}')
+		</if>
+	</sql>
+
+	<!-- 根据主键查询信息 -->
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from classification
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 根据主键删除 信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		classification
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<!-- 保存全部信息 -->
+	<insert id="insert" parameterType="com.jl.psi.model.Classification">
+		insert into classification
+		(id, identifier, name,
+		parent_id, key_word, operator_identifier,
+		operator_time, type,is_delete)
+		values (#{id,jdbcType=INTEGER},
+		#{identifier,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{parentId,jdbcType=INTEGER}, #{keyWord,jdbcType=VARCHAR},
+		#{operatorIdentifier,jdbcType=VARCHAR},
+		#{operatorTime,jdbcType=TIMESTAMP}, #{type,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER})
+	</insert>
+
+	<!-- 保存所选内容的信息 -->
+	<insert id="insertSelective" parameterType="com.jl.psi.model.Classification">
+		insert into classification
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="identifier != null">
+				identifier,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="keyWord != null">
+				key_word,
+			</if>
+			<if test="operatorIdentifier != null">
+				operator_identifier,
+			</if>
+			<if test="operatorTime != null">
+				operator_time,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="identifier != null">
+				#{identifier,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=INTEGER},
+			</if>
+			<if test="keyWord != null">
+				#{keyWord,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorIdentifier != null">
+				#{operatorIdentifier,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorTime != null">
+				#{operatorTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新所选内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.Classification">
+		update classification
+		<set>
+			<if test="identifier != null">
+				identifier = #{identifier,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=INTEGER},
+			</if>
+			<if test="keyWord != null">
+				key_word = #{keyWord,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorIdentifier != null">
+				operator_identifier =
+				#{operatorIdentifier,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorTime != null">
+				operator_time = #{operatorTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据主键更新全部内容 -->
+	<update id="updateByPrimaryKey" parameterType="com.jl.psi.model.Classification">
+		update
+		classification
+		set identifier = #{identifier,jdbcType=VARCHAR},
+		name =
+		#{name,jdbcType=VARCHAR},
+		parent_id = #{parentId,jdbcType=INTEGER},
+		key_word = #{keyWord,jdbcType=VARCHAR},
+		operator_identifier =
+		#{operatorIdentifier,jdbcType=VARCHAR},
+		operator_time =
+		#{operatorTime,jdbcType=TIMESTAMP},
+		type = #{type,jdbcType=INTEGER},
+		is_delete = #{isDelete,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 新增时防止分类名称重复接口 -->
+	<select id="selectClassifityNamePreventRepeatAdd" resultMap="BaseResultMap">
+	select * from classification c where c.`name`=#{name,jdbcType=VARCHAR} and c.parent_id=#{parentId,jdbcType=INTEGER} and c.type=#{type,jdbcType=INTEGER} and c.is_delete = 0
+	</select>
+	
+	<!-- 修改时防止分类名称重复接口 -->
+	<select id="selectClassifityNamePreventRepeatEdit" resultMap="BaseResultMap">
+	select * from classification c where c.id!=#{id,jdbcType=INTEGER} and c.`name`=#{name,jdbcType=VARCHAR} and c.parent_id=#{parentId,jdbcType=INTEGER} and c.type=#{type,jdbcType=INTEGER} and c.is_delete = 0 
+	</select>
+	
+	<!-- 根据一级分类id查询二级分类  -->
+	<select id="selectTwoByOneId" resultMap="BaseResultMap">
+	select * from classification where parent_id=#{parentId,jdbcType=INTEGER} and is_delete = 0
+	</select>
+	
+	<!-- 根据主键批量查询信息 -->
+	<select id="selectBatchByPrimaryKey" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from classification
+		where id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</select>
+	
+	<!-- 根据主键批量删除 信息 -->
+	<delete id="deleteBatchByPrimaryKey">
+		<!-- delete from
+		classification
+		where id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		) -->
+		update 
+		classification
+		set is_delete = 1
+		where id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</delete>
+	
+	<!-- 获取所属类型下的所有一级分类 -->
+	<select id="selectAllOneClassifityByType" resultMap="BaseResultMap">
+		select * from classification c where c.parent_id=0 and c.type=#{type,jdbcType=INTEGER} and c.is_delete = 0
+	</select>
+	
+	<!-- 查询需要导出全部的信息 -->
+	<select id="selectMsgToExport" resultMap="BaseResultMap">
+	SELECT
+		c.*, cp.id cpId,
+		cp. NAME cpName,
+		cp.identifier cpIdentifier,
+		u. NAME uname
+		FROM
+		classification c
+		LEFT JOIN classification cp ON cp.id = c.parent_id AND cp.type = c.type
+		LEFT JOIN person u
+		ON u.identifier = c.operator_identifier
+		WHERE
+		c.type =
+		#{type,jdbcType=INTEGER}
+		<if test="oneOrTwo==1 ">
+			and c.parent_id=0
+		</if>
+		<if test="oneOrTwo==2 ">
+			and c.parent_id!=0
+		</if>
+		<include refid="query_where"></include>
+	</select>
+	
+	<!-- 查询对应类型下的最大一级分类编号 -->
+	<select id="selectMaxOneClaIdentifier" resultType="java.lang.String">
+		select MAX(identifier) from classification 
+		where type=#{type,jdbcType=INTEGER} and parent_id=0	
+	</select>
+	
+	<!-- 查询对应父级分类下的最大二级分类编号 -->
+	<select id="selectMaxTwoClaIdentifier" resultType="java.lang.String">
+		select MAX(identifier) from classification where parent_id=#{parentId,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 查询对应父级分类下所有的二级分类 -->
+	<select id="selectAllTwoClassifityByParentId"  resultMap="BaseResultMap">
+		select * from classification where parent_id=#{parentId,jdbcType=INTEGER} and is_delete = 0
+	</select>
+	
+	<!-- 判断客户/供应商一二级分类是否被占用 -->
+	<select id="selectClassificationIsExistFromSupcto" resultMap="BaseResultMap">
+	SELECT
+		c.id,c.name
+	FROM
+		supcto s
+	LEFT JOIN classification c on c.id=s.classification_id
+	WHERE
+		s.customer_or_supplier = #{customerOrSupplier}
+	AND s.classification_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	and c.parent_id!=0
+	and c.type=#{customerOrSupplier}
+	and s.state!=11
+	GROUP BY s.classification_id	
+	</select>
+	
+	<!-- 判断商品一二级分类是否被占用 -->
+	<select id="selectClassificationIsExistFromCommodity" resultMap="BaseResultMap">
+	SELECT
+		c.id,c.name
+	FROM
+		commodity cd
+	LEFT JOIN classification c on c.id=cd.classification_id
+	LEFT JOIN commodity_specification cs on cs.commodity_id=cd.id
+	WHERE
+		c.parent_id!=0
+	AND cd.classification_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	and c.type=3
+	and cs.state!=10
+	GROUP BY cd.classification_id
+	
+	</select>
+
+
+	<!-- datatable 分页 start -->
+	<!-- 查询记录总条数 -->
+	<select id="iTotalRecords" resultType="java.lang.Integer">
+		select count(1)
+		from
+		classification c
+		LEFT JOIN classification cp ON cp.id = c.parent_id AND cp.type = c.type
+		LEFT JOIN person u
+		ON u.identifier = c.operator_identifier
+		WHERE
+		c.type = #{type,jdbcType=INTEGER}
+		<if test="oneOrTwo==1 ">
+			and c.parent_id=0
+		</if>
+		<if test="oneOrTwo==2 ">
+			and c.parent_id!=0
+		</if>
+	</select>
+	<!-- 查询所有信息 结果集 -->
+	<select id="selectForSearch" resultMap="BaseResultMap">
+		SELECT
+		c.*, cp.id cpId,
+		cp. NAME cpName,
+		cp.identifier cpIdentifier,
+		u. NAME uname
+		FROM
+		classification c
+		LEFT JOIN classification cp ON cp.id = c.parent_id AND cp.type = c.type
+		LEFT JOIN person u
+		ON u.identifier = c.operator_identifier
+		WHERE
+		c.type =
+		#{type,jdbcType=INTEGER}
+		<if test="oneOrTwo==1 ">
+			and c.parent_id=0
+		</if>
+		<if test="oneOrTwo==2 ">
+			and c.parent_id!=0
+		</if>
+		<include refid="query_where"></include>
+		<if test="desc!=null and desc!='' ">
+			order by ${desc} desc
+		</if>
+		<if test="asc!=null and asc!='' ">
+			order by ${asc} asc
+		</if>
+		limit ${iDisplayStart},${pageDisplayLength}
+	</select>
+	<!-- 通过查询条件过滤后的总记录 -->
+	<select id="iTotalDisplayRecords" resultType="java.lang.Integer">
+		select count(1)
+		from
+		classification c
+		LEFT JOIN classification cp ON cp.id = c.parent_id AND cp.type = c.type
+		LEFT JOIN person u
+		ON u.identifier = c.operator_identifier
+		WHERE
+		c.type =
+		#{type,jdbcType=INTEGER}
+		<if test="oneOrTwo==1 ">
+			and c.parent_id=0
+		</if>
+		<if test="oneOrTwo==2 ">
+			and c.parent_id!=0
+		</if>
+		<include refid="query_where"></include>
+	</select>
+	<!-- datatable 分页 end -->
+</mapper>

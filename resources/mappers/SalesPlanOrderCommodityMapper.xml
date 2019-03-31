@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.SalesPlanOrderCommodityMapper">
+  <resultMap id="BaseResultMap" type="com.jl.psi.model.SalesPlanOrderCommodity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sales_plan_order_id" jdbcType="INTEGER" property="salesPlanOrderId" />
+    <result column="commodity_specification_id" jdbcType="INTEGER" property="commoditySpecificationId" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="unit_price" jdbcType="DOUBLE" property="unitPrice" />
+    <result column="money" jdbcType="DOUBLE" property="money" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sales_plan_order_id, commodity_specification_id, number, unit_price, money, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sales_plan_order_commodity
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sales_plan_order_commodity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jl.psi.model.SalesPlanOrderCommodity">
+    insert into sales_plan_order_commodity (id, sales_plan_order_id, commodity_specification_id, 
+      number, unit_price, money, 
+      remark)
+    values (#{id,jdbcType=INTEGER}, #{salesPlanOrderId,jdbcType=INTEGER}, #{commoditySpecificationId,jdbcType=INTEGER}, 
+      #{number,jdbcType=INTEGER}, #{unitPrice,jdbcType=DOUBLE}, #{money,jdbcType=DOUBLE}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jl.psi.model.SalesPlanOrderCommodity">
+    insert into sales_plan_order_commodity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="salesPlanOrderId != null">
+        sales_plan_order_id,
+      </if>
+      <if test="commoditySpecificationId != null">
+        commodity_specification_id,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="unitPrice != null">
+        unit_price,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="salesPlanOrderId != null">
+        #{salesPlanOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="commoditySpecificationId != null">
+        #{commoditySpecificationId,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="unitPrice != null">
+        #{unitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.SalesPlanOrderCommodity">
+    update sales_plan_order_commodity
+    <set>
+      <if test="salesPlanOrderId != null">
+        sales_plan_order_id = #{salesPlanOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="commoditySpecificationId != null">
+        commodity_specification_id = #{commoditySpecificationId,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="unitPrice != null">
+        unit_price = #{unitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jl.psi.model.SalesPlanOrderCommodity">
+    update sales_plan_order_commodity
+    set sales_plan_order_id = #{salesPlanOrderId,jdbcType=INTEGER},
+      commodity_specification_id = #{commoditySpecificationId,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      unit_price = #{unitPrice,jdbcType=DOUBLE},
+      money = #{money,jdbcType=DOUBLE},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <!-- 根据销售计划单id查询销售计划商品信息 -->
+  <select id="selectMsgBySalesPlanOrderId" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from sales_plan_order_commodity
+    where sales_plan_order_id = #{salesPlanOrderId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 批量添加 -->
+  <insert id="insertBeatch" parameterType="com.jl.psi.model.SalesPlanOrderCommodity" useGeneratedKeys="true" keyProperty="id">
+    insert into sales_plan_order_commodity (sales_plan_order_id, commodity_specification_id, 
+      number, unit_price, money, 
+      remark)
+    values <foreach collection="list" index="index" item="spoc" separator=",">
+	 (#{spoc.salesPlanOrderId,jdbcType=INTEGER}, #{spoc.commoditySpecificationId,jdbcType=INTEGER}, 
+      #{spoc.number,jdbcType=INTEGER}, #{spoc.unitPrice,jdbcType=DOUBLE}, #{spoc.money,jdbcType=DOUBLE}, 
+      #{spoc.remark,jdbcType=VARCHAR})
+      </foreach>
+  </insert>
+    <!-- 根据活动id查询分组后的 销售计划单商品 -->
+  <select id="selectCsBuActivityId"  parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  SELECT
+	spoc.commodity_specification_id,sum(spoc.number) as number,SUM(spoc.money) as money
+FROM
+	sales_plan_order_commodity spoc
+INNER JOIN sales_plan_order spo ON spoc.sales_plan_order_id = spo.id
+WHERE
+	spo.activity_id = #{activityId} GROUP BY commodity_specification_id
+  </select>
+</mapper>

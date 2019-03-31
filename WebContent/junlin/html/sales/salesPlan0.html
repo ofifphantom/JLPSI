@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8" />
+		<title>销售计划单</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../../css/ace.min.css" />
+		<link rel="stylesheet" href="../../css/style.css" />
+		<link rel="stylesheet" href="../../css/style_i.css" />
+		<link rel="stylesheet" href="../../font/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="../../js/layer/skin/layer.css" />
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="../../font/css/font-awesome-ie7.min.css" />
+		  <link rel="stylesheet" href="../../css/ace-ie.min.css" />
+		<![endif]-->
+
+		<link rel="stylesheet" href="../../css/mine/all.css" />
+		<link rel="stylesheet" href="../../css/mine/public.css" />
+
+		<script src="../../js/jquery-1.10.2.min.js"></script>
+		<script src="../../js/bootstrap.min.js"></script>
+		<script src="../../js/typeahead-bs2.min.js"></script>
+		<script src="../../js/jquery.dataTables.min.js"></script>
+		<script src="../../js/jquery.dataTables.bootstrap.js"></script>
+		<script src="../../js/layer/layer.js" type="text/javascript"></script>
+		<script src="../../js/laydate/laydate.js" type="text/javascript"></script>
+		<script src="../../script/public.js" type="text/javascript"></script>
+		
+		
+		<link href="../../js/jQuery-searchableSelect/jquery.searchableSelect.css" rel="stylesheet" type="text/css">
+	    <script src="../../js/jQuery-searchableSelect/jquery.searchableSelect.js"></script>
+		<script src="../../script/form.js" type="text/javascript"></script>
+		<style>
+			#editDiv {
+				padding-top: 20px;
+			}
+			#allgoodDivEdit .jl-panel{
+				position:relative;
+			}
+		</style>
+	</head>
+
+	<body class="content">
+		<div class="page-content clearfix">
+			<div id="Member_Ratings">
+				<div class="d_Confirm_Order_style" style="margin-top:10px;">
+					<h4 class="text-title">销售计划单</h4>
+					<div class="search-div clearfix">
+						<div class="clearfix">
+							<span class="l_f"> 
+							单号： <input type="text" value="" id="query_identifier"/>
+						</span>
+							<span class="l_f"> 
+							货品名称： <input type="text" value="" id="query_goodsName"/>
+						</span>
+							<span class="l_f"> 
+							品牌： <input type="text"  value="" id="query_goodsBrand"/>
+						</span>
+
+							</span>
+							<span class="r_f"> 
+							<input type="button" id="btn_search" class="btncss btn_search" value="搜索" />
+						</span>
+						</div>
+
+					</div>
+					<div class="opration-div clearfix">
+						<span class="r_f"> 
+							<button type="button" class="btncss jl-btn-defult" onclick="salesPlanRefresh()" style="margin-right: 0;"><i class="fa fa-refresh"></i>刷新</button>
+						</span>
+						<span class="r_f"> 
+							<button type="button" class="btncss jl-btn-defult" onclick="salesPlanAdd()"><i class="fa fa-plus"></i> 新增</button>
+						</span>
+						<!--<span class="jl_f_l">
+							<input type="checkbox" name="id" id="checkAll" style="margin:0 5px 0 0;" onclick="checkboxController(this)"/>
+						</span>
+						<span class="jl_f_l">
+							<label for="checkAll">全选</label>
+						</span>-->
+
+					</div>
+					<div class="table_menu_list">
+						<table class="table table-striped table-hover col-xs-12" id="datatable">
+							<thead class="table-header">
+								<tr>
+									<th>单号</th>
+									<th>货品名称</th>
+									<th>规格</th>
+									<th>品牌</th>
+									<th>金额</th>
+									<th>日期</th>
+									<th width="15%">操作</th>
+								</tr>
+
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<span class="look-span" onclick="salesPlanDetail()">PO.2017.09.00054</span>
+									</td>
+									<td>椒叶黄瓜</td>
+									<td>5斤/箱</td>
+									<td>嘉和</td>
+									<td>2940</td>
+									<td>2017.10.02</td>
+									<td>
+										<input type="button" class="btncss edit" onclick="salesPlanDetail()" value="详情" />
+										<input type="button" class="btncss edit" onclick="salesPlanDo()" value="销售" />
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<!--新增 -->
+		<div id="editDiv" style="display: none;">
+			<form class="container">
+				<div class="row jl-title">
+					<span>基本信息</span>
+				</div>
+				<div class="row jl-panel">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">计划对象：</label>
+							<div class="col-xs-8">
+								<select class="form-control" name="" id="planFor">
+									<option value="-1">---请选择---</option>
+									<option value="021">021</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">币种：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">结束日期：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="orderEndTime" value="" class="form-control" readonly="readonly" placeholder="请选择结束日期" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row jl-title">
+					<span>商品</span>
+					<b class="r_f" style="margin-top: 13px;">
+						<button type="button" class="btncss jl-btn-importent" onclick="goodsAddEdit()">新增</button>
+					</b>
+				</div>
+				<div id="allgoodDivEdit">
+					
+				<!--<div class="row jl-panel">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">货品名称：</label>
+							<div class="col-xs-8">
+								<select id="edit_goods_name" class="form-control">
+									<option value="-1" selected="selected">--请选择商品--</option>
+									<option value="123456">BlackBerry</option>
+									<option value="23">device</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">规格：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control"  readonly="readonly" placeholder="请先选择商品名称"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">规格id：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control"  readonly="readonly" placeholder="请先选择商品名称"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">品牌：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control"  readonly="readonly"  placeholder="请先选择商品名称"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">单位：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control"  readonly="readonly"  placeholder="请先选择商品名称"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">业务数量：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">业务单价：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">金额：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">金额（本）：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">已销售数：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">中止：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">备注：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				-->
+				</div>
+				<div class="row jl-title">
+					<span>合计</span>
+				</div>
+				<div class="row jl-panel">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">业务数量：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">金额：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row jl-title">
+					<span>其他</span>
+				</div>
+				<div class="row jl-panel">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">部门：</label>
+							<div class="col-xs-8">
+								<select class="form-control">
+									<option value="-1">请选择</option>
+									<option value="01">000</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">制单人：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">分支机构：</label>
+							<div class="col-xs-8">
+								<select name="" class="form-control">
+									<option value="-1">---请选择---</option>
+									<option value="123">1231</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">业务员：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">摘要：</label>
+							<div class="col-xs-8">
+								<input type="text" name="" id="" value="" class="form-control" />
+								
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</form>
+		</div>
+		
+		<!--详情 -->
+		<div id="lookDiv" style="display: none;">
+			<form class="container">
+				<div class="row jl-title">
+					<span>基本信息</span>
+				</div>
+				<div class="row jl-panel">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">日期：</label>
+							<div class="col-xs-8">
+								2017-5-8
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">计划对象：</label>
+							<div class="col-xs-8">
+								分支机构
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">币种：</label>
+							<div class="col-xs-8">
+								人民币
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">单号：</label>
+							<div class="col-xs-8">
+								SP-2017-09-00001
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">结束日期：</label>
+							<div class="col-xs-8">
+								2017-9-5
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row jl-title">
+					<span>商品</span>
+				</div>
+				<div id="allgoodDivDetail">
+				<!--<div class="row jl-panel">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">货品名称：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">规格：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">规格id：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">品牌：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">单位：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">业务数量：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						
+					</div>
+					<div class="col-xs-6">
+						
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">业务单价：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">金额：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">金额（本）：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">已销售数：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">中止：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">备注：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				-->
+				</div>
+				<div class="row jl-title">
+					<span>合计</span>
+				</div>
+				<div class="row jl-panel">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">业务数量：</label>
+							<div class="col-xs-8">
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">金额：</label>
+							<div class="col-xs-8">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row jl-title">
+					<span>其他</span>
+				</div>
+				<div class="row jl-panel">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">部门：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">制单人：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">分支机构：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">业务员：</label>
+							<div class="col-xs-8">
+								123456
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-xs-4 control-label">摘要：</label>
+							<div class="col-xs-8">
+								123456
+								
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</form>
+		</div>
+	
+	</body>
+
+	<script>
+		latdate("#orderEndTime");
+		latdate("#endEditTime");
+		$('#planFor').searchableSelect();
+		let goodsIndex=0;
+		let goodsJson=[];
+		$(function(){
+			ajaxJquery("GET","../../json/salesPlanGoods.json",{},function(data){
+				goodsJson=data;
+				cosole.log(goodsJson)
+			})
+			
+		})
+		
+		
+		/*刷新页面，查看系统是否有新的计划单生成，如果有，就刷新datetable*/
+		function salesPlanRefresh() {
+			let index = layer.load(1, {
+			  shade: [0.1,'#fff'] //0.1透明度的白色背景
+			});
+			
+			
+			setTimeout(function(){
+				layer.close(index);
+			},3000)
+			
+		}
+
+		/*销售*/
+		function salesPlanDo(){
+			publicMessageLayer("生成销售定单", function(){
+
+				laysuccess("已生成");
+			})
+		}
+
+		
+		/*详情*/
+		function salesPlanDetail() {
+			goodsAddDetail();
+			layer.open({
+				type: 1,
+				title: "销售计划单详情",
+				closeBtn: 1,
+				area: ['100%', '100%'],
+				content: $("#lookDiv"),
+				btn: ['关闭']
+			});
+		}
+		/*新增销售订单*/
+		function salesPlanAdd(){
+			goodsAddEdit()
+			layer.open({
+				type: 1,
+				title: "新增销售计划单",
+				closeBtn: 1,
+				area: ['100%', '100%'],
+				content: $("#editDiv"),
+				btn: ['提交', '取消'],
+				yes: function(index) {
+					layer.close(index);
+
+					laysuccess("编辑");
+				},
+				end: function(index, layero) {
+					layer.close(index);
+					$("#allgoodDivEdit").html("");
+					clearForm("editDiv", "");
+					clearSearchableSelect("planFor");
+				}
+			});
+		}
+		
+		
+		
+		/*新增商品*/
+		
+		function goodsAddEdit(){
+			let form=new FormPanel("editGoodsDiv"+goodsIndex,goodsJson);
+			let $obj=form.toformPrint();
+			$("#allgoodDivEdit").append($obj.append(form.toCloseSpan));
+			form.toWork();
+			goodsIndex++;
+		}
+		
+		/*新增商品_详情*/
+		function goodsAddDetail(){
+			$("#allgoodDivDetail").html("")
+			let detailIndext=0;
+			/*
+			 * 请在此处便利商品，添加详情
+			 */
+			let formDetail=new FormPanel("detailGoodsDiv"+detailIndext,goodsJson);
+			let $obj=formDetail.toDetailPrint();
+			$("#allgoodDivDetail").append($obj);
+			
+			detailIndext++;
+		}
+		
+		/*删除商品*/
+		function delform(thisspan){
+			if($("#allgoodDivEdit>div").length>1){
+				$(thisspan).parent().remove();
+			}else{
+				layfail("商品不能为空");
+			}
+			
+		}
+		
+		
+	</script>
+
+</html>

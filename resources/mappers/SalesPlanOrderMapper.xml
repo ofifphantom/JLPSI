@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.SalesPlanOrderMapper">
+  <resultMap id="BaseResultMap" type="com.jl.psi.model.SalesPlanOrder">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="identifier" jdbcType="VARCHAR" property="identifier" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="end_time" jdbcType="DATE" property="endTime" />
+    <result column="currency" jdbcType="INTEGER" property="currency" />
+    <result column="branch" jdbcType="VARCHAR" property="branch" />
+    <result column="originator" jdbcType="VARCHAR" property="originator" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="supcto_id" jdbcType="INTEGER" property="supctoId" />
+    <result column="person_id" jdbcType="INTEGER" property="personId" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="is_app_order" jdbcType="INTEGER" property="isAppOrder" />
+    <result column="app_consignee_name" jdbcType="VARCHAR" property="appConsigneeName" />
+    <result column="app_consignee_phone" jdbcType="VARCHAR" property="appConsigneePhone" />
+    <result column="app_consignee_address" jdbcType="VARCHAR" property="appConsigneeAddress" />
+    
+    <result column="originatorName" jdbcType="VARCHAR" property="originatorName" />
+	<result column="personName" jdbcType="VARCHAR" property="personName" />
+    <result column="personDepartmentName" jdbcType="VARCHAR" property="personDepartmentName" />
+     <result column="activity_id" jdbcType="INTEGER" property="activityId" />
+     <result column="miss_order_id" jdbcType="INTEGER" property="missOrderId" />
+    
+	<association property="supcto" javaType="com.jl.psi.model.Supcto"
+			resultMap="SupctoResultMap" />
+	<association property="person" javaType="com.jl.psi.model.Person"
+			resultMap="PersonResultMap" />
+			
+	<association property="inventory" javaType="com.jl.psi.model.Inventory"
+		resultMap="InventoryResultMap" />		
+	<collection property="salesPlanOrderCommodities" ofType="com.jl.psi.model.SalesPlanOrderCommodity"
+			resultMap="SalesPlanOrderCommodityResultMap" />
+  </resultMap>
+  
+  <!-- 库存信息 -->
+	<resultMap id="InventoryResultMap" type="com.jl.psi.model.Inventory">
+		
+		
+		<result column="inventory" jdbcType="INTEGER" property="inventory" />
+		
+		<result column="occupied_inventory" jdbcType="INTEGER"
+			property="occupiedInventory" />
+		
+	</resultMap>
+  <!-- 销售计划单商品信息 -->
+  <resultMap id="SalesPlanOrderCommodityResultMap" type="com.jl.psi.model.SalesPlanOrderCommodity">
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="unit_price" jdbcType="DOUBLE" property="unitPrice" />
+    <result column="money" jdbcType="DOUBLE" property="money" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <association property="commoditySpecification"
+			javaType="com.jl.psi.model.CommoditySpecification" resultMap="CommoditySpecificationResultMap" />
+  </resultMap>
+  <!-- 商品规格信息 -->
+	<resultMap id="CommoditySpecificationResultMap" type="com.jl.psi.model.CommoditySpecification">
+		<id column="csId" jdbcType="INTEGER" property="id" />
+		<result column="specification_identifier" jdbcType="VARCHAR"
+			property="specificationIdentifier" />
+		<result column="specification_name" jdbcType="VARCHAR"
+			property="specificationName" />
+		<result column="commodity_id" jdbcType="INTEGER" property="commodityId" />
+		<result column="quality_period" jdbcType="INTEGER" property="qualityPeriod" />
+		<result column="quality_period_unit" jdbcType="VARCHAR"
+			property="qualityPeriodUnit" />
+		<result column="mini_order_quantity" jdbcType="INTEGER"
+			property="miniOrderQuantity" />
+		<result column="add_order_quantity" jdbcType="INTEGER"
+			property="addOrderQuantity" />
+		<result column="packaging_size" jdbcType="VARCHAR" property="packagingSize" />
+		<result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+		<result column="warning_number" jdbcType="INTEGER" property="warningNumber" />
+		<result column="weight" jdbcType="DOUBLE" property="weight" />
+		<result column="operator_identifier" jdbcType="VARCHAR"
+			property="operatorIdentifier" />
+		<result column="operator_time" jdbcType="TIMESTAMP" property="operatorTime" />
+		<result column="state" jdbcType="INTEGER" property="state" />
+		<result column="baseUnitName" jdbcType="VARCHAR" property="baseUnitName" />
+		<association property="commodity" javaType="com.jl.psi.model.Commodity"
+			resultMap="CommodityResultMap" />
+		<collection property="units" ofType="com.jl.psi.model.Unit" resultMap="UnitResultMap"/>	
+	</resultMap>
+	<!-- 单位信息 -->
+	<resultMap id="UnitResultMap" type="com.jl.psi.model.Unit">
+		<id column="uId" jdbcType="INTEGER" property="id" />
+		<result column="unName" jdbcType="VARCHAR" property="name" />
+		<result column="uSpecificationId" jdbcType="INTEGER" property="specificationId" />
+		<result column="ratio_denominator" jdbcType="INTEGER" property="ratioDenominator" />
+		<result column="ratio_molecular" jdbcType="INTEGER" property="ratioMolecular" />
+		<result column="purchase_price" jdbcType="DOUBLE" property="purchasePrice" />
+		<result column="commonly_price" jdbcType="DOUBLE" property="commonlyPrice" />
+		<result column="mini_price" jdbcType="DOUBLE" property="miniPrice" />
+		<result column="bar_code" jdbcType="VARCHAR" property="barCode" />
+		<result column="sales_unit" jdbcType="VARCHAR" property="salesUnit" />
+		<result column="basic_unit" jdbcType="INTEGER" property="basicUnit" />
+		<result column="warehouse_unit" jdbcType="VARCHAR" property="warehouseUnit" />
+		<result column="purchasing_unit" jdbcType="VARCHAR" property="purchasingUnit" />
+		<result column="mini_purchasing" jdbcType="INTEGER" property="miniPurchasing" />
+	</resultMap>
+	<!-- 商品信息 -->
+	<resultMap id="CommodityResultMap" type="com.jl.psi.model.Commodity">
+		<id column="cId" jdbcType="INTEGER" property="id" />
+		<result column="classification_id" jdbcType="INTEGER" property="classificationId" />
+		<result column="cName" jdbcType="VARCHAR" property="name" />
+		<result column="cBrand" jdbcType="VARCHAR" property="brand" />
+		<result column="zero_stock" jdbcType="INTEGER" property="zeroStock" />
+		<result column="shout_name" jdbcType="VARCHAR" property="shoutName" />
+		<result column="mnemonic_code" jdbcType="VARCHAR" property="mnemonicCode" />
+		<result column="basics_information" jdbcType="VARCHAR"
+			property="basicsInformation" />
+		<result column="attribute" jdbcType="VARCHAR" property="attribute" />
+		<result column="cIdentifier" jdbcType="VARCHAR" property="identifier" />
+		<result column="supcto_id" jdbcType="INTEGER" property="supctoId" />
+		<result column="taxes" jdbcType="DOUBLE" property="taxes" />
+	</resultMap>
+
+
+	<!-- 客户信息 -->
+	<resultMap id="SupctoResultMap" type="com.jl.psi.model.Supcto">
+		<result column="sName" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+  
+  <!-- 用户信息 -->
+	<resultMap id="PersonResultMap" type="com.jl.psi.model.Person">
+		<result column="uname" jdbcType="VARCHAR" property="name" />
+		<result column="uIdentifier" jdbcType="VARCHAR" property="identifier" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+	</resultMap>
+  
+  
+  <sql id="Base_Column_List">
+    id, identifier, create_time, end_time, currency, branch, originator, summary, supcto_id, 
+    person_id, state, is_app_order, app_consignee_name, app_consignee_phone, app_consignee_address
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sales_plan_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sales_plan_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jl.psi.model.SalesPlanOrder">
+    insert into sales_plan_order (id, identifier, create_time, 
+      end_time, currency, branch, 
+      originator, summary, supcto_id, 
+      person_id, state, is_app_order, 
+      app_consignee_name, app_consignee_phone, app_consignee_address
+      )
+    values (#{id,jdbcType=INTEGER}, #{identifier,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=DATE}, #{currency,jdbcType=INTEGER}, #{branch,jdbcType=VARCHAR}, 
+      #{originator,jdbcType=VARCHAR}, #{summary,jdbcType=VARCHAR}, #{supctoId,jdbcType=INTEGER}, 
+      #{personId,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{isAppOrder,jdbcType=INTEGER}, 
+      #{appConsigneeName,jdbcType=VARCHAR}, #{appConsigneePhone,jdbcType=VARCHAR}, #{appConsigneeAddress,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jl.psi.model.SalesPlanOrder"
+  useGeneratedKeys="true" keyProperty="id">
+    insert into sales_plan_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="identifier != null">
+        identifier,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="branch != null">
+        branch,
+      </if>
+      <if test="originator != null">
+        originator,
+      </if>
+      <if test="summary != null">
+        summary,
+      </if>
+      <if test="supctoId != null">
+        supcto_id,
+      </if>
+      <if test="personId != null">
+        person_id,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="isAppOrder != null">
+        is_app_order,
+      </if>
+      <if test="appConsigneeName != null">
+        app_consignee_name,
+      </if>
+      <if test="appConsigneePhone != null">
+        app_consignee_phone,
+      </if>
+      <if test="appConsigneeAddress != null">
+        app_consignee_address,
+      </if>
+       		<if test="missOrderId != null">
+				miss_order_id,
+			</if>
+			<if test="activityId != null">
+				activity_id,
+			</if>
+		
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="identifier != null">
+        #{identifier,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=DATE},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=INTEGER},
+      </if>
+      <if test="branch != null">
+        #{branch,jdbcType=VARCHAR},
+      </if>
+      <if test="originator != null">
+        #{originator,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null">
+        #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="supctoId != null">
+        #{supctoId,jdbcType=INTEGER},
+      </if>
+      <if test="personId != null">
+        #{personId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="isAppOrder != null">
+        #{isAppOrder,jdbcType=INTEGER},
+      </if>
+      <if test="appConsigneeName != null">
+        #{appConsigneeName,jdbcType=VARCHAR},
+      </if>
+      <if test="appConsigneePhone != null">
+        #{appConsigneePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="appConsigneeAddress != null">
+        #{appConsigneeAddress,jdbcType=VARCHAR},
+      </if>
+      	<if test="missOrderId != null">
+				 #{missOrderId,jdbcType=INTEGER},
+			</if>
+      	<if test="activityId != null">
+				 #{activityId,jdbcType=INTEGER},
+			</if>
+		
+		
+      
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.SalesPlanOrder">
+    update sales_plan_order
+    <set>
+      <if test="identifier != null">
+        identifier = #{identifier,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=DATE},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=INTEGER},
+      </if>
+      <if test="branch != null">
+        branch = #{branch,jdbcType=VARCHAR},
+      </if>
+      <if test="originator != null">
+        originator = #{originator,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null">
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="supctoId != null">
+        supcto_id = #{supctoId,jdbcType=INTEGER},
+      </if>
+      <if test="personId != null">
+        person_id = #{personId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="isAppOrder != null">
+        is_app_order = #{isAppOrder,jdbcType=INTEGER},
+      </if>
+      <if test="appConsigneeName != null">
+        app_consignee_name = #{appConsigneeName,jdbcType=VARCHAR},
+      </if>
+      <if test="appConsigneePhone != null">
+        app_consignee_phone = #{appConsigneePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="appConsigneeAddress != null">
+        app_consignee_address = #{appConsigneeAddress,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jl.psi.model.SalesPlanOrder">
+    update sales_plan_order
+    set identifier = #{identifier,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=DATE},
+      currency = #{currency,jdbcType=INTEGER},
+      branch = #{branch,jdbcType=VARCHAR},
+      originator = #{originator,jdbcType=VARCHAR},
+      summary = #{summary,jdbcType=VARCHAR},
+      supcto_id = #{supctoId,jdbcType=INTEGER},
+      person_id = #{personId,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      is_app_order = #{isAppOrder,jdbcType=INTEGER},
+      app_consignee_name = #{appConsigneeName,jdbcType=VARCHAR},
+      app_consignee_phone = #{appConsigneePhone,jdbcType=VARCHAR},
+      app_consignee_address = #{appConsigneeAddress,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查找销售计划单详情 -->
+  <select id="getSalesPlanOrderDetail" resultMap="BaseResultMap">
+  SELECT
+			spo.*,
+			spoc.number,
+			spoc.unit_price,
+			spoc.money,
+			spoc.remark,
+			s. NAME sName,
+			c. NAME cName,
+			c.brand cBrand,
+			cs.specification_name specification_name,
+			cs.specification_identifier,
+			un.NAME baseUnitName,
+			u. NAME originatorName,
+			p.NAME  personName,
+			d.NAME  personDepartmentName
+		FROM
+			sales_plan_order spo
+		LEFT JOIN sales_plan_order_commodity spoc ON spoc.sales_plan_order_id = spo.id
+		LEFT JOIN supcto s ON s.id = spo.supcto_id
+		LEFT JOIN commodity_specification cs ON cs.id = spoc.commodity_specification_id
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN unit un ON un.specification_id = cs.id AND un.basic_unit = 1
+		LEFT JOIN person u ON u.identifier = spo.originator
+		LEFT JOIN person p ON p.id = spo.person_id
+		LEFT JOIN department d ON d.id = p.department_id
+		where spo.id=#{id}
+  </select>
+  
+  
+  <!--定义一个sql片段 -->
+	<sql id="query_where">
+		<if test="identifier!=null and identifier!=''">
+			AND spo.identifier like '%${identifier}%'
+		</if>
+		<if test="commodityName!=null and commodityName!=''">
+			AND c.name like '%${commodityName}%'
+		</if>
+		<if test="originator!=null and originator!=''">
+			AND u.name like '%${originator}%'
+		</if>
+		<if test="beginTime!=null and beginTime!=''">
+			AND date_format(spo.create_time,'%Y-%m-%d') &gt;= #{beginTime}
+			AND date_format(spo.create_time,'%Y-%m-%d') &lt;= #{endTime}
+		</if>
+		<if test="state!=null and state!=-1">
+			AND spo.state = #{state}
+		</if>
+	</sql>
+  
+  <!-- datatable 分页 start -->
+	<!-- 查询记录总条数 -->
+	<select id="iTotalRecords" resultType="java.lang.Integer">
+		SELECT
+		COUNT(1)
+		FROM
+		(
+		SELECT
+			COUNT(1)
+		FROM
+			sales_plan_order spo
+		LEFT JOIN sales_plan_order_commodity spoc ON spoc.sales_plan_order_id = spo.id
+		LEFT JOIN supcto s ON s.id = spo.supcto_id
+		LEFT JOIN commodity_specification cs ON cs.id = spoc.commodity_specification_id
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN unit un ON un.specification_id = cs.id AND un.basic_unit = 1
+		LEFT JOIN person u ON u.identifier = spo.originator
+		LEFT JOIN person p ON p.id = spo.person_id
+		LEFT JOIN department d ON d.id = p.department_id
+	
+		GROUP BY
+		spo.id
+		) msg
+	</select>
+	<!-- 查询所有信息 结果集 -->
+	<select id="selectForSearch" resultMap="BaseResultMap">
+		SELECT
+			spo.*,
+			spoc.number,
+			spoc.unit_price,
+			spoc.money,
+			spoc.remark,
+			s. NAME sName,
+			c. NAME cName,
+			c.brand cBrand,
+			cs.specification_name specification_name,
+			cs.specification_identifier,
+			un.NAME baseUnitName,
+			u. NAME originatorName,
+			p.NAME  personName,
+			d.NAME  personDepartmentName
+		FROM
+			sales_plan_order spo
+		LEFT JOIN sales_plan_order_commodity spoc ON spoc.sales_plan_order_id = spo.id
+		LEFT JOIN supcto s ON s.id = spo.supcto_id
+		LEFT JOIN commodity_specification cs ON cs.id = spoc.commodity_specification_id
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN unit un ON un.specification_id = cs.id AND un.basic_unit = 1
+		LEFT JOIN person u ON u.identifier = spo.originator
+		LEFT JOIN person p ON p.id = spo.person_id
+		LEFT JOIN department d ON d.id = p.department_id
+		where 1=1
+		<include refid="query_where"></include>
+		<if test="desc!=null and desc!='' ">
+			order by ${desc} desc
+		</if>
+		<if test="asc!=null and asc!='' ">
+			order by ${asc} asc
+		</if>
+		<!-- limit ${iDisplayStart},${pageDisplayLength} -->
+		
+	</select>
+	<!-- 通过查询条件过滤后的总记录 -->
+	<select id="iTotalDisplayRecords" resultType="java.lang.Integer">
+		SELECT
+		COUNT(1)
+		FROM
+		(
+		SELECT
+			COUNT(1)
+		FROM
+			sales_plan_order spo
+		LEFT JOIN sales_plan_order_commodity spoc ON spoc.sales_plan_order_id = spo.id
+		LEFT JOIN supcto s ON s.id = spo.supcto_id
+		LEFT JOIN commodity_specification cs ON cs.id = spoc.commodity_specification_id
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN unit un ON un.specification_id = cs.id AND un.basic_unit = 1
+		LEFT JOIN person u ON u.identifier = spo.originator
+		LEFT JOIN person p ON p.id = spo.person_id
+		LEFT JOIN department d ON d.id = p.department_id
+		where 1=1
+		<include refid="query_where"></include>
+		GROUP BY
+		spo.id
+		) msg
+	</select>
+	<!-- datatable 分页 end -->
+  
+    <!-- 获取最大的编号 -->
+	<select id="selectMaxIdentifier" resultType="java.lang.String">
+		select MAX(identifier) from sales_plan_order 
+	</select>
+
+	<!-- 	查询销售计划订单到期数量-->	
+ 	<select id="selectExpirationCount" resultType="java.lang.Integer">
+		SELECT  COUNT(1)   from sales_plan_order where state=1  and  NOW()>=DATE_SUB(end_time,INTERVAL 2 DAY)  
+	</select>
+	
+	<!-- 销售计划失败 （state==1 && 当前时间>结束时间） -->
+	<select id="selectSalesPlanOrderToFailure"  resultMap="BaseResultMap">
+ 		select * from sales_plan_order where state = 1 and  DATE_FORMAT(NOW(),'%Y-%m-%d') > end_time
+	</select>
+	
+	<select id="salesPlanOrderByActivityId"  resultMap="BaseResultMap">
+ 		select * from sales_plan_order where  activity_id=#{activityId}
+	</select>
+
+	
+	
+	<!--销售计划单明细表 -按客户  -->
+	
+	<sql id="query_where2">
+	  	<!--单号  -->
+		<if test="identifier!=null and identifier!=''">
+			AND spo.identifier like '%${identifier}%'
+		</if>
+		<!--商品名称  -->
+		<if test="cname!=null and cname!=''">
+			AND c.name like '%${cname}%'
+		</if>
+		<!--时间  -->
+		<if test="beginTime!=null and beginTime!=''">
+			AND
+			spo.create_time
+			BETWEEN
+			'${beginTime}'
+			AND
+			'${closeTime}'
+		</if>
+		<!-- 商品编码 -->
+		<if test="commodity_identifier!=null and commodity_identifier!=''">
+			AND cs.specification_identifier like '%${commodity_identifier}%'
+		</if>
+		<!--品牌  -->
+		<if test="brand!=null and brand!=''">
+			AND c.brand like '%${brand}%'
+		</if>
+		<!--仓库  -->
+		<if test="warehouseMsgId!=null and warehouseMsgId!='' and warehouseMsgId!=-1">
+			AND i.warehouse_id='${warehouseMsgId}'
+		</if>
+		<!--客户名称分类  -->
+		<if test="supctoTypeClassId!=null and supctoTypeClassId!='' and supctoTypeClassId!=-1">		
+			AND cla.parent_id='${supctoTypeClassId}'
+		</if>
+		<!--客户名称二级分类  -->
+		<if test="supctoTypeClassTwoId!=null and supctoTypeClassTwoId!='' and supctoTypeClassTwoId!=-1">
+			AND s.classification_id='${supctoTypeClassTwoId}'
+		</if>
+		<!--客户名称  -->
+		<if test="supctoName!=null and supctoName!=''">
+			AND s.name  like '%${supctoName}%'
+		</if>
+		<!--省份  -->
+		<if test="province!=null and province!=''">
+			AND s.province_code='${province}'
+		</if>
+		<!--市  -->
+		<if test="city!=null and city!=''">
+			AND s.city_code='${city}'
+		</if>
+		<!-- 区 -->
+		<if test="area!=null and area!=''">
+			AND s.area_code='${area}'
+		</if>
+
+		<!--制单人部门  -->
+		<if test="departmentClassOneId!=null and departmentClassOneId!='' and departmentClassOneId!='-1'">
+			AND k.department_id='${departmentClassOneId}'
+		</if>
+		<!--制单人  -->
+		<if test="makeOrderPersonId!=null and makeOrderPersonId!='' and makeOrderPersonId!='-1'">
+			AND k.identifier='${makeIdentifier}'
+		</if>
+		
+	</sql>
+	<select id="reportSalesPlanOrderDetail" resultMap="BaseResultMap">
+	SELECT
+		spo.identifier,
+		spo.create_time,
+		spo.is_app_order,
+		i.occupied_inventory,
+		p.name uname,
+		c.identifier cIdentifier,
+		c.`name` cName,
+		cs.specification_name,
+		cs.specification_identifier,
+		un.name unName,
+		s.name sName,
+		spoc.unit_price,
+		spoc.number,
+		spoc.money,
+		spoc.remark,
+		p.phone
+	FROM
+		sales_plan_order_commodity spoc
+	LEFT JOIN sales_plan_order spo ON spoc.sales_plan_order_id = spo.id
+	LEFT JOIN commodity_specification cs ON cs.id = spoc.commodity_specification_id
+	LEFT JOIN commodity c ON c.id = cs.commodity_id
+	LEFT JOIN unit un ON un.specification_id = cs.id AND un.basic_unit = 1
+	LEFT JOIN supcto s ON s.id = spo.supcto_id
+	LEFT JOIN classification cla ON cla.id=s.classification_id
+	LEFT JOIN inventory i ON i.specification_id=cs.id	
+	LEFT JOIN warehouse w ON w.id = i.warehouse_id
+	LEFT JOIN person P ON p.id = spo.person_id
+	LEFT JOIN person k ON k.identifier=spo.originator
+	WHERE
+	spo.state!=4
+	<include refid="query_where2" />
+	GROUP BY spoc.id
+	ORDER BY
+	 spo.id desc
+	</select>
+	<!--修改mis计划单收货人信息  -->
+	<update id="updateByMisOrderIdSelective" parameterType="com.jl.psi.model.SalesPlanOrder">
+    update sales_plan_order
+    <set>
+      <if test="identifier != null">
+        identifier = #{identifier,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=DATE},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=INTEGER},
+      </if>
+      <if test="branch != null">
+        branch = #{branch,jdbcType=VARCHAR},
+      </if>
+      <if test="originator != null">
+        originator = #{originator,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null">
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="supctoId != null">
+        supcto_id = #{supctoId,jdbcType=INTEGER},
+      </if>
+      <if test="personId != null">
+        person_id = #{personId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="isAppOrder != null">
+        is_app_order = #{isAppOrder,jdbcType=INTEGER},
+      </if>
+      <if test="appConsigneeName != null">
+        app_consignee_name = #{appConsigneeName,jdbcType=VARCHAR},
+      </if>
+      <if test="appConsigneePhone != null">
+        app_consignee_phone = #{appConsigneePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="appConsigneeAddress != null">
+        app_consignee_address = #{appConsigneeAddress,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where miss_order_id = #{missOrderId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,56 @@
+[
+	{
+		"name": "货品名称",
+		"type": "searchSelect",
+		"class": "look_goodsName",
+		"placeholder":"",
+		"value":""
+	}, {
+		"name": "规格",
+		"type": "inputDisable",
+		"class": "look_goodsSpecificationName",
+		"placeholder":"请先选择商品名称",
+		"value":""
+	}, {
+		"name": "规格编码",
+		"type": "inputDisable",
+		"class": "look_goodsSpecificationIdentifier",
+		"placeholder":"请先选择商品名称",
+		"value":""
+	}, {
+		"name": "品牌",
+		"type": "inputDisable",
+		"class": "look_goodsBrand",
+		"placeholder":"请先选择商品名称",
+		"value":""
+	}, {
+		"name": "单位",
+		"type": "inputDisable",
+		"class": "look_goodsUnit",
+		"placeholder":"请先选择商品名称",
+		"value":""
+	},  {
+		"name": "业务单价",
+		"type": "inputDisable",
+		"class": "look_goodsUnitPrice",
+		"placeholder":"请先选择商品名称",
+		"value":""
+	},{
+		"name": "业务数量",
+		"type": "input",
+		"class": "look_goodsNumber",
+		"placeholder":"",
+		"value":""
+	}, {
+		"name": "金额",
+		"type": "inputDisable",
+		"class": "look_goodsMoney",
+		"placeholder":"请输入业务数量",
+		"value":""
+	}, {
+		"name": "备注",
+		"type": "input",
+		"class": "look_goodsRemark",
+		"value":""
+	}
+]

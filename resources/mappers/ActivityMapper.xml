@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.ActivityMapper">
+  <resultMap id="BaseResultMap" type="com.jl.psi.model.Activity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+     <result column="activity_id" jdbcType="INTEGER" property="activityId" />
+    <result column="generated_time" jdbcType="DATE" property="generatedTime" />
+    <result column="activity_type" jdbcType="INTEGER" property="activityType" />
+    <result column="is_generated" jdbcType="INTEGER" property="isGenerated" />
+   </resultMap>
+ 
+ 
+   <insert id="insertSelective" parameterType="com.jl.psi.model.Activity"		useGeneratedKeys="true" keyProperty="id">
+		insert into activity
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="activityId != null">
+				activity_id,
+			</if>
+			 <if test="generatedTime != null">
+				generated_time,
+			</if>
+			 <if test="activityType != null">
+				activity_type,
+			</if>
+			 <if test="isGenerated != null">
+				is_generated,
+			</if>						
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+ 			<if test="activityId != null">
+ 				#{activityId,jdbcType=INTEGER},
+			</if>
+			 <if test="generatedTime != null">
+  				#{generatedTime,jdbcType=TIMESTAMP},
+				
+			</if>
+			 <if test="activityType != null">
+				#{activityType,jdbcType=INTEGER},
+			</if>
+			 <if test="isGenerated != null">
+				 #{isGenerated,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	
+			<select id="selectByActivityId"  resultMap="BaseResultMap" parameterType="java.lang.Integer">
+			SELECT
+ 
+	* from activity
+
+	WHERE
+		 activity_id=#{activityId}
+		</select>
+    <select id="selectAll"  resultMap="BaseResultMap">
+			SELECT * from activity where activity_id!=0
+ 	</select>
+	
+	<update id="updateGenerated" parameterType="java.lang.Integer">
+		UPDATE activity set is_generated=1 where id=#{id}
+	</update>
+ 
+	
+		
+</mapper>

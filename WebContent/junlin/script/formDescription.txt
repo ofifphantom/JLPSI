@@ -1,0 +1,16 @@
+json格式说明
+name：label标签中的文字
+type：即下述表单类型
+placeholder：提示语
+class：class名，用于选择该对象
+value：该字段的值
+
+form表单类型说明文档
+1.text  基本文本
+2.input 表单中的input标签
+3.inputDisable 表单中的input标签,只读
+4.select  表单中的select标签
+5.selectDisable  表单中的select标签,只读
+6.date  表单中的input标签+layer时间控件
+7.searchSelect  select可查询筛选控件，所选结果不能再次更改
+8.typeahead  bootstrap-typeahead.js bootstrap的搜索控件 搜索结果可再次更改

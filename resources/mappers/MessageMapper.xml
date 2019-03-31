@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.MessageMapper">
+  <resultMap id="BaseResultMap" type="com.jl.psi.model.Message">
+    <id column="id" jdbcType="INTEGER" property="id" />
+     <result column="menu_id" jdbcType="INTEGER" property="menuId" />
+    <result column="service_type" jdbcType="INTEGER" property="serviceType" />
+    <result column="service_id" jdbcType="INTEGER" property="serviceId" />
+    <result column="message_time" jdbcType="DATE" property="messageTime" />
+  </resultMap>
+    <resultMap id="requestMessage"   type="com.jl.psi.model.RequestMessage">  
+    <result column="name" property="name"/>  
+    <result column="serviceType" property="serviceType" />
+    <result column="count" property="count" />
+    <result column="url" property="url" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List">
+    id,  message_type_id, service_type, service_id, message_time
+  </sql>
+  
+
+  
+   <!-- 根据业务类型 和业务id  删除 消息信息 -->
+  <delete id="delete" parameterType="com.jl.psi.model.Message">
+    delete from message
+    where service_id = #{serviceId,jdbcType=INTEGER} and  service_type = #{serviceType,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 保存全部信息  -->
+  <insert id="insert" parameterType="com.jl.psi.model.Message">
+    insert into message (menu_id, service_type, service_id, message_time
+
+      )
+    values (#{menuId,jdbcType=INTEGER},#{serviceType,jdbcType=INTEGER},
+    #{serviceId,jdbcType=INTEGER} , #{messageTime,jdbcType=DATE}
+      )
+  </insert>
+  
+  	<!-- datatable 分页 start -->
+    <!-- 查询记录总条数 -->
+	<select id="iTotalRecords" resultType="java.lang.Integer">
+SELECT COUNT(*) from (
+
+ SELECT
+	m.`name` as name,
+	COUNT(me.id) as count,
+m.service_type  as serviceType from 
+	permission pe
+INNER JOIN menu m ON m.id = pe.menu_id
+RIGHT JOIN message me ON me.menu_id = m.id
+WHERE
+	pe.user_id = #{userId,jdbcType=INTEGER}
+GROUP BY
+	m.`name`,m.service_type ) as a
+	</select>
+	<!-- 查询所有信息 结果集 -->
+	<select id="selectForSearch" resultMap="requestMessage">
+		 SELECT
+	m.`name` as name,
+	COUNT(me.id) as count,
+m.service_type  as serviceType , m.url as url from 
+	permission pe
+INNER JOIN menu m ON m.id = pe.menu_id
+RIGHT JOIN message me ON me.menu_id = m.id
+WHERE
+	pe.user_id = #{userId,jdbcType=INTEGER}
+GROUP BY
+	m.`name`,m.service_type, m.url 
+ 		
+		<if test="desc!=null and desc!='' ">
+			order by ${desc} desc
+		</if>
+		<if test="asc!=null and asc!=''">
+			order by ${asc} asc
+		</if>
+		limit ${iDisplayStart},${pageDisplayLength}
+	</select>
+	<!-- 通过搜索条件过滤后的总记录 -->
+	<select id="iTotalDisplayRecords" resultType="java.lang.Integer">
+		SELECT COUNT(*) from (
+
+ SELECT
+	m.`name` as name,
+	COUNT(me.id) as count,
+m.service_type  as serviceType from 
+	permission pe
+INNER JOIN menu m ON m.id = pe.menu_id
+RIGHT JOIN message me ON me.menu_id = m.id
+WHERE
+	pe.user_id = #{userId,jdbcType=INTEGER} 
+GROUP BY
+	m.`name`,m.service_type) as a
+ 			
+	</select>
+</mapper>

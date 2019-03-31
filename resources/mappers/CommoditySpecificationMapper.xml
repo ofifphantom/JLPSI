@@ -1,0 +1,1494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.CommoditySpecificationMapper">
+	<resultMap id="BaseResultMap" type="com.jl.psi.model.CommoditySpecification">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<id column="soId" jdbcType="INTEGER" property="soId" />
+		<id column="num" jdbcType="INTEGER" property="num" />
+		<result column="specification_identifier" jdbcType="VARCHAR"
+			property="specificationIdentifier" />
+		<result column="specification_name" jdbcType="VARCHAR"
+			property="specificationName" />
+		<result column="commodity_id" jdbcType="INTEGER" property="commodityId" />
+		<result column="quality_period" jdbcType="INTEGER" property="qualityPeriod" />
+		<result column="quality_period_unit" jdbcType="VARCHAR"
+			property="qualityPeriodUnit" />
+		<result column="mini_order_quantity" jdbcType="INTEGER"
+			property="miniOrderQuantity" />
+		<result column="add_order_quantity" jdbcType="INTEGER"
+			property="addOrderQuantity" />
+		<result column="temp_mini_order_quantity" jdbcType="INTEGER"
+			property="tempMiniOrderQuantity" />
+		<result column="temp_add_order_quantity" jdbcType="INTEGER"
+			property="tempAddOrderQuantity" />
+		<result column="packaging_size" jdbcType="VARCHAR" property="packagingSize" />
+		<result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+		<result column="warning_number" jdbcType="INTEGER" property="warningNumber" />
+		<result column="temp_warning_number" jdbcType="INTEGER" property="tempWarningNumber" />
+		
+		<result column="temp_warehouse_id" jdbcType="INTEGER" property="tempWarehouseId" />
+		<result column="temp_inventory" jdbcType="INTEGER" property="tempInventory" />
+		<result column="temp_max_inventory" jdbcType="INTEGER" property="tempMaxInventory" />
+		<result column="temp_mini_inventory" jdbcType="INTEGER" property="tempMiniInventory" />
+		
+		<result column="weight" jdbcType="DOUBLE" property="weight" />
+		<result column="operator_identifier" jdbcType="VARCHAR"
+			property="operatorIdentifier" />
+		<result column="operator_time" jdbcType="TIMESTAMP" property="operatorTime" />
+		<result column="state" jdbcType="INTEGER" property="state" />
+		<result column="temp_state" jdbcType="INTEGER" property="tempState" />
+		<result column="baseUnitName" jdbcType="VARCHAR" property="baseUnitName" />
+		<result column="baseCommonlyPrice" jdbcType="DOUBLE" property="baseCommonlyPrice" />
+		<result column="specWarehouseId" jdbcType="INTEGER" property="specWarehouseId" />
+		<result column="inventoryNum" jdbcType="INTEGER" property="inventoryNum"/>
+		<result column="baseMiniPrice" jdbcType="DOUBLE" property="baseMiniPrice" />
+		<result column="specWarehouseName" jdbcType="VARCHAR" property="specWarehouseName" />
+		<result column="sendNum" jdbcType="INTEGER" property="sendNum" />
+		<result column="receiveNum" jdbcType="INTEGER" property="receiveNum" />
+		<result column="commentPrice" jdbcType="DOUBLE" property="commentPrice" />
+		<result column="occupiedNum" jdbcType="INTEGER" property="occupiedNum" />
+		<association property="commodity" javaType="com.jl.psi.model.Commodity"
+			resultMap="CommodityResultMap" />
+		<association property="person" javaType="com.jl.psi.model.Person"
+			resultMap="PersonResultMap" />
+			
+		<collection property="units" ofType="com.jl.psi.model.Unit" resultMap="UnitResultMap"/>
+		<collection property="inventories" ofType="com.jl.psi.model.Inventory" resultMap="InventoryResultMap"/>
+	</resultMap>
+	
+	<!-- 用户信息 -->
+	<resultMap id="PersonResultMap" type="com.jl.psi.model.Person">
+		<result column="uname" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+	
+	<!-- 单位信息 -->
+	<resultMap id="UnitResultMap" type="com.jl.psi.model.Unit">
+		<id column="uId" jdbcType="INTEGER" property="id" />
+		<result column="unName" jdbcType="VARCHAR" property="name" />
+		<result column="uSpecificationId" jdbcType="INTEGER" property="specificationId" />
+		<result column="ratio_denominator" jdbcType="INTEGER" property="ratioDenominator" />
+		<result column="ratio_molecular" jdbcType="INTEGER" property="ratioMolecular" />
+		<result column="purchase_price" jdbcType="DOUBLE" property="purchasePrice" />
+		<result column="commonly_price" jdbcType="DOUBLE" property="commonlyPrice" />
+		<result column="mini_price" jdbcType="DOUBLE" property="miniPrice" />
+		<result column="bar_code" jdbcType="VARCHAR" property="barCode" />
+		<result column="sales_unit" jdbcType="VARCHAR" property="salesUnit" />
+		<result column="basic_unit" jdbcType="INTEGER" property="basicUnit" />
+		<result column="warehouse_unit" jdbcType="VARCHAR" property="warehouseUnit" />
+		<result column="purchasing_unit" jdbcType="VARCHAR" property="purchasingUnit" />
+		<result column="mini_purchasing" jdbcType="INTEGER" property="miniPurchasing" />
+		<result column="temp_commonly_price" jdbcType="DOUBLE" property="tempCommonlyPrice" />
+	</resultMap>
+	
+	<!-- 库存信息 -->
+	<resultMap id="InventoryResultMap" type="com.jl.psi.model.Inventory">
+		<id column="inId" jdbcType="INTEGER" property="id" />
+		<result column="inSpecificationId" jdbcType="INTEGER" property="specificationId" />
+		<result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		<result column="inventory" jdbcType="INTEGER" property="inventory" />
+		<result column="presell_inventory" jdbcType="INTEGER" property="presellInventory" />
+		<result column="occupied_inventory" jdbcType="INTEGER"
+			property="occupiedInventory" />
+		<result column="max_inventory" jdbcType="INTEGER" property="maxInventory" />
+		<result column="mini_inventory" jdbcType="INTEGER" property="miniInventory" />
+		<result column="cost_price" jdbcType="DOUBLE" property="costPrice" />
+		<result column="commodity_num" jdbcType="INTEGER" property="commodityNum" />
+		<association property="warehouse" javaType="com.jl.psi.model.Warehouse"
+			resultMap="WarehouseResultMap" />
+	</resultMap>
+	
+	<!-- 仓库信息 -->
+	<resultMap id="WarehouseResultMap" type="com.jl.psi.model.Warehouse">
+		<result column="wName" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+	
+	<!-- 商品信息 -->
+	<resultMap id="CommodityResultMap" type="com.jl.psi.model.Commodity">
+		<id column="cId" jdbcType="INTEGER" property="id" />
+		<result column="classification_id" jdbcType="INTEGER" property="classificationId" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="brand" jdbcType="VARCHAR" property="brand" />
+		<result column="zero_stock" jdbcType="INTEGER" property="zeroStock" />
+		<result column="shout_name" jdbcType="VARCHAR" property="shoutName" />
+		<result column="mnemonic_code" jdbcType="VARCHAR" property="mnemonicCode" />
+		<result column="basics_information" jdbcType="VARCHAR"
+			property="basicsInformation" />
+		<result column="attribute" jdbcType="VARCHAR" property="attribute" />
+		<result column="identifier" jdbcType="VARCHAR" property="identifier" />
+		<result column="supcto_id" jdbcType="INTEGER" property="supctoId" />
+		<result column="taxes" jdbcType="DOUBLE" property="taxes" />
+		<result column="temp_taxes" jdbcType="DOUBLE" property="tempTaxes" />
+		<result column="is_assemble" jdbcType="INTEGER" property="isAssemble" />
+		<result column="is_presell" jdbcType="INTEGER" property="isPresell" />
+		<association property="classification" javaType="com.jl.psi.model.Classification"
+			resultMap="ClassificationResultMap" />
+		<association property="supcto" javaType="com.jl.psi.model.Supcto"
+			resultMap="SupctoResultMap" />
+	</resultMap>
+	
+	<!-- 供货商信息 -->
+	<resultMap id="SupctoResultMap" type="com.jl.psi.model.Supcto">
+	    <result column="sName" jdbcType="VARCHAR" property="name" />
+    </resultMap>
+    
+    <!-- 分类信息 -->
+	<resultMap id="ClassificationResultMap" type="com.jl.psi.model.Classification">
+		<id column="cfId" jdbcType="INTEGER" property="id" />
+		<result column="cfName" jdbcType="VARCHAR" property="name" />
+		<result column="parent_id" jdbcType="INTEGER" property="parentId" />
+	</resultMap>
+	
+	
+	<sql id="Base_Column_List">
+		id, specification_identifier, specification_name,
+		commodity_id,
+		quality_period,quality_period_unit, mini_order_quantity,
+		add_order_quantity,temp_mini_order_quantity,
+		temp_add_order_quantity,
+		packaging_size, is_delete, warning_number,temp_warning_number,
+		temp_warehouse_id,
+		temp_inventory,
+		temp_max_inventory,
+		temp_mini_inventory,
+		weight,
+		operator_identifier,
+		operator_time,state,temp_state
+	</sql>
+	
+	<!--定义一个sql片段 -->
+	<sql id="query_where">
+		<if test="classificationId!=null and classificationId!=-1">
+			AND c.classification_id = #{classificationId}
+		</if>
+		<if test="cname!=null and cname!=''">
+			AND c.name like '%${cname}%'
+		</if>
+		<if test="operatorName!=null and operatorName!=''">
+			AND u.name like '%${operatorName}%'
+		</if>
+		<if test="supctoId!=null and supctoId!=-1">
+			AND c.supcto_id = #{supctoId}
+		</if>
+		<if test="startTime!=null and startTime!=''and endTime!=''and endTime!=''">
+			AND (DATE_FORMAT(cs.operator_time,'%Y-%m-%d') >= '${startTime}'
+			AND DATE_FORMAT(cs.operator_time,'%Y-%m-%d') &lt;= '${endTime}')
+		</if>
+		<if test="state!=null and state!=-1">
+			<!-- 销售审核通过 -->
+			<if test="state==3">
+			AND cs.state = 3 and cs.is_delete=0 and cs.temp_state is null
+			</if>
+			<!-- 其他 -->
+			<if test="state==2">
+			AND (cs.state != 3 and cs.is_delete=0 ) or (cs.state = 3 and cs.temp_state is not null)
+			</if>
+			<!-- 已停用 -->
+			<if test="state==1">
+			AND cs.is_delete=1
+			</if>
+			<!-- 已删除 -->
+			<if test="state==4">
+			AND cs.state = 10
+			</if>
+		</if>
+	</sql>
+	
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from commodity_specification
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 根据主键删除 信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		commodity_specification
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 根据商品id 删除 信息 -->
+	<delete id="deleteByCommodityId" parameterType="java.lang.Integer">
+		delete from
+		commodity_specification
+		where commodity_id = #{commodityId,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 保存全部信息 -->
+	<insert id="insert" parameterType="com.jl.psi.model.CommoditySpecification">
+		insert into
+		commodity_specification (id, specification_identifier,
+		specification_name,
+		commodity_id, quality_period,quality_period_unit, mini_order_quantity,
+		add_order_quantity,temp_mini_order_quantity,
+		temp_add_order_quantity, packaging_size, is_delete,
+		warning_number,temp_warning_number,
+		temp_warehouse_id,
+		temp_inventory,
+		temp_max_inventory,
+		temp_mini_inventory,
+		weight,
+		operator_identifier,
+		operator_time,state,temp_state)
+		values (#{id,jdbcType=INTEGER},
+		#{specificationIdentifier,jdbcType=VARCHAR},
+		#{specificationName,jdbcType=VARCHAR},
+		#{commodityId,jdbcType=INTEGER}, #{qualityPeriod,jdbcType=INTEGER},
+		#{qualityPeriodUnit,jdbcType=VARCHAR},
+		#{miniOrderQuantity,jdbcType=INTEGER},
+		#{addOrderQuantity,jdbcType=INTEGER},
+		#{tempMiniOrderQuantity,jdbcType=INTEGER},
+		#{tempAddOrderQuantity,jdbcType=INTEGER},
+		#{packagingSize,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER},
+		#{warningNumber,jdbcType=INTEGER},#{tempWarningNumber,jdbcType=INTEGER}, 
+		
+		#{tempWarehouseId,jdbcType=INTEGER},
+		#{tempInventory,jdbcType=INTEGER},
+		#{tempMaxInventory,jdbcType=INTEGER},
+		#{tempMiniInventory,jdbcType=INTEGER},
+		
+		#{weight,jdbcType=DOUBLE},
+		#{operatorIdentifier,jdbcType=VARCHAR},
+		#{operatorTime,jdbcType=TIMESTAMP},
+		#{state,jdbcType=INTEGER},
+		#{tempState,jdbcType=INTEGER})
+	</insert>
+	
+	<!-- 保存全部信息 -->
+	<insert id="insertBatch" parameterType="com.jl.psi.model.CommoditySpecification" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		commodity_specification (specification_identifier,
+		specification_name,
+		commodity_id, quality_period,quality_period_unit, mini_order_quantity,
+		add_order_quantity,temp_mini_order_quantity,
+		temp_add_order_quantity, packaging_size, is_delete,
+		warning_number,temp_warning_number,
+		
+		temp_warehouse_id,
+		temp_inventory,
+		temp_max_inventory,
+		temp_mini_inventory,
+		
+		weight,
+		operator_identifier,
+		operator_time,state,temp_state)
+		values <foreach collection="list" index="index" item="cs"
+			separator=",">
+		(
+		#{cs.specificationIdentifier,jdbcType=VARCHAR},
+		#{cs.specificationName,jdbcType=VARCHAR},
+		#{cs.commodityId,jdbcType=INTEGER}, #{cs.qualityPeriod,jdbcType=INTEGER},
+		#{cs.qualityPeriodUnit,jdbcType=VARCHAR},
+		#{cs.miniOrderQuantity,jdbcType=INTEGER},
+		#{cs.addOrderQuantity,jdbcType=INTEGER},
+		#{cs.tempMiniOrderQuantity,jdbcType=INTEGER},
+		#{cs.tempAddOrderQuantity,jdbcType=INTEGER},
+		#{cs.packagingSize,jdbcType=VARCHAR}, #{cs.isDelete,jdbcType=INTEGER},
+		#{cs.warningNumber,jdbcType=INTEGER},#{cs.tempWarningNumber,jdbcType=INTEGER}, 
+		
+		#{cs.tempWarehouseId,jdbcType=INTEGER},
+		#{cs.tempInventory,jdbcType=INTEGER},
+		#{cs.tempMaxInventory,jdbcType=INTEGER},
+		#{cs.tempMiniInventory,jdbcType=INTEGER},
+		
+		#{cs.weight,jdbcType=DOUBLE},
+		#{cs.operatorIdentifier,jdbcType=VARCHAR},
+		#{cs.operatorTime,jdbcType=TIMESTAMP},
+		#{cs.state,jdbcType=INTEGER},
+		#{cs.tempState,jdbcType=INTEGER})
+		</foreach>
+	</insert>
+	
+	<!-- 保存所选内容的信息 -->
+	<insert id="insertSelective" parameterType="com.jl.psi.model.CommoditySpecification" useGeneratedKeys="true" keyProperty="id">
+		insert into commodity_specification
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="specificationIdentifier != null">
+				specification_identifier,
+			</if>
+			<if test="specificationName != null">
+				specification_name,
+			</if>
+			<if test="commodityId != null">
+				commodity_id,
+			</if>
+			<if test="qualityPeriod != null">
+				quality_period,
+			</if>
+			<if test="qualityPeriodUnit != null">
+				quality_period_unit,
+			</if>
+			<if test="miniOrderQuantity != null">
+				mini_order_quantity,
+			</if>
+			<if test="addOrderQuantity != null">
+				add_order_quantity,
+			</if>
+			<if test="tempMiniOrderQuantity != null">
+				temp_mini_order_quantity,
+			</if>
+			<if test="tempAddOrderQuantity != null">
+				temp_add_order_quantity,
+			</if>
+			<if test="packagingSize != null">
+				packaging_size,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			<if test="warningNumber != null">
+				warning_number,
+			</if>
+			<if test="tempWarningNumber != null">
+				temp_warning_number,
+			</if>
+			
+			<if test="tempWarehouseId != null">
+				temp_warehouse_id,
+			</if>
+			<if test="tempInventory != null">
+				temp_inventory,
+			</if>
+			<if test="tempMaxInventory != null">
+				temp_max_inventory,
+			</if>
+			<if test="tempMiniInventory != null">
+				temp_mini_inventory,
+			</if>
+			
+			<if test="weight != null">
+				weight,
+			</if>
+			<if test="operatorIdentifier != null">
+				operator_identifier,
+			</if>
+			<if test="operatorTime != null">
+				operator_time,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+			<if test="tempState != null">
+				temp_state,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="specificationIdentifier != null">
+				#{specificationIdentifier,jdbcType=VARCHAR},
+			</if>
+			<if test="specificationName != null">
+				#{specificationName,jdbcType=VARCHAR},
+			</if>
+			<if test="commodityId != null">
+				#{commodityId,jdbcType=INTEGER},
+			</if>
+			<if test="qualityPeriod != null">
+				#{qualityPeriod,jdbcType=INTEGER},
+			</if>
+			<if test="qualityPeriodUnit != null">
+				#{qualityPeriodUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="miniOrderQuantity != null">
+				#{miniOrderQuantity,jdbcType=INTEGER},
+			</if>
+			<if test="addOrderQuantity != null">
+				#{addOrderQuantity,jdbcType=INTEGER},
+			</if>
+			<if test="tempMiniOrderQuantity != null">
+				#{tempMiniOrderQuantity,jdbcType=INTEGER},
+			</if>
+			<if test="tempAddOrderQuantity != null">
+				#{tempAddOrderQuantity,jdbcType=INTEGER},
+			</if>
+			<if test="packagingSize != null">
+				#{packagingSize,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=INTEGER},
+			</if>
+			<if test="warningNumber != null">
+				#{warningNumber,jdbcType=INTEGER},
+			</if>
+			<if test="tempWarningNumber != null">
+				#{tempWarningNumber,jdbcType=INTEGER},
+			</if>
+			
+			<if test="tempWarehouseId != null">
+				#{tempWarehouseId,jdbcType=INTEGER},
+			</if>
+			<if test="tempInventory != null">
+				#{tempInventory,jdbcType=INTEGER},
+			</if>
+			<if test="tempMaxInventory != null">
+				#{tempMaxInventory,jdbcType=INTEGER},
+			</if>
+			<if test="tempMiniInventory != null">
+				#{tempMiniInventory,jdbcType=INTEGER},
+			</if>
+			
+			<if test="weight != null">
+				#{weight,jdbcType=DOUBLE},
+			</if>
+			<if test="operatorIdentifier != null">
+				#{operatorIdentifier,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorTime != null">
+				#{operatorTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=INTEGER},
+			</if>
+			<if test="tempState != null">
+				#{tempState,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 根据主键更新所选内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.CommoditySpecification">
+		update commodity_specification
+		<set>
+			<if test="specificationIdentifier != null">
+				specification_identifier =
+				#{specificationIdentifier,jdbcType=VARCHAR},
+			</if>
+			<if test="specificationName != null">
+				specification_name =
+				#{specificationName,jdbcType=VARCHAR},
+			</if>
+			<if test="commodityId != null">
+				commodity_id = #{commodityId,jdbcType=INTEGER},
+			</if>
+			<if test="qualityPeriod != null">
+				quality_period = #{qualityPeriod,jdbcType=INTEGER},
+			</if>
+			<if test="qualityPeriodUnit != null">
+				quality_period_unit = #{qualityPeriodUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="miniOrderQuantity != null">
+				mini_order_quantity =
+				#{miniOrderQuantity,jdbcType=INTEGER},
+			</if>
+			<if test="addOrderQuantity != null">
+				add_order_quantity =
+				#{addOrderQuantity,jdbcType=INTEGER},
+			</if>
+			<if test="tempMiniOrderQuantity != null">
+				temp_mini_order_quantity =
+				#{tempMiniOrderQuantity,jdbcType=INTEGER},
+			</if>
+			<if test="tempAddOrderQuantity != null">
+				temp_add_order_quantity =
+				#{tempAddOrderQuantity,jdbcType=INTEGER},
+			</if>
+			<if test="packagingSize != null">
+				packaging_size = #{packagingSize,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=INTEGER},
+			</if>
+			<if test="warningNumber != null">
+				warning_number = #{warningNumber,jdbcType=INTEGER},
+			</if>
+			<if test="tempWarningNumber != null">
+				temp_warning_number = #{tempWarningNumber,jdbcType=INTEGER},
+			</if>
+			
+			<if test="tempWarehouseId != null">
+				temp_warehouse_id = #{tempWarehouseId,jdbcType=INTEGER},
+			</if>
+			<if test="tempInventory != null">
+				temp_inventory = #{tempInventory,jdbcType=INTEGER},
+			</if>
+			<if test="tempMaxInventory != null">
+				temp_max_inventory = #{tempMaxInventory,jdbcType=INTEGER},
+			</if>
+			<if test="tempMiniInventory != null">
+				temp_mini_inventory = #{tempMiniInventory,jdbcType=INTEGER},
+			</if>
+			
+			<if test="weight != null">
+				weight = #{weight,jdbcType=DOUBLE},
+			</if>
+			<if test="operatorIdentifier != null">
+				operator_identifier =
+				#{operatorIdentifier,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorTime != null">
+				operator_time = #{operatorTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=INTEGER},
+			</if>
+			<if test="tempState != null">
+				temp_state = #{tempState,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 根据主键更新全部内容 -->
+	<update id="updateByPrimaryKey" parameterType="com.jl.psi.model.CommoditySpecification">
+		update
+		commodity_specification
+		set specification_identifier =
+		#{specificationIdentifier,jdbcType=VARCHAR},
+		specification_name =
+		#{specificationName,jdbcType=VARCHAR},
+		commodity_id =
+		#{commodityId,jdbcType=INTEGER},
+		quality_period =
+		#{qualityPeriod,jdbcType=INTEGER},
+		quality_period_unit =
+		#{qualityPeriodUnit,jdbcType=VARCHAR},
+		mini_order_quantity =
+		#{miniOrderQuantity,jdbcType=INTEGER},
+		add_order_quantity =
+		#{addOrderQuantity,jdbcType=INTEGER},
+		temp_mini_order_quantity =
+		#{tempMiniOrderQuantity,jdbcType=INTEGER},
+		temp_add_order_quantity =
+		#{tempAddOrderQuantity,jdbcType=INTEGER},
+		packaging_size =
+		#{packagingSize,jdbcType=VARCHAR},
+		is_delete =
+		#{isDelete,jdbcType=INTEGER},
+		warning_number =
+		#{warningNumber,jdbcType=INTEGER},
+		temp_warning_number =
+		#{tempWarningNumber,jdbcType=INTEGER},
+		
+		temp_warehouse_id = #{tempWarehouseId,jdbcType=INTEGER},
+		temp_inventory = #{tempInventory,jdbcType=INTEGER},
+		temp_max_inventory = #{tempMaxInventory,jdbcType=INTEGER},
+		temp_mini_inventory = #{tempMiniInventory,jdbcType=INTEGER},
+			
+		weight = #{weight,jdbcType=DOUBLE},
+		operator_identifier = #{operatorIdentifier,jdbcType=VARCHAR},
+		operator_time = #{operatorTime,jdbcType=TIMESTAMP},
+		state =
+		#{state,jdbcType=INTEGER},
+		temp_state =
+		#{tempState,jdbcType=INTEGER}
+		where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 判断商品的规格名是否重复 2是update  1是add -->
+	<select id="selectGoodsSpecificationNamePreventRepeat" resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			commodity_specification cs
+		WHERE
+			cs.commodity_id = #{commodityId,jdbcType=INTEGER}
+		AND cs.specification_name = #{specificationName,jdbcType=VARCHAR}
+		<if test="addOrUpdate==2">
+			and cs.id != #{id,jdbcType=INTEGER}
+		</if>
+	</select>
+	
+	<!-- 查询商品规格的详情 -->
+	<select id="lookCommoditySpecificationDetail" resultMap="BaseResultMap">
+		SELECT
+			cs.*, c.id cId,
+			c.attribute,
+			c.basics_information,
+			c.brand,
+			c.classification_id,
+			c.identifier,
+			c.mnemonic_code,
+			c.`name`,
+			c.shout_name,
+			c.supcto_id,
+			c.taxes,
+			c.temp_taxes,
+			c.zero_stock,
+			c.is_assemble,
+			c.is_presell,
+			cf.id cfId,
+			cf.parent_id,
+			cf.`name` cfName,
+			un.id uId,
+			un. NAME unName,
+			un.specification_id uSpecificationId,
+			un.ratio_denominator,
+			un.ratio_molecular,
+			un.purchase_price,
+			un.commonly_price,
+			un.mini_price,
+			un.bar_code,
+			un.sales_unit,
+			un.basic_unit,
+			un.warehouse_unit,
+			un.purchasing_unit,
+			un.mini_purchasing,
+			un.temp_commonly_price,
+			ity.*, s.`name` sName,
+			u. NAME uname,
+			tempWarehouse.name specWarehouseName
+		FROM
+			commodity_specification cs
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN classification cf ON cf.id = c.classification_id
+		LEFT JOIN supcto s ON s.id = c.supcto_id
+		LEFT JOIN unit un ON un.specification_id = cs.id
+		LEFT JOIN person u ON u.identifier = cs.operator_identifier
+		LEFT JOIN warehouse tempWarehouse ON tempWarehouse.id = cs.temp_warehouse_id
+		LEFT JOIN (
+			SELECT
+				it.id inId,
+				it.specification_id inSpecificationId,
+				it.warehouse_id,
+				it.inventory,
+				it.max_inventory,
+				it.mini_inventory,
+				it.commodity_num,
+				it.occupied_inventory,
+				w.`name` wName
+			FROM
+				inventory it
+			LEFT JOIN warehouse w ON w.id = it.warehouse_id
+		) ity ON ity.inSpecificationId = cs.id	
+		where cs.id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 根据主键批量查询信息 -->
+	<select id="selectBatchByPrimaryKey" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from commodity_specification
+		where id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</select>
+	
+	<!-- 根据主键批量删除 信息 -->
+	<delete id="deleteBatchByPrimaryKey">
+		delete from
+		commodity_specification
+		where id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</delete>
+	
+	<!-- 根据商品id获取最大的规格编号 -->
+	<select id="selectMaxSpecificationIdentifierByCommodityId" resultType="java.lang.String">
+		SELECT
+			specification_identifier
+		FROM
+			commodity_specification
+		WHERE
+			id = (
+				SELECT
+					MAX(id)
+				FROM
+					commodity_specification
+				WHERE
+					commodity_id = #{commodityId,jdbcType=INTEGER}
+			)
+	</select>
+	 <!-- 根据id列表更改商品状态 -->
+	<update id="updateStateByIds" parameterType="java.util.Map" >
+ 		update commodity_specification 
+ 		 <!-- 采购总经理/销售修改审批通过 -->
+ 		<if test="state == -1">
+			set state = 3,temp_state = null
+		</if>
+		<!-- 采购修改审批驳回 -->
+		<if test="state == 11">
+			set temp_state = 11
+		</if>
+		<!-- 采购修改审批通过 -->
+		<if test="state == 14">
+			set temp_state = 14
+		</if>
+		<!-- 采购总经理修改审批驳回 -->
+		<if test="state == 15">
+			set temp_state = 15
+		</if>
+		<!-- 销售修改审批驳回 -->
+		<if test="state == 13">
+			set temp_state = 13
+		</if>
+		<if test="state != -1 and state != 11 and state != 13 and state != 14 and state != 15">
+			set state = #{state,jdbcType=INTEGER}
+		</if>
+	
+ 		where id  in (
+      	<foreach collection="ids"  item="item"  index="index" separator=",">
+					  #{item}
+	    </foreach>
+      )
+	</update>
+	
+	<!-- 获取所有审核通过且未停用的商品信息 -->
+	<select id="getAllCommodityByStateAndIsDelete" resultMap="BaseResultMap">
+		select
+			cs.*, c.id cId,
+			c.attribute,
+			c.basics_information,
+			c.brand,
+			c.classification_id,
+			c.identifier,
+			c.mnemonic_code,
+			c.`name`,
+			c.shout_name,
+			c.supcto_id,
+			c.taxes,
+			c.zero_stock,
+			un.name baseUnitName,
+			un.commonly_price baseCommonlyPrice,
+			un.mini_price baseMiniPrice,
+			inv.warehouse_id specWarehouseId,
+			inv.inventory,
+			inv.occupied_inventory
+		from commodity_specification cs
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN unit un ON un.specification_id = cs.id and un.basic_unit=1
+		LEFT JOIN inventory inv ON inv.specification_id = cs.id
+		where cs.is_delete = 0
+		and cs.state = 3
+	</select>
+	
+	<!-- 根据供应商ID获取所有审核通过且未停用的商品信息 -->
+	<select id="getAllCommodityByStateAndIsDeleteBySupctoId" resultMap="BaseResultMap">
+		select
+			cs.id,
+			cs.specification_identifier,
+			cs.specification_name,
+			c.id cId,
+			c.brand,
+			c.identifier,
+			c.`name`,
+			c.taxes,
+			inv.warehouse_id specWarehouseId,
+			un.name baseUnitName,
+			un.commonly_price baseCommonlyPrice,
+			un.mini_price baseMiniPrice
+		from commodity_specification cs
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN unit un ON un.specification_id = cs.id and un.basic_unit=1
+		LEFT JOIN inventory inv on inv.specification_id=cs.id
+		where cs.is_delete = 0
+		and cs.state = 3
+		<if test="supctoId!=0">
+			and c.supcto_id=#{supctoId,jdbcType=INTEGER}
+		</if> 
+	</select>
+	
+	<!-- 获取所有审核通过且未停用的有库存商品信息 -->
+	<select id="getHasInventoryCommodityByStateAndIsDeleteBySupctoId" resultMap="BaseResultMap">
+		select
+			cs.id,
+			cs.specification_identifier,
+			cs.specification_name,
+			c.id cId,
+			c.brand,
+			c.identifier,
+			c.`name`,
+			c.taxes,
+			inv.warehouse_id specWarehouseId,
+			un.name baseUnitName,
+			un.commonly_price baseCommonlyPrice,
+			un.mini_price baseMiniPrice
+		from commodity_specification cs
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN unit un ON un.specification_id = cs.id and un.basic_unit=1
+		LEFT JOIN inventory inv on inv.specification_id=cs.id
+		where cs.is_delete = 0
+		and cs.state = 3
+		and (inv.inventory-inv.occupied_inventory)>0
+	</select>
+	
+	<!-- 根据仓库id获取所有审核通过且未停用的有库存记录的商品信息 -->
+	<select id="getHasInventoryCommodityByStateAndIsDeleteAndWarehouseId" resultMap="BaseResultMap">
+		select
+			cs.id,
+			cs.specification_identifier,
+			cs.specification_name,
+			c.id cId,
+			c.name,
+			un.name baseUnitName,
+			un.mini_price baseMiniPrice,
+			inv.inventory inventoryNum
+		from commodity_specification cs
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN unit un ON un.specification_id = cs.id and un.basic_unit=1
+		LEFT JOIN inventory inv on inv.specification_id=cs.id
+		where cs.is_delete = 0
+		and cs.state = 3
+		and inv.warehouse_id = #{warehouseId}
+	</select>
+	
+	<!-- 查询库存不足的商品 用于自动生成采购计划单 -->
+	<select id="selectLowStocksCommodity" resultMap="BaseResultMap">
+	SELECT
+		cs.id,
+		cs.warning_number,
+		c.id cId,
+		c.supcto_id,
+		c.taxes,
+		inv.inventory
+	FROM
+		commodity_specification cs
+	LEFT JOIN commodity c ON cs.commodity_id = c.id
+	LEFT JOIN inventory inv ON inv.specification_id = cs.id
+	WHERE
+		inv.inventory &lt; cs.warning_number
+	and  inv.is_create_procure_plan!=1
+	and cs.is_delete = 0
+	and cs.state = 3
+	and c.is_assemble=2	
+	and c.is_presell=2
+	ORDER BY supcto_id
+	</select>
+	
+	<!-- 根据id列表更改状态为已删除    批量删除商品信息 -->
+	<update id="updateStateToDeleteByIds" parameterType="java.util.Map">
+		update commodity_specification set state = 10 where id in (
+		<foreach collection="list" item="item" index="index" separator=",">
+			#{item}
+		</foreach>
+		)
+	</update>
+	
+	
+	
+	<!-- datatable 分页 start -->
+	<!-- 查询记录总条数 -->
+	<select id="iTotalRecords" resultType="java.lang.Integer">
+		select count(1)
+		FROM
+			commodity_specification cs
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN person u ON u.identifier = cs.operator_identifier
+		LEFT JOIN classification cf ON cf.id = c.classification_id
+		LEFT JOIN supcto s ON s.id = c.supcto_id
+		LEFT JOIN unit un ON un.specification_id = cs.id and un.basic_unit=1
+		where 1=1
+		<if test="messageOrDelivery==2">
+			and cs.state in (2,4) 
+		</if> 
+		<if test="messageOrDelivery==3">
+			and (cs.state = 9 or cs.temp_state = 10)
+		</if> 
+		<if test="messageOrDelivery==4">
+			and cs.state in (3,5,7)
+		</if> 
+		<if test="messageOrDelivery==5">
+			and (cs.state = 6 or cs.temp_state = 12)
+		</if> 
+		<if test="messageOrDelivery==6">
+			and cs.state =3
+		</if> 
+		<if test="messageOrDelivery==7">
+			and cs.temp_state = 14
+		</if> 
+	</select>
+	<!-- 查询所有信息 结果集 -->
+	<select id="selectForSearch" resultMap="BaseResultMap">
+		SELECT
+			cs.*, c.id cId,
+			c.attribute,
+			c.basics_information,
+			c.brand,
+			c.classification_id,
+			c.identifier,
+			c.mnemonic_code,
+			c.`name`,
+			c.shout_name,
+			c.supcto_id,
+			c.taxes,
+			c.zero_stock,
+			u. NAME uname,
+			cf.id cfId,
+			cf.parent_id,
+			cf.`name` cfName,
+			s.`name` sName,
+			un.id uId,
+			un. NAME unName,
+			un.specification_id uSpecificationId,
+			un.ratio_denominator,
+			un.ratio_molecular,
+			un.purchase_price,
+			un.commonly_price,
+			un.mini_price,
+			un.bar_code,
+			un.sales_unit,
+			un.basic_unit,
+			un.warehouse_unit,
+			un.purchasing_unit,
+			un.mini_purchasing
+		FROM
+			commodity_specification cs
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN person u ON u.identifier = cs.operator_identifier
+		LEFT JOIN classification cf ON cf.id = c.classification_id
+		LEFT JOIN supcto s ON s.id = c.supcto_id
+		LEFT JOIN unit un ON un.specification_id = cs.id and un.basic_unit=1
+		WHERE
+		1=1
+		<if test="messageOrDelivery==2">
+			and cs.state in (2,4) 
+		</if> 
+		<if test="messageOrDelivery==3">
+			and (cs.state = 9 or cs.temp_state = 10)
+		</if> 
+		<if test="messageOrDelivery==4">
+			and cs.state in (3,5,7)
+		</if> 
+		<if test="messageOrDelivery==5">
+			and (cs.state = 6 or cs.temp_state = 12)
+		</if> 
+		<if test="messageOrDelivery==6">
+			and cs.state =3
+		</if> 
+		<if test="messageOrDelivery==7">
+			and cs.temp_state = 14
+		</if>
+		<include refid="query_where"></include>
+		<if test="desc!=null and desc!='' ">
+			order by ${desc} desc
+		</if>
+		<if test="asc!=null and asc!='' ">
+			order by ${asc} asc
+		</if>
+		limit ${iDisplayStart},${pageDisplayLength}
+	</select>
+	<!-- 通过查询条件过滤后的总记录 -->
+	<select id="iTotalDisplayRecords" resultType="java.lang.Integer">
+		select count(1)
+		FROM
+			commodity_specification cs
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN person u ON u.identifier = cs.operator_identifier
+		LEFT JOIN classification cf ON cf.id = c.classification_id
+		LEFT JOIN supcto s ON s.id = c.supcto_id
+		LEFT JOIN unit un ON un.specification_id = cs.id and un.basic_unit=1
+		WHERE
+		1=1
+		<if test="messageOrDelivery==2">
+			and cs.state in (2,4) 
+		</if> 
+		<if test="messageOrDelivery==3">
+			and (cs.state = 9 or cs.temp_state = 10)
+		</if> 
+		<if test="messageOrDelivery==4">
+			and cs.state in (3,5,7) 
+		</if> 
+		<if test="messageOrDelivery==5">
+			and (cs.state = 6 or cs.temp_state = 12)
+		</if> 
+		<if test="messageOrDelivery==6">
+			and cs.state =3
+		</if> 
+		<if test="messageOrDelivery==7">
+			and cs.temp_state = 14
+		</if>
+		<include refid="query_where"></include>
+	</select>
+	<!-- datatable 分页 end -->
+	
+	
+	<!--获取商品规格编号-->
+	<select id="getAllSpecificationIdentifier"  resultMap="BaseResultMap">
+		SELECT
+		c.specification_identifier
+		FROM
+		commodity_specification c
+		WHERE
+		c.commodity_id=#{commodityId}
+
+	</select>
+	
+	<!-- 根据主键查询商品税率 -->
+	<select id="selectTaxesByPrimaryKey" parameterType="java.lang.Integer"
+		resultType="java.lang.Double">
+		select c.taxes from commodity_specification cs,commodity c where cs.commodity_id = c.id and cs.id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 批量根据商品规格id获取商品信息 -->
+	<select id="selectBatchMsgByCSID" resultMap="BaseResultMap">
+	SELECT
+		cs.id,
+		cs.specification_identifier,
+		cs.specification_name,
+		c.id cId,
+		c.`name`
+	FROM
+		commodity_specification cs
+	LEFT JOIN commodity c ON c.id = cs.commodity_id
+	where cs.id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		) 
+	</select>
+	
+	
+	
+	
+	
+	<!-- 判断商品是否被占用 -->
+	
+	<!-- 判断调拨单中该商品是否存在 -->
+	<select id="selectCommodityIsExistFromAOC" resultMap="BaseResultMap">
+	SELECT
+		cs.id,cs.specification_identifier
+	FROM
+		allot_order_commodity aoc
+	LEFT JOIN commodity_specification cs ON cs.id = aoc.commodity_specification_id
+	where aoc.commodity_specification_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</select>
+	
+	<!-- 判断报损单中该商品是否存在 -->
+	<select id="selectCommodityIsExistFromBOC" resultMap="BaseResultMap">
+	SELECT
+		cs.id,cs.specification_identifier
+	FROM
+			breakage_order_commodity boc INNER JOIN breakage_order bo on bo.id=boc.breakage_order_id
+	LEFT JOIN commodity_specification cs ON cs.id = boc.commodity_specification_id
+	where bo.is_delete=0 and  boc.commodity_specification_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</select>
+	
+	<!-- 判断组装/拆卸单中该商品是否存在 -->
+	<select id="selectCommodityIsExistFromPOOC" resultMap="BaseResultMap">
+	SELECT
+		cs.id,cs.specification_identifier
+	FROM
+		package_or_teardown_order_commodity pooc INNER JOIN package_or_teardown_order poo on poo.id=pooc.package_or_teardown_order_id
+	LEFT JOIN commodity_specification cs ON cs.id = pooc.commodity_specification_id
+	where poo.is_delete=0 and pooc.commodity_specification_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</select>
+	
+	<!-- 判断采购单中该商品是否存在 -->
+	<select id="selectCommodityIsExistFromPC" resultMap="BaseResultMap">
+	SELECT
+		cs.id,cs.specification_identifier
+	FROM
+		procure_commodity pc INNER JOIN procure_table pt on pt.id=pc.procure_table_id
+	LEFT JOIN commodity_specification cs ON cs.id = pc.commodity_id
+	where pt.is_delete=0 and pc.commodity_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</select>
+	
+	<!-- 判断销售订单中该商品是否存在 -->
+	<select id="selectCommodityIsExistFromSOC" resultMap="BaseResultMap">
+	SELECT
+		cs.id,cs.specification_identifier
+	FROM
+		sales_order_commodity soc
+	LEFT JOIN sales_order so on so.id=soc.sales_order_id
+	LEFT JOIN commodity_specification cs ON cs.id = soc.commodity_specification_id
+	where so.state!=37 and soc.commodity_specification_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</select>
+	
+	<!-- 判断销售计划单中该商品是否存在 -->
+	<select id="selectCommodityIsExistFromSPOC" resultMap="BaseResultMap">
+	SELECT
+		cs.id,cs.specification_identifier
+	FROM
+		sales_plan_order_commodity spoc
+	LEFT JOIN sales_plan_order spo on spo.id=spoc.sales_plan_order_id
+	LEFT JOIN commodity_specification cs ON cs.id = spoc.commodity_specification_id
+	where spo.state!=4 and spoc.commodity_specification_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</select>
+	
+	<!-- 判断盘点单中该商品是否存在 -->
+	<select id="selectCommodityIsExistFromTSOC" resultMap="BaseResultMap">
+	SELECT
+		cs.id,cs.specification_identifier
+	FROM
+		take_stock_order_commodity tsoc INNER JOIN take_stock_order tso on tsoc.take_stock_order_id=tso.id 
+	LEFT JOIN commodity_specification cs ON cs.id = tsoc.commodity_specification_id
+	where tso.is_delete=0 and tsoc.commodity_specification_id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</select>
+	
+	
+	
+	<!-- api接口所用sql -->
+	<resultMap id="ApiBaseResultMap" type="com.jl.psi.model.ApiCommodityMsg">
+		<result column="commoditySpecId" jdbcType="INTEGER" property="commoditySpecId" />
+		<result column="specificationIdentifier" jdbcType="VARCHAR"
+			property="specificationIdentifier" />
+		<result column="specificationName" jdbcType="VARCHAR"
+			property="specificationName" />
+		<result column="commodityId" jdbcType="INTEGER" property="commodityId" />
+		<result column="commodityIdentifier" jdbcType="VARCHAR" property="commodityIdentifier" />
+		<result column="commodityName" jdbcType="VARCHAR"
+			property="commodityName" />
+		<result column="brand" jdbcType="VARCHAR"
+			property="brand" />	
+		<result column="commodityPrice" jdbcType="DOUBLE" property="commodityPrice" />
+	</resultMap>
+	
+	<!-- 供MIS后台商品添加的查询购销存商品 -->
+	<select id="selectCommodityMsgToMisGoodsApi" resultMap="ApiBaseResultMap">
+	SELECT
+		cs.id commoditySpecId,
+		cs.specification_identifier specificationIdentifier,
+		cs.specification_name specificationName,
+		c.id commodityId,
+		c.`name` commodityName,
+		c.brand brand,
+		c.identifier commodityIdentifier,
+		u.commonly_price commodityPrice
+	FROM
+		commodity_specification cs
+	LEFT JOIN commodity c ON c.id = cs.commodity_id
+	LEFT JOIN unit u on u.specification_id=cs.id and u.basic_unit=1
+	WHERE
+		cs.state = 3
+	AND c.is_assemble = 2
+	and cs.is_delete=0
+	
+	</select>
+	
+	<!--查询app订单的商品规格id  -->
+	<select id="getAppCommoditySpecificcationId" resultMap="BaseResultMap">
+	SELECT
+	soc.commodity_specification_id id,
+	soc.deliver_goods_num num,
+	i.warehouse_id commodity_id
+	FROM
+	sales_order so
+	LEFT JOIN sales_order_commodity soc ON soc.sales_order_id=so.id
+	LEFT JOIN inventory i ON i.specification_id=soc.commodity_specification_id 
+	WHERE so.is_app_order=2 AND so.state=33 AND so.order_type=7 AND so.miss_order_id=#{missId}
+	GROUP BY soc.id
+	
+	
+	</select>
+	
+	<!-- 根据ids清空临时数据的值 -->
+	<update id="clearTempDate">
+		update commodity_specification
+		set
+		temp_mini_order_quantity = null,
+		temp_add_order_quantity	= null,
+		temp_warning_number	= null,
+		temp_warehouse_id	= null,
+		temp_max_inventory = null,
+		temp_mini_inventory	= null,
+		temp_inventory	= null
+		where id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+		
+	</update>
+	<!-- 账面库存表 -->
+	<select id="reportAccountsGether" resultMap="BaseResultMap">
+	SELECT
+w.`name` specWarehouseName,
+cs.specification_identifier,
+c.`name`,
+c.brand,
+cs.specification_name,
+u.mini_price baseMiniPrice,
+(IFNULL((SELECT
+	sum(pc.order_num)
+	
+FROM
+	procure_table pt
+	LEFT JOIN procure_commodity pc ON pc.procure_table_id = pt.id
+	
+WHERE
+	1 = 1 
+	AND pt.state IN ( 8,9,11,12, 13,15 ) 
+	AND pt.plan_or_order = 3 
+	AND pt.postfix IS NULL 
+	AND pt.is_other_receipts IN (0 ,1)
+	AND pc.commodity_id=cs.id
+	<!--时间  -->
+		<if test="beginTime!=null and beginTime!=''">
+			AND
+			pt.generate_date
+			BETWEEN
+			'${beginTime}'
+			AND
+			DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+		</if>
+	
+GROUP BY
+pc.commodity_id
+ORDER BY
+	pt.id DESC),0)
+	+IFNULL((SELECT
+	sum(soc.return_goods_num)
+	
+FROM
+	sales_order so
+	LEFT JOIN sales_order_commodity soc ON soc.sales_order_id = so.id
+	
+WHERE
+	so.is_show = 2 
+	AND so.order_type = 6 
+	AND so.state IN ( 30, 31 ) 
+	AND soc.commodity_specification_id=cs.id
+	<!--时间  -->
+	<if test="beginTime!=null and beginTime!=''">
+		AND
+		so.create_time
+		BETWEEN
+		'${beginTime}'
+		AND
+		DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+	</if>
+	
+GROUP BY
+soc.commodity_specification_id
+ORDER BY
+	so.identifier DESC),0)
+	+IFNULL((SELECT
+	sum(aoc.number)
+FROM
+	allot_order ao
+	
+	LEFT JOIN allot_order_commodity aoc ON ao.id=aoc.allot_order_id
+WHERE
+	1 = 1 
+	AND aoc.commodity_specification_id=cs.id
+	<!--时间  -->
+	<if test="beginTime!=null and beginTime!=''">
+		AND
+		ao.allot_date
+		BETWEEN
+		'${beginTime}'
+		AND
+		DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+	</if>
+	
+GROUP BY
+aoc.commodity_specification_id
+ORDER BY
+	ao.id DESC),0)
+	+IFNULL((SELECT
+	
+	sum(package_or_teardown_num)
+FROM
+	package_or_teardown_order po
+	
+WHERE
+	po.order_type=1
+	AND po.is_delete = 0 
+	AND po.commodity_specification_id=cs.id
+	<!--时间  -->
+	<if test="beginTime!=null and beginTime!=''">
+		AND
+		po.package_or_teardown_date
+		BETWEEN
+		'${beginTime}'
+		AND
+		DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+	</if>
+GROUP BY
+	po.commodity_specification_id 
+ORDER BY
+	po.id DESC),0)
+	+IFNULL((SELECT
+	sum(package_or_teardown_num)
+FROM
+	package_or_teardown_order po
+	LEFT JOIN package_or_teardown_order_commodity poto ON poto.package_or_teardown_order_id=po.id
+WHERE
+	po.order_type=2
+	AND po.is_delete = 0 
+	AND poto.commodity_specification_id=cs.id
+	<!--时间  -->
+	<if test="beginTime!=null and beginTime!=''">
+		AND
+		po.package_or_teardown_date
+		BETWEEN
+		'${beginTime}'
+		AND
+		DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+	</if>
+GROUP BY
+	poto.commodity_specification_id
+ORDER BY
+	po.id DESC),0)) receiveNum,
+(IFNULL((SELECT
+	sum(soc.deliver_goods_num)
+FROM
+	sales_order_commodity soc
+	LEFT JOIN sales_order so ON soc.sales_order_id = so.id
+	
+WHERE
+	so.order_type IN ( 3, 9 ) 
+	AND so.state != 37 
+	AND soc.commodity_specification_id=cs.id
+	<!--时间  -->
+	<if test="beginTime!=null and beginTime!=''">
+		AND
+		so.create_time
+		BETWEEN
+		'${beginTime}'
+		AND
+		DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+	</if>
+GROUP BY
+	soc.commodity_specification_id 
+ORDER BY
+	so.id DESC),0)
+	+IFNULL((SELECT
+	sum(pc.arrival_quantity)
+FROM
+	procure_table pt
+	LEFT JOIN procure_commodity pc ON pc.procure_table_id = pt.id
+WHERE
+	1 = 1 
+	AND pt.state IN ( 3, 14 ) 
+	AND pt.plan_or_order = 5 
+	and pc.commodity_id=cs.id
+	<!--时间  -->
+	<if test="beginTime!=null and beginTime!=''">
+		AND
+		pt.generate_date
+		BETWEEN
+		'${beginTime}'
+		AND
+		DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+	</if>
+GROUP BY
+pc.commodity_id
+ORDER BY
+	pt.id DESC),0)
+	+IFNULL((SELECT
+	sum(aoc.number)
+FROM
+	allot_order ao
+	
+	LEFT JOIN allot_order_commodity aoc ON ao.id=aoc.allot_order_id
+WHERE
+	1 = 1 
+	AND aoc.commodity_specification_id=cs.id
+	<!--时间  -->
+	<if test="beginTime!=null and beginTime!=''">
+		AND
+		ao.allot_date
+		BETWEEN
+		'${beginTime}'
+		AND
+		DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+	</if>
+GROUP BY
+aoc.commodity_specification_id
+ORDER BY
+	ao.id DESC),0)
+	+IFNULL((SELECT
+	
+	sum(package_or_teardown_num)
+FROM
+	package_or_teardown_order po
+	
+WHERE
+	po.order_type=2
+	AND po.is_delete = 0 
+	AND po.commodity_specification_id=cs.id
+	<!--时间  -->
+	<if test="beginTime!=null and beginTime!=''">
+		AND
+		po.package_or_teardown_date
+		BETWEEN
+		'${beginTime}'
+		AND
+		DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+	</if>
+GROUP BY
+	po.commodity_specification_id 
+ORDER BY
+	po.id DESC),0)
+	+IFNULL((SELECT
+	sum(package_or_teardown_num)
+FROM
+	package_or_teardown_order po
+	LEFT JOIN package_or_teardown_order_commodity poto ON poto.package_or_teardown_order_id=po.id
+WHERE
+	po.order_type=1
+	AND po.is_delete = 0 
+	AND poto.commodity_specification_id=cs.id
+	<!--时间  -->
+	<if test="beginTime!=null and beginTime!=''">
+		AND
+		po.package_or_teardown_date
+		BETWEEN
+		'${beginTime}'
+		AND
+		DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+	</if>
+GROUP BY
+	poto.commodity_specification_id
+ORDER BY
+	po.id DESC),0))	sendNum,
+u.commonly_price commentPrice,
+i.occupied_inventory occupiedNum,
+u.name baseUnitName
+FROM
+
+commodity_specification cs 
+LEFT JOIN inventory i ON i.specification_id=cs.id
+LEFT JOIN warehouse w ON w.id=i.warehouse_id
+LEFT JOIN commodity c ON c.id=cs.commodity_id
+LEFT JOIN unit u ON u.specification_id=cs.id AND u.basic_unit=1
+
+where 
+1=1
+		<!--商品名称  -->
+		<if test="cname!=null and cname!=''">
+			AND c.name like '%${cname}%'
+		</if>
+		<!-- 商品编码 -->
+		<if test="commodity_identifier!=null and commodity_identifier!=''">
+			AND cs.specification_identifier like '%${commodity_identifier}%'
+		</if>
+		<!--品牌  -->
+		<if test="brand!=null and brand!=''">
+			AND c.brand like '%${brand}%'
+		</if>
+GROUP BY
+cs.id
+ORDER BY
+cs.id DESC	
+	</select>
+</mapper>

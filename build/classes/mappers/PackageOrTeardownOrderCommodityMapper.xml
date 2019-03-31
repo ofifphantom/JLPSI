@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.PackageOrTeardownOrderCommodityMapper">
+	<resultMap id="BaseResultMap"
+		type="com.jl.psi.model.PackageOrTeardownOrderCommodity">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="package_or_teardown_order_id" jdbcType="INTEGER"
+			property="packageOrTeardownOrderId" />
+		<result column="commodity_specification_id" jdbcType="INTEGER"
+			property="commoditySpecificationId" />
+		<result column="number" jdbcType="INTEGER" property="number" />
+		<result column="unit_price" jdbcType="DOUBLE" property="unitPrice" />
+		<result column="money" jdbcType="DOUBLE" property="money" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, package_or_teardown_order_id,
+		commodity_specification_id, number,
+		unit_price,
+		money
+	</sql>
+	
+	<!-- 根据主键查询信息 -->
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from package_or_teardown_order_commodity
+		where id =
+		#{id,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 根据主键删除 信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		package_or_teardown_order_commodity
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- 保存全部信息 -->
+	<insert id="insert" parameterType="com.jl.psi.model.PackageOrTeardownOrderCommodity">
+		insert into
+		package_or_teardown_order_commodity (id,
+		package_or_teardown_order_id,
+		commodity_specification_id,
+		number, unit_price, money
+		)
+		values
+		(#{id,jdbcType=INTEGER},
+		#{packageOrTeardownOrderId,jdbcType=INTEGER},
+		#{commoditySpecificationId,jdbcType=INTEGER},
+		#{number,jdbcType=INTEGER}, #{unitPrice,jdbcType=DOUBLE},
+		#{money,jdbcType=DOUBLE}
+		)
+	</insert>
+	
+	<!-- 保存所选内容的信息 -->
+	<insert id="insertSelective" parameterType="com.jl.psi.model.PackageOrTeardownOrderCommodity">
+		insert into package_or_teardown_order_commodity
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="packageOrTeardownOrderId != null">
+				package_or_teardown_order_id,
+			</if>
+			<if test="commoditySpecificationId != null">
+				commodity_specification_id,
+			</if>
+			<if test="number != null">
+				number,
+			</if>
+			<if test="unitPrice != null">
+				unit_price,
+			</if>
+			<if test="money != null">
+				money,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="packageOrTeardownOrderId != null">
+				#{packageOrTeardownOrderId,jdbcType=INTEGER},
+			</if>
+			<if test="commoditySpecificationId != null">
+				#{commoditySpecificationId,jdbcType=INTEGER},
+			</if>
+			<if test="number != null">
+				#{number,jdbcType=INTEGER},
+			</if>
+			<if test="unitPrice != null">
+				#{unitPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="money != null">
+				#{money,jdbcType=DOUBLE},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 根据主键更新所选内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.PackageOrTeardownOrderCommodity">
+		update package_or_teardown_order_commodity
+		<set>
+			<if test="packageOrTeardownOrderId != null">
+				package_or_teardown_order_id =
+				#{packageOrTeardownOrderId,jdbcType=INTEGER},
+			</if>
+			<if test="commoditySpecificationId != null">
+				commodity_specification_id =
+				#{commoditySpecificationId,jdbcType=INTEGER},
+			</if>
+			<if test="number != null">
+				number = #{number,jdbcType=INTEGER},
+			</if>
+			<if test="unitPrice != null">
+				unit_price = #{unitPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="money != null">
+				money = #{money,jdbcType=DOUBLE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 根据主键更新全部内容 -->
+	<update id="updateByPrimaryKey" parameterType="com.jl.psi.model.PackageOrTeardownOrderCommodity">
+		update
+		package_or_teardown_order_commodity
+		set package_or_teardown_order_id =
+		#{packageOrTeardownOrderId,jdbcType=INTEGER},
+		commodity_specification_id =
+		#{commoditySpecificationId,jdbcType=INTEGER},
+		number =
+		#{number,jdbcType=INTEGER},
+		unit_price = #{unitPrice,jdbcType=DOUBLE},
+		money = #{money,jdbcType=DOUBLE}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 批量保存全部信息 -->
+	<insert id="insertBatch" parameterType="com.jl.psi.model.PackageOrTeardownOrderCommodity">
+		insert into
+		package_or_teardown_order_commodity (package_or_teardown_order_id,
+		commodity_specification_id,
+		number, unit_price, money
+		)
+		values <foreach collection="list" index="index" item="pooc" separator=",">
+		(#{pooc.packageOrTeardownOrderId,jdbcType=INTEGER},
+		#{pooc.commoditySpecificationId,jdbcType=INTEGER},
+		#{pooc.number,jdbcType=INTEGER}, #{pooc.unitPrice,jdbcType=DOUBLE},
+		#{pooc.money,jdbcType=DOUBLE}
+		)
+		</foreach>
+	</insert>
+	
+	<!-- 根据拆卸单/组装单id删除 信息 -->
+	<delete id="deleteByPOOId" parameterType="java.lang.Integer">
+		delete from
+		package_or_teardown_order_commodity
+		where package_or_teardown_order_id = #{packageOrTeardownOrderId,jdbcType=INTEGER}
+	</delete>
+</mapper>

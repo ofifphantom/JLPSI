@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.SalesOrderCommodityMapper">
+  <resultMap id="BaseResultMap" type="com.jl.psi.model.SalesOrderCommodity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sales_order_id" jdbcType="INTEGER" property="salesOrderId" />
+    <result column="commodity_specification_id" jdbcType="INTEGER" property="commoditySpecificationId" />
+    <result column="deliver_goods_money" jdbcType="DOUBLE" property="deliverGoodsMoney" />
+    <result column="deliver_goods_num" jdbcType="INTEGER" property="deliverGoodsNum" />
+    <result column="return_goods_num" jdbcType="INTEGER" property="returnGoodsNum" />
+    <result column="receiving_goods_money" jdbcType="DOUBLE" property="receivingGoodsMoney" />
+    <result column="receiving_goods_num" jdbcType="INTEGER" property="receivingGoodsNum" />
+    <result column="damage_num" jdbcType="INTEGER" property="damageNum" />
+    <result column="damage_money" jdbcType="DOUBLE" property="damageMoney" />
+    <result column="discount" jdbcType="DOUBLE" property="discount" />
+    <result column="unit_price" jdbcType="DOUBLE" property="unitPrice" />
+    <result column="taxes_money" jdbcType="DOUBLE" property="taxesMoney" />
+    <result column="taxes" jdbcType="DOUBLE" property="taxes" />
+    <result column="batch_number" jdbcType="VARCHAR" property="batchNumber" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="is_special_offer" jdbcType="INTEGER" property="isSpecialOffer" />
+    <result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+    <result column="app_amountMoney" jdbcType="DOUBLE" property="appAmountMoney" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTT" />
+    <association property="commoditySpecification"
+			javaType="com.jl.psi.model.CommoditySpecification" resultMap="CommoditySpecificationResultMap" />
+	<association property="warehouse"
+			javaType="com.jl.psi.model.Warehouse" resultMap="WarehouseResultMap" />
+  </resultMap>
+  
+  <!-- 商品规格信息 -->
+	<resultMap id="CommoditySpecificationResultMap" type="com.jl.psi.model.CommoditySpecification">
+		<id column="csId" jdbcType="INTEGER" property="id" />
+		<result column="specification_identifier" jdbcType="VARCHAR"
+			property="specificationIdentifier" />
+		<result column="specification_name" jdbcType="VARCHAR"
+			property="specificationName" />
+		<result column="commodity_id" jdbcType="INTEGER" property="commodityId" />
+		<result column="quality_period" jdbcType="INTEGER" property="qualityPeriod" />
+		<result column="quality_period_unit" jdbcType="VARCHAR"
+			property="qualityPeriodUnit" />
+		<result column="mini_order_quantity" jdbcType="INTEGER"
+			property="miniOrderQuantity" />
+		<result column="add_order_quantity" jdbcType="INTEGER"
+			property="addOrderQuantity" />
+		<result column="packaging_size" jdbcType="VARCHAR" property="packagingSize" />
+		<result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+		<result column="warning_number" jdbcType="INTEGER" property="warningNumber" />
+		<result column="weight" jdbcType="DOUBLE" property="weight" />
+		<result column="operator_identifier" jdbcType="VARCHAR"
+			property="operatorIdentifier" />
+		<result column="operator_time" jdbcType="TIMESTAMP" property="operatorTime" />
+		<result column="state" jdbcType="INTEGER" property="state" />
+		<result column="baseUnitName" jdbcType="VARCHAR" property="baseUnitName" />
+		<result column="baseCommonlyPrice" jdbcType="DOUBLE" property="baseCommonlyPrice" />
+		<association property="commodity" javaType="com.jl.psi.model.Commodity"
+			resultMap="CommodityResultMap" />
+	</resultMap>
+
+	<!-- 商品信息 -->
+	<resultMap id="CommodityResultMap" type="com.jl.psi.model.Commodity">
+		<id column="cId" jdbcType="INTEGER" property="id" />
+		<result column="classification_id" jdbcType="INTEGER" property="classificationId" />
+		<result column="cName" jdbcType="VARCHAR" property="name" />
+		<result column="brand" jdbcType="VARCHAR" property="brand" />
+		<result column="zero_stock" jdbcType="INTEGER" property="zeroStock" />
+		<result column="shout_name" jdbcType="VARCHAR" property="shoutName" />
+		<result column="mnemonic_code" jdbcType="VARCHAR" property="mnemonicCode" />
+		<result column="basics_information" jdbcType="VARCHAR"
+			property="basicsInformation" />
+		<result column="attribute" jdbcType="VARCHAR" property="attribute" />
+		<result column="cIdentifier" jdbcType="VARCHAR" property="identifier" />
+		<result column="supcto_id" jdbcType="INTEGER" property="supctoId" />
+		<result column="taxes" jdbcType="DOUBLE" property="taxes" />
+	</resultMap>
+
+	<!-- 仓库 -->
+	<resultMap id="WarehouseResultMap" type="com.jl.psi.model.Warehouse">
+		<result column="wName" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+	
+  <sql id="Base_Column_List">
+    id, sales_order_id, commodity_specification_id, deliver_goods_money, deliver_goods_num, 
+    return_goods_num, receiving_goods_money, receiving_goods_num, damage_num, damage_money, 
+    discount, unit_price, taxes_money, taxes, batch_number, remark, is_special_offer,warehouse_id,app_amountMoney
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sales_order_commodity
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sales_order_commodity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jl.psi.model.SalesOrderCommodity">
+    insert into sales_order_commodity (id, sales_order_id, commodity_specification_id, 
+      deliver_goods_money, deliver_goods_num, return_goods_num, 
+      receiving_goods_money, receiving_goods_num, 
+      damage_num, damage_money, discount, 
+      unit_price, taxes_money, taxes, 
+      batch_number, remark, is_special_offer,warehouse_id,app_amountMoney
+      )
+    values (#{id,jdbcType=INTEGER}, #{salesOrderId,jdbcType=INTEGER}, #{commoditySpecificationId,jdbcType=INTEGER}, 
+      #{deliverGoodsMoney,jdbcType=DOUBLE}, #{deliverGoodsNum,jdbcType=INTEGER}, #{returnGoodsNum,jdbcType=INTEGER}, 
+      #{receivingGoodsMoney,jdbcType=DOUBLE}, #{receivingGoodsNum,jdbcType=INTEGER}, 
+      #{damageNum,jdbcType=INTEGER}, #{damageMoney,jdbcType=DOUBLE}, #{discount,jdbcType=DOUBLE}, 
+      #{unitPrice,jdbcType=DOUBLE}, #{taxesMoney,jdbcType=DOUBLE}, #{taxes,jdbcType=DOUBLE}, 
+      #{batchNumber,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{isSpecialOffer,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, #{appAmountMoney,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jl.psi.model.SalesOrderCommodity">
+    insert into sales_order_commodity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="salesOrderId != null">
+        sales_order_id,
+      </if>
+      <if test="commoditySpecificationId != null">
+        commodity_specification_id,
+      </if>
+      <if test="deliverGoodsMoney != null">
+        deliver_goods_money,
+      </if>
+      <if test="deliverGoodsNum != null">
+        deliver_goods_num,
+      </if>
+      <if test="returnGoodsNum != null">
+        return_goods_num,
+      </if>
+      <if test="receivingGoodsMoney != null">
+        receiving_goods_money,
+      </if>
+      <if test="receivingGoodsNum != null">
+        receiving_goods_num,
+      </if>
+      <if test="damageNum != null">
+        damage_num,
+      </if>
+      <if test="damageMoney != null">
+        damage_money,
+      </if>
+      <if test="discount != null">
+        discount,
+      </if>
+      <if test="unitPrice != null">
+        unit_price,
+      </if>
+      <if test="taxesMoney != null">
+        taxes_money,
+      </if>
+      <if test="taxes != null">
+        taxes,
+      </if>
+      <if test="batchNumber != null">
+        batch_number,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="isSpecialOffer != null">
+        is_special_offer,
+      </if>
+      <if test="warehouseId != null">
+        warehouse_id,
+      </if>
+      <if test="appAmountMoney != null">
+        app_amountMoney,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="salesOrderId != null">
+        #{salesOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="commoditySpecificationId != null">
+        #{commoditySpecificationId,jdbcType=INTEGER},
+      </if>
+      <if test="deliverGoodsMoney != null">
+        #{deliverGoodsMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="deliverGoodsNum != null">
+        #{deliverGoodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="returnGoodsNum != null">
+        #{returnGoodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="receivingGoodsMoney != null">
+        #{receivingGoodsMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="receivingGoodsNum != null">
+        #{receivingGoodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="damageNum != null">
+        #{damageNum,jdbcType=INTEGER},
+      </if>
+      <if test="damageMoney != null">
+        #{damageMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="unitPrice != null">
+        #{unitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="taxesMoney != null">
+        #{taxesMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="taxes != null">
+        #{taxes,jdbcType=DOUBLE},
+      </if>
+      <if test="batchNumber != null">
+        #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isSpecialOffer != null">
+        #{isSpecialOffer,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null">
+        #{warehouseId,jdbcType=INTEGER},
+      </if>
+       <if test="appAmountMoney != null">
+        #{appAmountMoney,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.SalesOrderCommodity">
+    update sales_order_commodity
+    <set>
+      <if test="salesOrderId != null">
+        sales_order_id = #{salesOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="commoditySpecificationId != null">
+        commodity_specification_id = #{commoditySpecificationId,jdbcType=INTEGER},
+      </if>
+      <if test="deliverGoodsMoney != null">
+        deliver_goods_money = #{deliverGoodsMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="deliverGoodsNum != null">
+        deliver_goods_num = #{deliverGoodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="returnGoodsNum != null">
+        return_goods_num = #{returnGoodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="receivingGoodsMoney != null">
+        receiving_goods_money = #{receivingGoodsMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="receivingGoodsNum != null">
+        receiving_goods_num = #{receivingGoodsNum,jdbcType=INTEGER},
+      </if>
+      <if test="damageNum != null">
+        damage_num = #{damageNum,jdbcType=INTEGER},
+      </if>
+      <if test="damageMoney != null">
+        damage_money = #{damageMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="discount != null">
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="unitPrice != null">
+        unit_price = #{unitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="taxesMoney != null">
+        taxes_money = #{taxesMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="taxes != null">
+        taxes = #{taxes,jdbcType=DOUBLE},
+      </if>
+      <if test="batchNumber != null">
+        batch_number = #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isSpecialOffer != null">
+        is_special_offer = #{isSpecialOffer,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null">
+        warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="appAmountMoney != null">
+        app_amountMoney = #{appAmountMoney,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jl.psi.model.SalesOrderCommodity">
+    update sales_order_commodity
+    set sales_order_id = #{salesOrderId,jdbcType=INTEGER},
+      commodity_specification_id = #{commoditySpecificationId,jdbcType=INTEGER},
+      deliver_goods_money = #{deliverGoodsMoney,jdbcType=DOUBLE},
+      deliver_goods_num = #{deliverGoodsNum,jdbcType=INTEGER},
+      return_goods_num = #{returnGoodsNum,jdbcType=INTEGER},
+      receiving_goods_money = #{receivingGoodsMoney,jdbcType=DOUBLE},
+      receiving_goods_num = #{receivingGoodsNum,jdbcType=INTEGER},
+      damage_num = #{damageNum,jdbcType=INTEGER},
+      damage_money = #{damageMoney,jdbcType=DOUBLE},
+      discount = #{discount,jdbcType=DOUBLE},
+      unit_price = #{unitPrice,jdbcType=DOUBLE},
+      taxes_money = #{taxesMoney,jdbcType=DOUBLE},
+      taxes = #{taxes,jdbcType=DOUBLE},
+      batch_number = #{batchNumber,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_special_offer = #{isSpecialOffer,jdbcType=INTEGER},
+      warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      app_amountMoney = #{appAmountMoney,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 批量添加 -->
+  <insert id="insertBeatch" parameterType="com.jl.psi.model.SalesOrderCommodity" useGeneratedKeys="true" keyProperty="id">
+    insert into sales_order_commodity (sales_order_id, commodity_specification_id, 
+      deliver_goods_money, deliver_goods_num, return_goods_num, 
+      receiving_goods_money, receiving_goods_num, 
+      damage_num, damage_money, discount, 
+      unit_price, taxes_money, taxes, 
+      batch_number, remark, is_special_offer,warehouse_id,app_amountMoney
+      )
+    values <foreach collection="list" index="index" item="soc" separator=",">
+	 (#{soc.salesOrderId,jdbcType=INTEGER}, #{soc.commoditySpecificationId,jdbcType=INTEGER}, 
+      #{soc.deliverGoodsMoney,jdbcType=DOUBLE}, #{soc.deliverGoodsNum,jdbcType=INTEGER}, #{soc.returnGoodsNum,jdbcType=INTEGER}, 
+      #{soc.receivingGoodsMoney,jdbcType=DOUBLE}, #{soc.receivingGoodsNum,jdbcType=INTEGER}, 
+      #{soc.damageNum,jdbcType=INTEGER}, #{soc.damageMoney,jdbcType=DOUBLE}, #{soc.discount,jdbcType=DOUBLE}, 
+      #{soc.unitPrice,jdbcType=DOUBLE}, #{soc.taxesMoney,jdbcType=DOUBLE}, #{soc.taxes,jdbcType=DOUBLE}, 
+      #{soc.batchNumber,jdbcType=VARCHAR}, #{soc.remark,jdbcType=VARCHAR}, #{soc.isSpecialOffer,jdbcType=INTEGER}, #{soc.warehouseId,jdbcType=INTEGER}, #{soc.appAmountMoney,jdbcType=DOUBLE}
+      )
+      </foreach>
+  </insert>
+  
+  <!-- 根据销售订单id查询销售商品信息 -->
+  <select id="selectMsgBySalesOrderId" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from sales_order_commodity
+    where sales_order_id = #{salesOrderId,jdbcType=INTEGER}
+    GROUP BY commodity_specification_id
+  </select>
+  
+  <!-- 根据销售订单id删除销售商品信息 -->
+  <delete id="deleteMsgBySalesOrderId" parameterType="java.lang.Integer">
+  	delete 
+    from sales_order_commodity
+    where sales_order_id = #{salesOrderId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 根据销售订单id查询旗下商品所属的仓库id -->
+  <select id="selectWarehouseIdBySalesOrderId" resultMap="BaseResultMap">
+ 	 select soc.warehouse_id,soc.sales_order_id from sales_order_commodity soc where soc.sales_order_id=#{salesOrderId,jdbcType=INTEGER} GROUP BY soc.warehouse_id
+  </select>
+  
+   <!-- 根据销售订单id批量删除销售商品信息 -->
+  <delete id="deleteBatchMsgBySalesOrderId" parameterType="java.util.List">
+  	delete 
+    from sales_order_commodity
+    where sales_order_id in (
+		<foreach collection="list" item="so" separator=",">
+			#{so.id,jdbcType=INTEGER}
+		</foreach>
+	)
+  </delete>
+  
+    <!-- 根据销售订单id获取该订单下的所有销售商品信息 -->
+  <select id="getSalesOrderCommodityBySalesOrderId" resultMap="BaseResultMap">
+ 	SELECT
+		soc.*, 
+		c. NAME cName,
+		c.id cId,
+		c.brand,
+		cs.specification_name specification_name,
+		cs.specification_identifier,
+		cs.id csId,
+		un.`name` baseUnitName,
+		un.commonly_price baseCommonlyPrice,
+		w. NAME wname
+	FROM
+		sales_order_commodity soc
+	LEFT JOIN commodity_specification cs ON cs.id = soc.commodity_specification_id
+	LEFT JOIN commodity c ON c.id = cs.commodity_id
+	LEFT JOIN unit un ON un.specification_id = cs.id
+	AND un.basic_unit = 1
+	LEFT JOIN warehouse w ON soc.warehouse_id = w.id
+	WHERE soc.sales_order_id = #{salesOrderId,jdbcType=INTEGER}
+  </select>
+  <sql id="query2">
+  		<if test="beginTime!=null and beginTime!=''">
+			AND
+			so.create_time
+			BETWEEN
+			'${beginTime}'
+			AND
+			DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+		</if>
+  
+  </sql>
+  
+  <select id="reportSalesCommodityDatil" resultMap="BaseResultMap">
+  SELECT 
+    so.identifier batch_number,
+	so.create_time,
+	cs.id csId,
+	soc.receiving_goods_num,
+	soc.receiving_goods_money
+	
+	from 
+	sales_order_commodity soc
+	LEFT JOIN sales_order so ON soc.sales_order_id = so.id
+	LEFT JOIN commodity_specification cs ON cs.id = soc.commodity_specification_id
+	LEFT JOIN sales_order_reviewer sor ON sor.sales_order_id = so.id 
+	AND sor.reviewer_type = 4
+	LEFT JOIN commodity c ON c.id = cs.commodity_id
+	LEFT JOIN supcto s ON s.id = so.supcto_id
+	LEFT JOIN unit u ON u.specification_id = cs.id 
+	AND u.basic_unit = 1
+	LEFT JOIN classification cla ON cla.id = s.classification_id
+	LEFT JOIN person k ON k.identifier = so.originator
+	LEFT JOIN person r ON r.id = sor.reviewer_id
+	LEFT JOIN inventory i ON i.specification_id = cs.id
+	LEFT JOIN department dk ON k.department_id = dk.id
+	LEFT JOIN department dr ON r.department_id = dr.id 
+	WHERE 
+	so.order_type = 2 
+	AND so.state IN (
+		15,
+		16,
+		17,
+		18,
+		22,
+		23 
+	) 
+	
+	<!--单号  -->
+		<if test="identifier!=null and identifier!=''">
+			AND so.identifier like '%${identifier}%'
+		</if>
+		<!--运输方式  -->
+		<if test="shippingModel!=null and shippingModel!='' and shippingModel!=-1">
+			AND so.shipping_mode_id='${shippingModel}'
+		</if>
+		
+		<!--客户名称分类  -->
+		<if test="supctoTypeClassId!=null and supctoTypeClassId!='' and supctoTypeClassId!=-1">		
+			AND cla.parent_id='${supctoTypeClassId}'
+		</if>
+		<!--客户名称二级分类  -->
+		<if test="supctoTypeClassTwoId!=null and supctoTypeClassTwoId!='' and supctoTypeClassTwoId!=-1">
+			AND s.classification_id='${supctoTypeClassTwoId}'
+		</if>
+		<!--客户名称  -->
+		<if test="supctoName!=null and supctoName!=''">
+			AND s.name  like '%${supctoName}%'
+		</if>
+		<!--省份  -->
+		<if test="province!=null and province!=''">
+			AND s.province_code='${province}'
+		</if>
+		<!--市  -->
+		<if test="city!=null and city!=''">
+			AND s.city_code='${city}'
+		</if>
+		<!-- 区 -->
+		<if test="area!=null and area!=''">
+			AND s.area_code='${area}'
+		</if>
+		<!--商品名称  -->
+		<if test="cname!=null and cname!=''">
+			AND c.name like '%${cname}%'
+		</if>
+		<!-- 商品编码 -->
+		<if test="commodity_identifier!=null and commodity_identifier!=''">
+			AND cs.specification_identifier like '%${commodity_identifier}%'
+		</if>
+		<!--品牌  -->
+		<if test="brand!=null and brand!=''">
+			AND c.brand like '%${brand}%'
+		</if>
+		<!--开单部门  -->
+		<if test="departmentClassOneId!=null and departmentClassOneId!='' and departmentClassOneId!='-1'">
+			AND dk.id='${departmentClassOneId}'
+		</if>
+		<!--开单人  -->
+		<if test="makeOrderPersonId!=null and makeOrderPersonId!='' and makeOrderPersonId!='-1'">
+			AND k.identifier='${makeIdentifier}'
+		</if>
+		<!--审核部门  -->
+		<if test="checkDepartmentId!=null and checkDepartmentId!='' and checkDepartmentId!='-1'">
+			AND dr.id='${checkDepartmentId}'
+		</if>
+		<!--审核人  -->
+		<if test="checkPersonId!=null and checkPersonId!='' and checkPersonId!='-1'">
+			AND r.identifier='${rewviewIdentifier}'
+		</if>
+		<!--时间  -->
+		<if test="beginTime!=null and beginTime!=''">
+			AND
+			so.create_time
+			BETWEEN
+			'${beginTime}'
+			AND
+			DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+		</if>
+		
+		<!--仓库  -->
+		<if test="warehouseMsgId!=null and warehouseMsgId!='' and warehouseMsgId!=-1">
+			AND i.warehouse_id='${warehouseMsgId}'
+		</if>
+	GROUP BY soc.id
+	ORDER BY so.id ASC
+  </select>
+</mapper>

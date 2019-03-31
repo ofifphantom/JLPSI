@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jl.psi.mapper.PackageOrTeardownOrderMapper">
+	<resultMap id="BaseResultMap" type="com.jl.psi.model.PackageOrTeardownOrder">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="order_type" jdbcType="INTEGER" property="orderType" />
+		<result column="package_or_teardown_date" jdbcType="TIMESTAMP"
+			property="packageOrTeardownDate" />
+		<result column="identifier" jdbcType="VARCHAR" property="identifier" />
+		<result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		<result column="commodity_specification_id" jdbcType="INTEGER"
+			property="commoditySpecificationId" />
+		<result column="package_or_teardown_num" jdbcType="INTEGER"
+			property="packageOrTeardownNum" />
+		<result column="unit_price" jdbcType="DOUBLE" property="unitPrice" />
+		<result column="total_money" jdbcType="DOUBLE" property="totalMoney" />
+		<result column="person_id" jdbcType="INTEGER" property="personId" />
+		<result column="originator" jdbcType="VARCHAR" property="originator" />
+		<result column="reviewer" jdbcType="VARCHAR" property="reviewer" />
+		<result column="summary" jdbcType="VARCHAR" property="summary" />
+		<result column="state" jdbcType="INTEGER" property="state" />
+		<result column="print_num" jdbcType="INTEGER" property="printNum" />
+		<result column="commoditySpecName" jdbcType="VARCHAR" property="commoditySpecName" />
+		<result column="commodityName" jdbcType="VARCHAR" property="commodityName" />
+		<result column="commoditySpecIdentifier" jdbcType="VARCHAR" property="commoditySpecIdentifier" />
+		<result column="baseUnit" jdbcType="VARCHAR" property="baseUnit" />
+		<result column="warehouseName" jdbcType="VARCHAR" property="warehouseName" />
+		<result column="originatorName" jdbcType="VARCHAR" property="originatorName" />
+		<result column="reviewerName" jdbcType="VARCHAR" property="reviewerName" />
+		<result column="dName" jdbcType="VARCHAR" property="departmentName" />
+		<result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+		<association property="inventory" javaType="com.jl.psi.model.Inventory"
+		resultMap="InventoryResultMap" />
+		<collection property="packageOrTeardownOrderCommodities" ofType="com.jl.psi.model.PackageOrTeardownOrderCommodity" resultMap="PackageOrTeardownOrderCommodityResultMap"/>
+	</resultMap>
+	
+	<!-- 组装单/拆卸单 所含商品信息 -->
+	<resultMap id="PackageOrTeardownOrderCommodityResultMap" type="com.jl.psi.model.PackageOrTeardownOrderCommodity">
+		<id column="poocId" jdbcType="INTEGER" property="id" />
+		<result column="package_or_teardown_order_id" jdbcType="INTEGER"
+			property="packageOrTeardownOrderId" />
+		<result column="poocCommoditySpecificationId" jdbcType="INTEGER"
+			property="commoditySpecificationId" />
+		<result column="number" jdbcType="INTEGER" property="number" />
+		<result column="poocUnitPrice" jdbcType="DOUBLE" property="unitPrice" />
+		<result column="money" jdbcType="DOUBLE" property="money" />
+		<result column="specWarehouseId" jdbcType="INTEGER" property="specWarehouseId" />
+		<result column="specWarehouseName" jdbcType="VARCHAR" property="specWarehouseName" />
+		<result column="poocCommName" jdbcType="VARCHAR" property="poocCommName" />
+		<result column="poocSpecName" jdbcType="VARCHAR" property="poocSpecName" />
+		<result column="poocCommoditySpecIdentifier" jdbcType="VARCHAR" property="poocCommoditySpecIdentifier" />
+		<result column="poocBaseUnit" jdbcType="VARCHAR" property="poocBaseUnit" />
+		<association property="commoditySpecification"
+			javaType="com.jl.psi.model.CommoditySpecification" resultMap="CommoditySpecificationResultMap" />
+	</resultMap>
+	<!-- 商品规格信息 -->
+	  <resultMap id="CommoditySpecificationResultMap" type="com.jl.psi.model.CommoditySpecification">
+			<result column="specification_identifier" jdbcType="VARCHAR"
+				property="specificationIdentifier" />
+			<result column="specification_name" jdbcType="VARCHAR"
+				property="specificationName" />
+			<result column="baseUnitName" jdbcType="VARCHAR" property="baseUnitName" />
+			<result column="barCode" jdbcType="VARCHAR" property="barCode" />
+			<association property="commodity" javaType="com.jl.psi.model.Commodity"
+				resultMap="CommodityResultMap" />
+			<collection property="units" ofType="com.jl.psi.model.Unit" resultMap="unitMapping"/>
+			<collection property="inventories" ofType="com.jl.psi.model.Inventory" resultMap="InventoryResultMap"/>
+	  </resultMap>
+	  <!-- 商品信息 -->
+	  <resultMap id="CommodityResultMap" type="com.jl.psi.model.Commodity">
+			<result column="cName" jdbcType="VARCHAR" property="name" />
+			<result column="cIdentifier" jdbcType="VARCHAR" property="identifier" />
+			<result column="brand" jdbcType="VARCHAR" property="brand" />
+	  </resultMap>
+	  <!--单位信息  -->
+	  <resultMap id="unitMapping" type="com.jl.psi.model.Unit">
+			<result column="uName" jdbcType="VARCHAR" property="name" />
+			<result column="mini_price" jdbcType="DOUBLE" property="miniPrice" />
+	  </resultMap>
+	  
+	  <!-- 库存信息 -->
+	<resultMap id="InventoryResultMap" type="com.jl.psi.model.Inventory">
+		<id column="inId" jdbcType="INTEGER" property="id" />
+		<result column="inSpecificationId" jdbcType="INTEGER" property="specificationId" />
+		<result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+		<result column="inventory" jdbcType="INTEGER" property="inventory" />
+		<result column="presell_inventory" jdbcType="INTEGER" property="presellInventory" />
+		<result column="occupied_inventory" jdbcType="INTEGER"
+			property="occupiedInventory" />
+		<result column="max_inventory" jdbcType="INTEGER" property="maxInventory" />
+		<result column="mini_inventory" jdbcType="INTEGER" property="miniInventory" />
+		<result column="cost_price" jdbcType="DOUBLE" property="costPrice" />
+		<result column="commodity_num" jdbcType="INTEGER" property="commodityNum" />
+		<association property="warehouse" javaType="com.jl.psi.model.Warehouse"
+			resultMap="WarehouseResultMap" />
+	</resultMap>
+	
+	<!-- 仓库信息 -->
+	<resultMap id="WarehouseResultMap" type="com.jl.psi.model.Warehouse">
+		<result column="wName" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, order_type, package_or_teardown_date, identifier,
+		warehouse_id,
+		commodity_specification_id,
+		package_or_teardown_num,
+		unit_price, total_money, person_id, originator, reviewer,
+		summary,
+		state, print_num,is_delete
+	</sql>
+
+	<!-- 根据主键查询信息 -->
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from package_or_teardown_order
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 根据主键删除 信息 -->
+	<update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		update  
+		package_or_teardown_order set is_delete=1
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 保存全部信息 -->
+	<insert id="insert" parameterType="com.jl.psi.model.PackageOrTeardownOrder">
+		insert into
+		package_or_teardown_order (id, order_type,
+		package_or_teardown_date,
+		identifier, warehouse_id, commodity_specification_id,
+		package_or_teardown_num, unit_price, total_money,
+		person_id,
+		originator, reviewer,
+		summary, state, print_num,is_delete
+		)
+		values
+		(#{id,jdbcType=INTEGER}, #{orderType,jdbcType=INTEGER},
+		#{packageOrTeardownDate,jdbcType=TIMESTAMP},
+		#{identifier,jdbcType=VARCHAR}, #{warehouseId,jdbcType=INTEGER},
+		#{commoditySpecificationId,jdbcType=INTEGER},
+		#{packageOrTeardownNum,jdbcType=INTEGER},
+		#{unitPrice,jdbcType=DOUBLE}, #{totalMoney,jdbcType=DOUBLE},
+		#{personId,jdbcType=INTEGER}, #{originator,jdbcType=VARCHAR},
+		#{reviewer,jdbcType=VARCHAR},
+		#{summary,jdbcType=VARCHAR},
+		#{state,jdbcType=INTEGER}, #{printNum,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER}
+		)
+	</insert>
+
+	<!-- 保存所选内容的信息 -->
+	<insert id="insertSelective" parameterType="com.jl.psi.model.PackageOrTeardownOrder" useGeneratedKeys="true" keyProperty="id">
+		insert into package_or_teardown_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="orderType != null">
+				order_type,
+			</if>
+			<if test="packageOrTeardownDate != null">
+				package_or_teardown_date,
+			</if>
+			<if test="identifier != null">
+				identifier,
+			</if>
+			<if test="warehouseId != null">
+				warehouse_id,
+			</if>
+			<if test="commoditySpecificationId != null">
+				commodity_specification_id,
+			</if>
+			<if test="packageOrTeardownNum != null">
+				package_or_teardown_num,
+			</if>
+			<if test="unitPrice != null">
+				unit_price,
+			</if>
+			<if test="totalMoney != null">
+				total_money,
+			</if>
+			<if test="personId != null">
+				person_id,
+			</if>
+			<if test="originator != null">
+				originator,
+			</if>
+			<if test="reviewer != null">
+				reviewer,
+			</if>
+			<if test="summary != null">
+				summary,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+			<if test="printNum != null">
+				print_num,
+			</if>
+			 <if test="isDelete != null">
+       		 	is_delete,
+      		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="orderType != null">
+				#{orderType,jdbcType=INTEGER},
+			</if>
+			<if test="packageOrTeardownDate != null">
+				#{packageOrTeardownDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="identifier != null">
+				#{identifier,jdbcType=VARCHAR},
+			</if>
+			<if test="warehouseId != null">
+				#{warehouseId,jdbcType=INTEGER},
+			</if>
+			<if test="commoditySpecificationId != null">
+				#{commoditySpecificationId,jdbcType=INTEGER},
+			</if>
+			<if test="packageOrTeardownNum != null">
+				#{packageOrTeardownNum,jdbcType=INTEGER},
+			</if>
+			<if test="unitPrice != null">
+				#{unitPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="totalMoney != null">
+				#{totalMoney,jdbcType=DOUBLE},
+			</if>
+			<if test="personId != null">
+				#{personId,jdbcType=INTEGER},
+			</if>
+			<if test="originator != null">
+				#{originator,jdbcType=VARCHAR},
+			</if>
+			<if test="reviewer != null">
+				#{reviewer,jdbcType=VARCHAR},
+			</if>
+			<if test="summary != null">
+				#{summary,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=INTEGER},
+			</if>
+			<if test="printNum != null">
+				#{printNum,jdbcType=INTEGER},
+			</if>
+		   <if test="isDelete != null">
+        	#{isDelete,jdbcType=INTEGER},
+      		</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键更新所选内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="com.jl.psi.model.PackageOrTeardownOrder">
+		update package_or_teardown_order
+		<set>
+			<if test="orderType != null">
+				order_type = #{orderType,jdbcType=INTEGER},
+			</if>
+			<if test="packageOrTeardownDate != null">
+				package_or_teardown_date =
+				#{packageOrTeardownDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="identifier != null">
+				identifier = #{identifier,jdbcType=VARCHAR},
+			</if>
+			<if test="warehouseId != null">
+				warehouse_id = #{warehouseId,jdbcType=INTEGER},
+			</if>
+			<if test="commoditySpecificationId != null">
+				commodity_specification_id =
+				#{commoditySpecificationId,jdbcType=INTEGER},
+			</if>
+			<if test="packageOrTeardownNum != null">
+				package_or_teardown_num =
+				#{packageOrTeardownNum,jdbcType=INTEGER},
+			</if>
+			<if test="unitPrice != null">
+				unit_price = #{unitPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="totalMoney != null">
+				total_money = #{totalMoney,jdbcType=DOUBLE},
+			</if>
+			<if test="personId != null">
+				person_id = #{personId,jdbcType=INTEGER},
+			</if>
+			<if test="originator != null">
+				originator = #{originator,jdbcType=VARCHAR},
+			</if>
+			<if test="reviewer != null">
+				reviewer = #{reviewer,jdbcType=VARCHAR},
+			</if>
+			<if test="summary != null">
+				summary = #{summary,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=INTEGER},
+			</if>
+			<if test="printNum != null">
+				print_num = #{printNum,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据主键更新全部内容 -->
+	<update id="updateByPrimaryKey" parameterType="com.jl.psi.model.PackageOrTeardownOrder">
+		update
+		package_or_teardown_order
+		set order_type =
+		#{orderType,jdbcType=INTEGER},
+		package_or_teardown_date =
+		#{packageOrTeardownDate,jdbcType=TIMESTAMP},
+		identifier =
+		#{identifier,jdbcType=VARCHAR},
+		warehouse_id =
+		#{warehouseId,jdbcType=INTEGER},
+		commodity_specification_id =
+		#{commoditySpecificationId,jdbcType=INTEGER},
+		package_or_teardown_num =
+		#{packageOrTeardownNum,jdbcType=INTEGER},
+		unit_price =
+		#{unitPrice,jdbcType=DOUBLE},
+		total_money =
+		#{totalMoney,jdbcType=DOUBLE},
+		person_id =
+		#{personId,jdbcType=INTEGER},
+		originator =
+		#{originator,jdbcType=VARCHAR},
+		reviewer =
+		#{reviewer,jdbcType=VARCHAR},
+		summary = #{summary,jdbcType=VARCHAR},
+		state = #{state,jdbcType=INTEGER},
+		print_num =
+		#{printNum,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据单据类型获取库里目前最大的编号 -->
+	<select id="selectMaxIdentifier" resultType="java.lang.String">
+		select
+		MAX(identifier) from package_or_teardown_order where order_type =
+		#{orderType,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 获取组装单/拆卸单的详情 -->
+	<select id="getPackageOrTeardownOrderMsgById" resultMap="BaseResultMap">
+	SELECT
+		d.`name` dName,
+		poo.*, pooc.id poocId,
+		pooc.commodity_specification_id poocCommoditySpecificationId,
+		pooc.money,
+		pooc.number,
+		pooc.unit_price poocUnitPrice,
+		cs.specification_name poocSpecName,
+		cs.specification_identifier poocCommoditySpecIdentifier,
+		c.`name` poocCommName,
+		c.brand,
+		u.`name` poocBaseUnit,
+		w.id specWarehouseId,
+		w.name specWarehouseName,
+		pooCs.specification_name commoditySpecName,
+		pooCs.specification_identifier commoditySpecIdentifier,
+		pooCo.`name` commodityName,
+		un.`name` baseUnit,
+		un.bar_code barCode,
+		we.`name` warehouseName,
+		p.`name` originatorName,
+		pe.`name` reviewerName
+	FROM
+		package_or_teardown_order poo
+	LEFT JOIN package_or_teardown_order_commodity pooc ON poo.id = pooc.package_or_teardown_order_id
+	LEFT JOIN commodity_specification cs ON cs.id = pooc.commodity_specification_id
+	LEFT JOIN commodity c ON c.id = cs.commodity_id
+	LEFT JOIN unit u on u.specification_id=cs.id and u.basic_unit=1
+	LEFT JOIN inventory inv ON inv.specification_id = pooc.commodity_specification_id
+	LEFT JOIN warehouse w ON w.id = inv.warehouse_id
+	LEFT JOIN commodity_specification pooCs on pooCs.id=poo.commodity_specification_id
+	LEFT JOIN commodity pooCo on pooCo.id=pooCs.commodity_id
+  	LEFT JOIN unit un on un.specification_id=pooCs.id and un.basic_unit=1
+	LEFT JOIN inventory inve ON inve.specification_id = poo.commodity_specification_id
+	LEFT JOIN warehouse we ON we.id = inve.warehouse_id
+	LEFT JOIN person p on p.identifier=poo.originator
+	LEFT JOIN person pe on pe.identifier=poo.reviewer
+	LEFT JOIN department d ON d.id=p.department_id
+	where poo.id=#{id,jdbcType=INTEGER}
+	</select>
+	
+	
+	
+	
+
+	
+	
+	<!--定义一个sql片段 -->
+	<sql id="query_where">
+		<if test="searchWarehouse!=null and searchWarehouse!=-1">
+			AND poo.warehouse_id =#{searchWarehouse}
+		</if>
+		<if test="searchOriginator!=null and searchOriginator!=''">
+			AND p.name like '%${searchOriginator}%'
+		</if>
+		<if test='stateType=="1" and stateType!="-1"'>
+			AND poo.state IN (1) and poo.is_delete=0
+		</if>
+		<if test='stateType=="2" and stateType!="-1"'>
+			AND poo.state IN (2)
+		</if>
+		<if test='stateType=="3" and stateType!="-1"'>
+			AND poo.state IN (3)
+		</if>
+		<if test='stateType=="4" and stateType!="-1"'>
+			AND poo.state IN (4)
+		</if>
+	 <!-- 已删除 -->
+		<if test='stateType=="isDelete"'>
+				AND poo.is_delete=1
+		</if>
+		<!--时间  -->
+		<if test="beginTime!=null and beginTime!=''">
+			AND
+			poo.package_or_teardown_date
+			BETWEEN
+			'${beginTime}'
+			AND
+			DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+		</if>
+	</sql>
+	
+	<!-- datatable 分页 start -->
+	<!-- 查询记录总条数 -->
+	<select id="iTotalRecords" resultType="java.lang.Integer">
+		select count(1)
+		from
+		package_or_teardown_order poo
+		LEFT JOIN commodity_specification cs ON cs.id = poo.commodity_specification_id
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN warehouse w ON w.id = poo.warehouse_id
+		where poo.order_type = #{orderType,jdbcType=INTEGER}
+		<if test="page==2 ">
+			and poo.state=2
+		</if>
+		<if test="page==3 ">
+			and poo.state=3
+		</if>
+	</select>
+	<!-- 查询所有信息 结果集 -->
+	<select id="selectForSearch" resultMap="BaseResultMap">
+		SELECT
+			poo.id,
+			poo.identifier,
+			poo.package_or_teardown_date,
+			poo.package_or_teardown_num,
+			poo.warehouse_id,
+			poo.unit_price,
+			poo.total_money,
+			poo.state,
+			poo.originator,
+			poo.print_num,
+			poo.is_delete,
+			cs.specification_name commoditySpecName,
+			c.`name` commodityName,
+			w.`name` warehouseName,
+			p.name originatorName
+		FROM
+			package_or_teardown_order poo
+		LEFT JOIN commodity_specification cs ON cs.id = poo.commodity_specification_id
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN warehouse w ON w.id = poo.warehouse_id
+		LEFT JOIN person p on p.identifier=poo.originator
+		where poo.order_type = #{orderType,jdbcType=INTEGER}
+		<if test="page==2 ">
+			and poo.state=2
+		</if>
+		<if test="page==3 ">
+			and poo.state=3
+		</if>
+		<include refid="query_where"></include>
+		<if test="desc!=null and desc!='' ">
+			order by ${desc} desc
+		</if>
+		<if test="asc!=null and asc!='' ">
+			order by ${asc} asc
+		</if>
+		limit ${iDisplayStart},${pageDisplayLength}
+	</select>
+	<!-- 通过查询条件过滤后的总记录 -->
+	<select id="iTotalDisplayRecords" resultType="java.lang.Integer">
+		select count(1)
+		from
+		package_or_teardown_order poo
+		LEFT JOIN commodity_specification cs ON cs.id = poo.commodity_specification_id
+		LEFT JOIN commodity c ON c.id = cs.commodity_id
+		LEFT JOIN warehouse w ON w.id = poo.warehouse_id
+		LEFT JOIN person p on p.identifier=poo.originator
+		where poo.order_type = #{orderType,jdbcType=INTEGER}
+		<if test="page==2 ">
+			and poo.state=2
+		</if>
+		<if test="page==3 ">
+			and poo.state=3
+		</if>
+		<include refid="query_where"></include>
+	</select>
+	
+	<!-- datatable 分页 end -->
+	<!--组装单/拆卸单报表  -->
+	
+	<!--基础查询条件  -->
+	<sql id="query_where_base">
+	  	<!--单号  -->
+		<if test="identifier!=null and identifier!=''">
+			AND po.identifier like '%${identifier}%'
+		</if>
+		
+		<!--商品名称  -->
+		<if test="cname!=null and cname!=''">
+			AND c.name like '%${cname}%'
+		</if>
+		<!-- 商品编码 -->
+		<if test="commodity_identifier!=null and commodity_identifier!=''">
+			AND c.identifier like '%${commodity_identifier}%'
+		</if>
+		<!--品牌  -->
+		<if test="brand!=null and brand!=''">
+			AND c.brand like '%${brand}%'
+		</if>
+		<!--开单部门  -->
+		<if test="departmentClassOneId!=null and departmentClassOneId!='' and departmentClassOneId!='-1'">
+			AND dk.id='${departmentClassOneId}'
+		</if>
+		<!--开单人  -->
+		<if test="makeOrderPersonId!=null and makeOrderPersonId!='' and makeOrderPersonId!='-1'">
+			AND po.originator='${makeIdentifier}'
+		</if>
+		<!--审核部门  -->
+		<if test="checkDepartmentId!=null and checkDepartmentId!='' and checkDepartmentId!='-1'">
+			AND dr.id='${checkDepartmentId}'
+		</if>
+		<!--审核人  -->
+		<if test="checkPersonId!=null and checkPersonId!='' and checkPersonId!=-1">
+			AND po.reviewer='${rewviewIdentifier}'
+		</if>
+		<!--时间  -->
+		<if test="beginTime!=null and beginTime!=''">
+			AND
+			po.package_or_teardown_date
+			BETWEEN
+			'${beginTime}'
+			AND
+			DATE_ADD('${closeTime}',INTERVAL 1 DAY)
+		</if>
+		
+		<!--仓库  -->
+		<if test="warehouseMsgId!=null and warehouseMsgId!='' and warehouseMsgId!=-1">
+			AND i.warehouse_id='${warehouseMsgId}'
+		</if>
+		
+		
+		
+	</sql>
+	<sql id="query_where_state">
+		<!-- 待审核 -->
+		<if test="state==1 and state!=-1">
+			AND po.state=2
+		</if>
+		<!-- 已审核 -->
+		<if test="state==2 and state!=-1">
+			AND po.state IN (3,4)
+		</if>
+		<!-- 已入库 -->
+		<if test="state==3 and state!=-1">
+			AND po.state=100
+		</if>
+		<!-- 已出库 -->
+		<if test="state==4 and state!=-1">
+			AND po.state=100
+		</if>
+		<!-- 已开单 -->
+		<if test="state==5 and state!=-1">
+			AND po.state=100
+		</if>
+		<!-- 已终止 -->
+		<if test="state==6 and state!=-1">
+			AND po.state=100
+		</if>
+		<!-- 其他 -->
+		<if test="state==7 and state!=-1">
+			AND po.state not IN (2,3,4)
+		</if>
+	</sql>
+	
+	<select id="reportPackageOrTeardownOrderMsg"  resultMap="BaseResultMap">
+		SELECT
+		po.id,
+		po.identifier,
+		i.occupied_inventory,
+		po.package_or_teardown_date,
+		c.identifier cIdentifier,
+		cs.specification_name,
+		cs.specification_identifier,
+		c.`name` cName,
+		u.`name` uName,
+		c.brand,
+		po.package_or_teardown_num,
+		po.unit_price,
+		po.total_money,
+		po.summary,
+		w.`name` wName
+		FROM
+		package_or_teardown_order po
+	LEFT JOIN commodity_specification cs ON cs.id = po.commodity_specification_id
+	LEFT JOIN commodity c ON c.id = cs.commodity_id
+	LEFT JOIN unit u ON u.specification_id = cs.id
+	LEFT JOIN inventory i ON i.specification_id = cs.id
+	LEFT JOIN warehouse w ON w.id = po.warehouse_id 
+	LEFT JOIN person k ON k.identifier=po.originator
+	LEFT JOIN person r ON r.identifier=po.reviewer
+	LEFT JOIN department dk ON dk.id=k.department_id
+	LEFT JOIN department dr ON dr.id=r.department_id
+	LEFT JOIN supcto s ON c.supcto_id=s.id
+	LEFT JOIN classification cla ON s.classification_id=cla.id
+		WHERE po.order_type='${orderType}' and po.is_delete=0
+		
+		<include refid="query_where_base" />
+		<include refid="query_where_state" />
+		GROUP BY po.id
+		ORDER BY
+	 	po.id desc
+	</select>
+</mapper>

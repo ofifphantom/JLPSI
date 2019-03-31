@@ -1,0 +1,160 @@
+{
+	"title":"其他发货单",
+	"head":[{
+		"name": "日期",
+		"type": "inputDisable",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "单号",
+		"type": "inputDisable",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "仓库",
+		"type": "select",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "出库类型",
+		"type": "select",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "凭证号",
+		"type": "input",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	}
+	],
+	"goods":[{
+		"name": "货品名称",
+		"type": "searchSelect",
+		"class": "goodsname",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "货品编码",
+		"type": "inputDisable",
+		"class": "",
+		"placeholder":"请先选择货品名称",
+		"value":""
+	},{
+		"name": "规格",
+		"type": "inputDisable",
+		"class": "",
+		"placeholder":"请先选择货品名称",
+		"value":""
+	},{
+		"name": "品牌",
+		"type": "inputDisable",
+		"class": "",
+		"placeholder":"请先选择货品名称",
+		"value":""
+	},{
+		"name": "条形码",
+		"type": "inputDisable",
+		"class": "",
+		"placeholder":"请先选择货品名称",
+		"value":""
+	},{
+		"name": "单位",
+		"type": "inputDisable",
+		"class": "",
+		"placeholder":"请先选择货品名称",
+		"value":""
+	},{
+		"name": "业务数量",
+		"type": "input",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "业务单价",
+		"type": "inputDisable",
+		"class": "",
+		"placeholder":"请先选择货品名称",
+		"value":""
+	},{
+		"name": "金额",
+		"type": "input",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "产品批号",
+		"type": "input",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "生产日期",
+		"type": "date",
+		"class": "manufactureDate",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "有效期至",
+		"type": "date",
+		"class": "periodValidity",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "备注",
+		"type": "input",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	}
+	],
+	"total":[{
+		"name": "业务数量",
+		"type": "input",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "金额",
+		"type": "input",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	}
+	],
+	"footer":[{
+		"name": "部门",
+		"type": "select",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "业务员",
+		"type": "input",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "制单人",
+		"type": "input",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "审核人",
+		"type": "input",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	},{
+		"name": "摘要",
+		"type": "input",
+		"class": "",
+		"placeholder":"",
+		"value":""
+	}]
+}
