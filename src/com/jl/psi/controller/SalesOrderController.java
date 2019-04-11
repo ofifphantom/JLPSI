@@ -286,7 +286,6 @@ public class SalesOrderController extends BaseController {
 		SalesOrder s = new SalesOrder();
 		s.setState(35); //待备货
 		s.setId(id);
-
 		// 修改销售订单的状态为待备货
 		if (salesOrderService.updateByPrimaryKeySelective(s) > 0) {
 			// 获取添加好的销售订单信息
@@ -313,16 +312,15 @@ public class SalesOrderController extends BaseController {
 					//首页提醒处理Start
 					messageService.addMessage(id, "备货单");
 					//首页提醒处理End
-					
 					// 往log表中插入操作数据
 					insertLog(operateType, identifier, Constants.OPERATE_INSERT, new Date(),
 							GetSessionUtil.GetSessionUserIdentifier(request));
-
 					rmsg.put("success", true);
 					rmsg.put("msg", Constants.SAVE_SUCCESS_MSG);
 					rmsg.put("id", salesOrder.getId());
+					Integer salesOrderId = id;
 					// 生成出库单单据打印页面所需的信息 返回值为JSON格式
-					rmsg.put("outboundOrderJSON", createOutboundOrderJSON(salesOrderService.selectOrderDetailById(id),0));
+					rmsg.put("outboundOrderJSON", createOutboundOrderJSON(salesOrderService.selectOrderDetailById(salesOrderId),0));
 					return rmsg;
 				}
 				// 保存失败
@@ -345,7 +343,6 @@ public class SalesOrderController extends BaseController {
 				salesOrderService.updateByPrimaryKeySelective(s);
 			}
 		}
-
 		rmsg.put("success", false);
 		rmsg.put("msg", "生成备货单失败！");
 		return rmsg;
